@@ -187,7 +187,7 @@ def export_cellprofiler_to_singlecell_native(
     try:
         import pandas as pd
     except ImportError as exc:
-        raise RuntimeError('pandas is required in lyx_env for native single-cell export.') from exc
+        raise RuntimeError('pandas is required in the active CellPainting-Claw runtime for native single-cell export.') from exc
 
     backend_payload = config.load_profiling_backend_payload()
     paths_payload = backend_payload['paths']
@@ -281,7 +281,7 @@ def run_pycytominer_native(
         from pycytominer import aggregate, feature_select, normalize
     except ImportError as exc:
         raise RuntimeError(
-            'pandas, pyarrow, numpy, scipy, and pycytominer are required in lyx_env for native run-pycytominer.'
+            'pandas, pyarrow, numpy, scipy, and pycytominer are required in the active CellPainting-Claw runtime for native run-pycytominer.'
         ) from exc
 
     backend_payload = config.load_profiling_backend_payload()

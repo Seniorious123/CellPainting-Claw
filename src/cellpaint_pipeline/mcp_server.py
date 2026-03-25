@@ -139,7 +139,7 @@ def _load_fastmcp_class() -> Any:
     except ImportError as exc:
         raise RuntimeError(
             'MCP server support requires the optional dependency group `mcp`. '
-            'Install it in lyx_env with `pip install -e .[mcp]` or equivalent.'
+            'Install it in the active CellPainting-Claw runtime with `pip install -e .[mcp]` or equivalent.'
         ) from exc
     return FastMCP
 

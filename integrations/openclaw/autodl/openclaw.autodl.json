@@ -8,8 +8,8 @@
   },
   "agents": {
     "defaults": {
-      "workspace": "/root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/autodl/workspace",
-      "repoRoot": "/root/pipeline/cellpaint_pipeline_lib",
+      "workspace": "/root/pipeline/CellPainting-Claw/integrations/openclaw/autodl/workspace",
+      "repoRoot": "/root/pipeline/CellPainting-Claw",
       "skipBootstrap": true,
       "heartbeat": {
         "every": "0m"

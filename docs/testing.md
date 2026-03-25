@@ -17,14 +17,14 @@ Coverage focus:
 Run:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline.test_suites fast
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites fast
 ```
 
 Or, after installation:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 cellpaint-pipeline-tests fast
 ```
 
@@ -42,22 +42,22 @@ Coverage focus:
 Run:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline.test_suites extended
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites extended
 ```
 
 Or, after installation:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 cellpaint-pipeline-tests extended
 ```
 
 ## List Available Suites
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline.test_suites --list
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites --list
 ```
 
 ## Recommended Practice

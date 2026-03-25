@@ -168,7 +168,7 @@ def prepare_segmentation_load_data_native(
     try:
         import pandas as pd
     except ImportError as exc:
-        raise RuntimeError('pandas is required in lyx_env for native segmentation load-data preparation.') from exc
+        raise RuntimeError('pandas is required in the active CellPainting-Claw runtime for native segmentation load-data preparation.') from exc
 
     backend_payload = config.load_segmentation_backend_payload()
     paths_payload = backend_payload['paths']
@@ -233,7 +233,7 @@ def generate_sample_previews_native(
         import pandas as pd
         from PIL import Image
     except ImportError as exc:
-        raise RuntimeError('numpy, pandas, and Pillow are required in lyx_env for native sample previews.') from exc
+        raise RuntimeError('numpy, pandas, and Pillow are required in the active CellPainting-Claw runtime for native sample previews.') from exc
 
     backend_payload = config.load_segmentation_backend_payload()
     paths_payload = backend_payload['paths']
@@ -287,7 +287,7 @@ def generate_png_previews_native(
     try:
         import pandas as pd
     except ImportError as exc:
-        raise RuntimeError('pandas is required in lyx_env for native single-cell PNG previews.') from exc
+        raise RuntimeError('pandas is required in the active CellPainting-Claw runtime for native single-cell PNG previews.') from exc
 
     resolved_manifest_path = manifest_path.resolve() if manifest_path is not None else _get_crop_manifest_path(config, mode)
     manifest_df = pd.read_csv(resolved_manifest_path)
@@ -362,7 +362,7 @@ def extract_single_cell_crops_native(
     try:
         import pandas as pd
     except ImportError as exc:
-        raise RuntimeError('pandas is required in lyx_env for native single-cell crop extraction.') from exc
+        raise RuntimeError('pandas is required in the active CellPainting-Claw runtime for native single-cell crop extraction.') from exc
 
     backend_payload = config.load_segmentation_backend_payload()
     paths_payload = backend_payload['paths']
@@ -453,7 +453,7 @@ def summarize_segmentation_outputs(config: ProjectConfig) -> SegmentationSummary
     try:
         import pandas as pd
     except ImportError as exc:
-        raise RuntimeError('pandas is required in lyx_env for segmentation summary.') from exc
+        raise RuntimeError('pandas is required in the active CellPainting-Claw runtime for segmentation summary.') from exc
 
     backend_payload = config.load_segmentation_backend_payload()
     paths_payload = backend_payload['paths']

@@ -66,7 +66,7 @@ def run_test_suite(suite: str, *, verbosity: int = 1) -> unittest.result.TestRes
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description='Run grouped unittest suites for the local cellpaint_pipeline_lib repository.')
+    parser = argparse.ArgumentParser(description='Run grouped unittest suites for the local CellPainting-Claw repository.')
     parser.add_argument('suite', nargs='?', default='fast', choices=available_test_suites())
     parser.add_argument('--list', action='store_true', help='Print the available grouped test suites as JSON and exit.')
     parser.add_argument('--verbosity', type=int, default=1, help='unittest verbosity passed to TextTestRunner.')

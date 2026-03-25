@@ -1,6 +1,6 @@
 # Release Readiness Checklist
 
-This checklist is for moving `cellpaint_pipeline_lib` from a validated internal library to a cleaner release candidate.
+This checklist is for moving `CellPainting-Claw` from a validated internal library to a cleaner release candidate.
 
 ## P0: Public Surface
 

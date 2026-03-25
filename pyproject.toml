@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cellpaint-pipeline-lib"
+name = "cellpainting-claw"
 version = "0.1.0"
-description = "Standardized wrapper library for Cell Painting profiling, segmentation, and data-access workflows"
+description = "CellPainting-Claw: a standardized Cell Painting workflow library, CLI, skills layer, and agent integration surface"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
@@ -41,8 +41,16 @@ mcp = [
 test = [
   "pytest>=8",
 ]
+docs = [
+  "sphinx>=8,<9",
+  "myst-parser>=3,<5",
+  "furo>=2024.8.6",
+]
 
 [project.scripts]
+cellpainting-claw = "cellpainting_claw.cli:main"
+cellpainting-skills = "cellpainting_skills.cli:main"
+cellpainting-claw-tests = "cellpainting_claw.test_suites:main"
 cellpaint-pipeline = "cellpaint_pipeline.cli:main"
 cellpaint-pipeline-tests = "cellpaint_pipeline.test_suites:main"
 

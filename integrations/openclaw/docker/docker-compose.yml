@@ -13,9 +13,9 @@ services:
       OPENCLAW_PROVIDER_ID: ${OPENCLAW_PROVIDER_ID:-openai_compatible}
       OPENCLAW_PROVIDER_API: ${OPENCLAW_PROVIDER_API:-openai-completions}
       OPENCLAW_HOME: /workspace/state/openclaw
-      OPENCLAW_TEMPLATE_CONFIG_PATH: /opt/cellpaint_pipeline_lib/integrations/openclaw/docker/openclaw.container.json
+      OPENCLAW_TEMPLATE_CONFIG_PATH: /opt/CellPainting-Claw/integrations/openclaw/docker/openclaw.container.json
       OPENCLAW_RUNTIME_CONFIG_PATH: /workspace/state/openclaw/openclaw.runtime.json
-      CELLPAINT_CONFIG_PATH: /opt/cellpaint_pipeline_lib/integrations/openclaw/docker/project_config.docker.json
+      CELLPAINT_CONFIG_PATH: /opt/CellPainting-Claw/integrations/openclaw/docker/project_config.docker.json
       CELLPAINT_PIPELINE_ROOT: /workspace/pipeline
     network_mode: host
     volumes:

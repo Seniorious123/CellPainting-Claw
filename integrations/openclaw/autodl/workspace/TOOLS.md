@@ -2,33 +2,33 @@
 
 Important local paths:
 
-- repo root: `/root/pipeline/cellpaint_pipeline_lib`
-- example config: `/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json`
-- Python interpreter: `/root/miniconda3/envs/lyx_env/bin/python`
+- repo root: `/root/pipeline/CellPainting-Claw`
+- example config: `/root/pipeline/CellPainting-Claw/configs/project_config.example.json`
+- Python interpreter: `$PYTHON_BIN`
 
 Preferred CLI form:
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline <command> ...
+$PYTHON_BIN -m cellpainting_claw <command> ...
 ```
 
 Preferred discovery commands:
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline list-mcp-tools
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline show-public-api-contract
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline list-pipeline-skills
+$PYTHON_BIN -m cellpainting_claw list-mcp-tools
+$PYTHON_BIN -m cellpainting_claw show-public-api-contract
+$PYTHON_BIN -m cellpainting_claw list-pipeline-skills
 ```
 
 Preferred execution commands:
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-skill --config /root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json --skill run-full-workflow
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-public-api-entrypoint --config /root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
 ```
 
 Optional MCP mode:
 
 ```bash
-/root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/start_cellpaint_mcp_http.sh
+/root/pipeline/CellPainting-Claw/integrations/openclaw/start_cellpaint_mcp_http.sh
 ```

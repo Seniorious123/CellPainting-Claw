@@ -6,13 +6,13 @@ if [ "$#" -gt 0 ]; then
   shift
 fi
 
-export PATH="/home/cellpaint/.local/bin:/opt/conda/envs/lyx_env/bin:/opt/conda/bin:${PATH}"
+export PATH="/home/cellpaint/.local/bin:/opt/conda/envs/cellpainting-claw/bin:/opt/conda/bin:${PATH}"
 export OPENCLAW_HOME="${OPENCLAW_HOME:-/workspace/state/openclaw}"
-export OPENCLAW_TEMPLATE_CONFIG_PATH="${OPENCLAW_TEMPLATE_CONFIG_PATH:-/opt/cellpaint_pipeline_lib/integrations/openclaw/docker/openclaw.container.json}"
+export OPENCLAW_TEMPLATE_CONFIG_PATH="${OPENCLAW_TEMPLATE_CONFIG_PATH:-/opt/CellPainting-Claw/integrations/openclaw/docker/openclaw.container.json}"
 export OPENCLAW_RUNTIME_CONFIG_PATH="${OPENCLAW_RUNTIME_CONFIG_PATH:-$OPENCLAW_HOME/openclaw.runtime.json}"
 export OPENCLAW_CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-$OPENCLAW_RUNTIME_CONFIG_PATH}"
 export CELLPAINT_PIPELINE_ROOT="${CELLPAINT_PIPELINE_ROOT:-/workspace/pipeline}"
-export CELLPAINT_CONFIG_PATH="${CELLPAINT_CONFIG_PATH:-/opt/cellpaint_pipeline_lib/integrations/openclaw/docker/project_config.docker.json}"
+export CELLPAINT_CONFIG_PATH="${CELLPAINT_CONFIG_PATH:-/opt/CellPainting-Claw/integrations/openclaw/docker/project_config.docker.json}"
 export CELLPAINT_MCP_HOST="${CELLPAINT_MCP_HOST:-127.0.0.1}"
 export CELLPAINT_MCP_PORT="${CELLPAINT_MCP_PORT:-8768}"
 export CELLPAINT_MCP_PATH="${CELLPAINT_MCP_PATH:-/mcp}"
@@ -25,7 +25,7 @@ export OPENCLAW_FALLBACK_MODEL="${OPENCLAW_FALLBACK_MODEL:-}"
 mkdir -p "$OPENCLAW_HOME" "$OPENCLAW_HOME/logs" "$OPENCLAW_WORKSPACE"
 
 bootstrap_workspace() {
-  local src="/opt/cellpaint_pipeline_lib/integrations/openclaw/workspace"
+  local src="/opt/CellPainting-Claw/integrations/openclaw/workspace"
   local dst="$OPENCLAW_WORKSPACE"
   for name in AGENTS.md SOUL.md TOOLS.md USER.md; do
     if [ ! -f "$dst/$name" ]; then
@@ -40,7 +40,7 @@ bootstrap_workspace() {
 }
 
 check_runtime_mounts() {
-  if [ ! -d "$CELLPAINT_PIPELINE_ROOT/cellpaint_pipeline_lib" ]; then
+  if [ ! -d "$CELLPAINT_PIPELINE_ROOT/CellPainting-Claw" ]; then
     echo "Expected pipeline root at $CELLPAINT_PIPELINE_ROOT is missing." >&2
     echo "Mount the host pipeline root into /workspace/pipeline when you start the container." >&2
     exit 1
@@ -109,7 +109,7 @@ PY
 
 start_mcp() {
   local log_file="$OPENCLAW_HOME/logs/cellpaint_mcp_http.log"
-  /opt/conda/envs/lyx_env/bin/python -m cellpaint_pipeline serve-mcp \
+  /opt/conda/envs/cellpainting-claw/bin/python -m cellpaint_pipeline serve-mcp \
     --transport streamable-http \
     --host "$CELLPAINT_MCP_HOST" \
     --port "$CELLPAINT_MCP_PORT" \
@@ -143,7 +143,7 @@ case "$MODE" in
     exec openclaw tui "$@"
     ;;
   mcp)
-    exec /opt/conda/envs/lyx_env/bin/python -m cellpaint_pipeline serve-mcp \
+    exec /opt/conda/envs/cellpainting-claw/bin/python -m cellpaint_pipeline serve-mcp \
       --transport streamable-http \
       --host "$CELLPAINT_MCP_HOST" \
       --port "$CELLPAINT_MCP_PORT" \

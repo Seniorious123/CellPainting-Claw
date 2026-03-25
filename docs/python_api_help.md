@@ -4,17 +4,24 @@ This document is the Python-side equivalent of CLI `--help`.
 
 It focuses on the importable, publication-facing surface rather than internal helper functions.
 
-## Recommended Import Style
+## Recommended Import Styles
 
 ```python
-import cellpaint_pipeline as cp
+import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json(
-    "/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json"
+    "/root/pipeline/CellPainting-Claw/configs/project_config.example.json"
 )
 ```
+For skill-focused automation, you can also use:
 
-## Recommended Top-Level Calls
+```python
+import cellpainting_skills as cps
+
+skills = cps.available_pipeline_skills()
+```
+
+## Recommended Top-Level Calls for `cellpainting_claw`
 
 In order of preference:
 
@@ -119,10 +126,10 @@ Discovery helpers for automation layers:
 End-to-end pipeline:
 
 ```python
-import cellpaint_pipeline as cp
+import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json(
-    "/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json"
+    "/root/pipeline/CellPainting-Claw/configs/project_config.example.json"
 )
 result = cp.run_end_to_end_pipeline(config)
 print(result.output_dir)
@@ -152,7 +159,7 @@ print(cp.data_download_plan_to_dict(plan))
 MCP tool discovery:
 
 ```python
-import cellpaint_pipeline as cp
+import cellpainting_claw as cp
 
 for tool_name in cp.available_mcp_tools():
     print(tool_name)

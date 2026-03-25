@@ -1,11 +1,11 @@
 # NanoBot Quickstart
 
-This directory contains a ready-to-adapt NanoBot handoff for `cellpaint_pipeline_lib`.
+This directory contains a ready-to-adapt NanoBot handoff for `CellPainting-Claw`.
 
 ## What is already validated
 
-- The library exports MCP-friendly tools through `cellpaint_pipeline.mcp_tools`
-- The library exposes a real MCP server through `cellpaint_pipeline.mcp_server`
+- The library exports MCP-friendly tools through `cellpainting_claw` and `cellpaint_pipeline.mcp_tools`
+- The library exposes a real MCP server through `cellpainting_claw.run_mcp_server` and `cellpaint_pipeline.mcp_server`
 - `stdio` startup was validated
 - `streamable-http` startup was validated on `127.0.0.1:8768`
 - A direct HTTP probe to `/mcp` returned `406 Not Acceptable`, which confirms the route is live and expects an MCP-compatible client
@@ -24,11 +24,11 @@ Without that key, NanoBot can start and load the MCP config, but it cannot compl
 
 ## Start the MCP server
 
-Use the lyx_env interpreter directly:
+Use the active CellPainting-Claw interpreter directly:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline serve-mcp --transport streamable-http --host 127.0.0.1 --port 8768 --path /mcp
+cd /root/pipeline/CellPainting-Claw
+$PYTHON_BIN -m cellpainting_claw serve-mcp --transport streamable-http --host 127.0.0.1 --port 8768 --path /mcp
 ```
 
 ## NanoBot config
@@ -71,7 +71,7 @@ For `nanobot 0.0.60`, a simple YAML file works for basic agent metadata, but ric
 Typical sequence:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/nanobot
+cd /root/pipeline/CellPainting-Claw/integrations/nanobot
 ./start_cellpaint_mcp_http.sh
 ```
 
@@ -79,6 +79,6 @@ In another shell:
 
 ```bash
 export OPENAI_API_KEY=...
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/nanobot
+cd /root/pipeline/CellPainting-Claw/integrations/nanobot
 ./run_nanobot_local.sh
 ```

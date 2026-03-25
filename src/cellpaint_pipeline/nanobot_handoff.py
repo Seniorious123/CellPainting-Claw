@@ -39,6 +39,8 @@ def nanobot_recommended_tool_order() -> list[str]:
 
 
 def nanobot_task_routes() -> list[NanoBotTaskRoute]:
+    repo_root = Path(__file__).resolve().parents[2]
+    config_path = str(repo_root / 'configs' / 'project_config.example.json')
     return [
         NanoBotTaskRoute(
             key='discover-capabilities',
@@ -56,7 +58,7 @@ def nanobot_task_routes() -> list[NanoBotTaskRoute]:
             reason='This is already a stable skill-level task and avoids forcing the agent to assemble planning parameters manually.',
             params_template={
                 'skill_key': 'plan-gallery-data',
-                'config_path': '/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json',
+                'config_path': config_path,
                 'params_json': '{"data_request": {"mode": "gallery-prefix", "prefix": "cpg0016-jump/source_4/workspace/", "dry_run": true}}',
             },
         ),
@@ -68,7 +70,7 @@ def nanobot_task_routes() -> list[NanoBotTaskRoute]:
             reason='Skill-level routing is the default high-level path for agent-driven end-to-end execution.',
             params_template={
                 'skill_key': 'run-full-workflow',
-                'config_path': '/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json',
+                'config_path': config_path,
                 'params_json': '{}',
             },
         ),
@@ -80,7 +82,7 @@ def nanobot_task_routes() -> list[NanoBotTaskRoute]:
             reason='The skill key already captures the intended DeepProfiler branch without exposing internal workflow names.',
             params_template={
                 'skill_key': 'run-deepprofiler-full',
-                'config_path': '/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json',
+                'config_path': config_path,
                 'params_json': '{}',
             },
         ),
@@ -93,7 +95,7 @@ def nanobot_task_routes() -> list[NanoBotTaskRoute]:
             params_template={
                 'entrypoint': 'run_end_to_end_pipeline',
                 'params': {'include_validation_report': True},
-                'config': '/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json',
+                'config': config_path,
             },
         ),
     ]
@@ -104,12 +106,12 @@ def nanobot_handoff_summary() -> NanoBotHandoffSummary:
     integrations_root = repo_root / 'integrations' / 'nanobot'
     return NanoBotHandoffSummary(
         agent_name='Cell Painting Operator',
-        mcp_server_name='cellpaint-pipeline',
+        mcp_server_name='cellpainting-claw',
         recommended_tool_order=nanobot_recommended_tool_order(),
         task_routes=nanobot_task_routes(),
         start_commands={
-            'start_mcp_http': 'cd /root/pipeline/cellpaint_pipeline_lib/integrations/nanobot && ./start_cellpaint_mcp_http.sh',
-            'run_nanobot_local': 'cd /root/pipeline/cellpaint_pipeline_lib/integrations/nanobot && ./run_nanobot_local.sh',
+            'start_mcp_http': f'cd {integrations_root} && ./start_cellpaint_mcp_http.sh',
+            'run_nanobot_local': f'cd {integrations_root} && ./run_nanobot_local.sh',
         },
         local_files={
             'quickstart': str(integrations_root / 'quickstart.md'),

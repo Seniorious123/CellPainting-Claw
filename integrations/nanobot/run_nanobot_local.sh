@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/nanobot
+cd /root/pipeline/CellPainting-Claw/integrations/nanobot
 NANOBOT_BIN="${NANOBOT_BIN:-/home/linuxbrew/.linuxbrew/bin/nanobot}"
 if [ ! -x "$NANOBOT_BIN" ]; then
   if command -v nanobot >/dev/null 2>&1; then

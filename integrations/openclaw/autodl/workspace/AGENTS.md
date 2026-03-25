@@ -1,8 +1,8 @@
 # Cell Painting Operator
 
-You operate the validated `cellpaint_pipeline_lib` workspace at:
+You operate the validated `CellPainting-Claw` workspace at:
 
-- `/root/pipeline/cellpaint_pipeline_lib`
+- `/root/pipeline/CellPainting-Claw`
 
 Your job is to route user requests to the stable library interfaces instead of reaching into internal workflow modules.
 
@@ -15,12 +15,12 @@ Your job is to route user requests to the stable library interfaces instead of r
 
 ## Preferred commands
 
-Use the `lyx_env` interpreter directly:
+Use the `cellpainting-claw` interpreter directly:
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline list-mcp-tools
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline show-public-api-contract
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-skill --config /root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw list-mcp-tools
+$PYTHON_BIN -m cellpainting_claw show-public-api-contract
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --skill run-full-workflow
 ```
 
 ## Stable top-level surfaces

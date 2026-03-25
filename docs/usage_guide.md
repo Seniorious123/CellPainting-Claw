@@ -25,43 +25,43 @@ Runtime tuning blocks:
 Show the resolved configuration:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline show-config           --config configs/project_config.example.json
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw show-config           --config configs/project_config.example.json
 ```
 
 Run the default top-level pipeline:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-end-to-end-pipeline           --config configs/project_config.example.json
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline           --config configs/project_config.example.json
 ```
 
 Run a named skill:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-skill           --config configs/project_config.example.json           --skill run-full-workflow
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-pipeline-skill           --config configs/project_config.example.json           --skill run-full-workflow
 ```
 
 Run a named preset:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-preset           --config configs/project_config.example.json           --preset full-pipeline
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-pipeline-preset           --config configs/project_config.example.json           --preset full-pipeline
 ```
 
 Run a profiling-only suite:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-profiling-suite           --config configs/project_config.example.json           --suite native
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-profiling-suite           --config configs/project_config.example.json           --suite native
 ```
 
 Run a segmentation-only suite:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-segmentation-suite           --config configs/project_config.example.json           --suite mask-export
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-segmentation-suite           --config configs/project_config.example.json           --suite mask-export
 ```
 
 Run the standardized DeepProfiler branch:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-deepprofiler-pipeline           --config configs/project_config.example.json           --workflow-root /path/to/segmentation_workflow
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-deepprofiler-pipeline           --config configs/project_config.example.json           --workflow-root /path/to/segmentation_workflow
 ```
 
 ## Data-Access CLI
@@ -69,19 +69,19 @@ PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline ru
 Summarize the available data-access backends:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline summarize-data-access           --config configs/project_config.example.json
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw summarize-data-access           --config configs/project_config.example.json
 ```
 
 Build a gallery download plan:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline plan-data-access           --config configs/project_config.example.json           --mode gallery-source           --dataset-id cpg0016-jump           --source-id source_4           --subprefix workspace           --dry-run           --output-path outputs/download_plan.json
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw plan-data-access           --config configs/project_config.example.json           --mode gallery-source           --dataset-id cpg0016-jump           --source-id source_4           --subprefix workspace           --dry-run           --output-path outputs/download_plan.json
 ```
 
 Execute a saved plan:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline execute-download-plan           --config configs/project_config.example.json           --plan-path outputs/download_plan.json
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw execute-download-plan           --config configs/project_config.example.json           --plan-path outputs/download_plan.json
 ```
 
 ## MCP Server
@@ -89,7 +89,7 @@ PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline ex
 Start the MCP server with HTTP transport:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline serve-mcp           --transport streamable-http           --host 127.0.0.1           --port 8768           --path /mcp
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw serve-mcp           --transport streamable-http           --host 127.0.0.1           --port 8768           --path /mcp
 ```
 
 ## OpenClaw on AutoDL-Like Hosts
@@ -97,7 +97,7 @@ PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline se
 Configure an OpenAI-compatible provider for the active OpenClaw runtime:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/autodl
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl
 cp provider.env.example provider.env
 # edit provider.env
 ./configure_openai_compatible_provider.sh

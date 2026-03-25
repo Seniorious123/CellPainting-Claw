@@ -353,7 +353,7 @@ def _resolve_deepprofiler_command(config: ProjectConfig, deepprofiler_executable
             if candidate.exists():
                 return [str(candidate.resolve())]
             raise FileNotFoundError(
-                f'DeepProfiler executable not found: {candidate}. Install DeepProfiler in lyx_env or clear deepprofiler_runtime.deepprofiler_executable to use python -m deepprofiler.'
+                f'DeepProfiler executable not found: {candidate}. Install DeepProfiler in the active CellPainting-Claw runtime or clear deepprofiler_runtime.deepprofiler_executable to use python -m deepprofiler.'
             )
         return [str(deepprofiler_executable)]
 

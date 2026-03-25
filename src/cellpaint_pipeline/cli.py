@@ -110,10 +110,14 @@ from cellpaint_pipeline.workflows.segmentation import (
 )
 
 
-def build_parser() -> argparse.ArgumentParser:
+def build_parser(
+    *,
+    prog: str = 'cellpaint_pipeline',
+    description: str = 'Standardized wrapper CLI for validated Cell Painting workflows.',
+) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog='cellpaint_pipeline',
-        description='Standardized wrapper CLI for validated Cell Painting workflows.',
+        prog=prog,
+        description=description,
     )
     subparsers = parser.add_subparsers(dest='command', required=True)
 
@@ -562,8 +566,13 @@ def _normalize_extra_args(extra_args: list[str]) -> list[str]:
     return extra_args
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = build_parser()
+def main(
+    argv: list[str] | None = None,
+    *,
+    prog: str = 'cellpaint_pipeline',
+    description: str = 'Standardized wrapper CLI for validated Cell Painting workflows.',
+) -> int:
+    parser = build_parser(prog=prog, description=description)
     args = parser.parse_args(argv)
 
     try:

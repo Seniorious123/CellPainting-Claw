@@ -45,7 +45,7 @@ def collect_deepprofiler_features(
     try:
         import pandas as pd
     except ImportError as exc:
-        raise RuntimeError("pandas and pyarrow are required in lyx_env for DeepProfiler feature collection.") from exc
+        raise RuntimeError("pandas and pyarrow are required in the active CellPainting-Claw runtime for DeepProfiler feature collection.") from exc
 
     resolved_project_root = project_root.expanduser().resolve()
     project_manifest_path = resolved_project_root / "project_manifest.json"

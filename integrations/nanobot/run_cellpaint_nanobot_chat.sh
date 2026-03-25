@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/root/pipeline/cellpaint_pipeline_lib"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 INTEGRATIONS_ROOT="$ROOT/integrations/nanobot"
-PYTHON_BIN="/root/miniconda3/envs/lyx_env/bin/python"
+PYTHON_BIN="${CELLPAINT_PYTHON_BIN:-${PYTHON_BIN:-python}}"
 NANOBOT_BIN="${NANOBOT_BIN:-/home/linuxbrew/.linuxbrew/bin/nanobot}"
 MCP_HOST="127.0.0.1"
 MCP_PORT="8768"
@@ -30,7 +30,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 cd "$ROOT"
-"$PYTHON_BIN" -m cellpaint_pipeline serve-mcp --transport streamable-http --host "$MCP_HOST" --port "$MCP_PORT" --path "$MCP_PATH" >"$MCP_LOG" 2>&1 &
+"$PYTHON_BIN" -m cellpainting_claw serve-mcp --transport streamable-http --host "$MCP_HOST" --port "$MCP_PORT" --path "$MCP_PATH" >"$MCP_LOG" 2>&1 &
 MCP_PID=$!
 sleep 2
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/docker
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
 if [ -f ./.env ]; then
   echo "Using docker env file: $(pwd)/.env"
 else

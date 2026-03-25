@@ -5,7 +5,7 @@
   "agents": {
     "defaults": {
       "workspace": "/workspace/state/openclaw/workspace",
-      "repoRoot": "/workspace/pipeline/cellpaint_pipeline_lib",
+      "repoRoot": "/workspace/pipeline/CellPainting-Claw",
       "skipBootstrap": true,
       "heartbeat": {
         "every": "0m"

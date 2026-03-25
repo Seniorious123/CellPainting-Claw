@@ -71,10 +71,10 @@ A minimal practical config for this library should explicitly pin:
 
 Validated machine-local reference:
 
-- `/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json`
+- `/root/pipeline/CellPainting-Claw/configs/project_config.example.json`
 
 Portable distribution template:
 
-- `/root/pipeline/cellpaint_pipeline_lib/configs/project_config.portable.example.json`
+- `/root/pipeline/CellPainting-Claw/configs/project_config.portable.example.json`
 
 Use `show-config` after editing the JSON to confirm all relative paths resolve the way you expect.

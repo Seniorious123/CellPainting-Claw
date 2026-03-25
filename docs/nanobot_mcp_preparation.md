@@ -1,6 +1,6 @@
 # NanoBot MCP Preparation
 
-This document describes how `cellpaint_pipeline_lib` is prepared for NanoBot-style MCP integration.
+This document describes how `CellPainting-Claw` is prepared for NanoBot-style MCP integration.
 
 ## Goal
 
@@ -41,7 +41,7 @@ Execution tools:
 ## Python Interface
 
 ```python
-import cellpaint_pipeline as cp
+import cellpainting_claw as cp
 
 catalog = cp.mcp_tool_catalog()
 payload = cp.run_mcp_tool_to_dict(
@@ -58,9 +58,9 @@ payload = cp.run_mcp_tool_to_dict(
 ## CLI Interface
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline list-mcp-tools
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline show-mcp-tool-catalog
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-mcp-tool --tool run_public_api_entrypoint --params-json '{"entrypoint":"build_data_request","params":{"mode":"gallery-prefix","prefix":"cpg0016-jump/source_4/workspace/","dry_run":true}}'
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw list-mcp-tools
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw show-mcp-tool-catalog
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-mcp-tool --tool run_public_api_entrypoint --params-json '{"entrypoint":"build_data_request","params":{"mode":"gallery-prefix","prefix":"cpg0016-jump/source_4/workspace/","dry_run":true}}'
 ```
 
 ## Why This Layer Fits NanoBot
@@ -84,7 +84,7 @@ The repository includes `cellpaint_pipeline.mcp_server` and exposes:
 CLI example:
 
 ```bash
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline serve-mcp --transport stdio
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw serve-mcp --transport stdio
 ```
 
 If the `mcp` SDK is not installed, the command fails explicitly rather than silently.

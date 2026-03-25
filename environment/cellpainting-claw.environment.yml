@@ -1,4 +1,4 @@
-name: lyx_env
+name: cellpainting-claw
 channels:
   - conda-forge
   - bioconda

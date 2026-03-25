@@ -1,6 +1,6 @@
 # Release Notes
 
-`cellpaint_pipeline_lib` is now packaged as a cleaner release candidate oriented around three goals:
+`CellPainting-Claw` is now packaged as a cleaner release candidate oriented around three goals:
 
 - a stable Python and CLI entry surface
 - a documented release workflow
@@ -25,7 +25,7 @@
 ## Recommended First Commands
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 ./scripts/run_release_smoke_test.sh
 ./scripts/build_release_bundle.sh
 ```

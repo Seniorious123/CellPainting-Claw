@@ -9,12 +9,12 @@ Use this skill when the user wants to discover, run, or summarize the standardiz
 
 ## Goal
 
-Translate natural-language requests into stable `cellpaint_pipeline_lib` entrypoints rather than custom shell chains.
+Translate natural-language requests into stable `CellPainting-Claw` entrypoints rather than custom shell chains.
 
 ## Base command
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline
+$PYTHON_BIN -m cellpainting_claw
 ```
 
 ## Preferred order
@@ -22,21 +22,21 @@ Translate natural-language requests into stable `cellpaint_pipeline_lib` entrypo
 1. Discovery
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline list-mcp-tools
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline show-public-api-contract
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline list-pipeline-skills
+$PYTHON_BIN -m cellpainting_claw list-mcp-tools
+$PYTHON_BIN -m cellpainting_claw show-public-api-contract
+$PYTHON_BIN -m cellpainting_claw list-pipeline-skills
 ```
 
 2. Task-oriented execution
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-skill --config /root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --skill run-full-workflow
 ```
 
 3. Stable public API dispatch
 
 ```bash
-/root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-public-api-entrypoint --config /root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
+$PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
 ```
 
 ## Useful skill keys
@@ -63,7 +63,7 @@ For each run, report:
 If the host is configured to use MCP, start the server with:
 
 ```bash
-/root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/start_cellpaint_mcp_http.sh
+/root/pipeline/CellPainting-Claw/integrations/openclaw/start_cellpaint_mcp_http.sh
 ```
 
 Then prefer the MCP tools that mirror the same public surfaces:

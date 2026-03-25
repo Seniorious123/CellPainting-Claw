@@ -12,20 +12,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN useradd --create-home --shell /bin/bash --uid 1000 cellpaint
 
-WORKDIR /opt/cellpaint_pipeline_lib
-COPY . /opt/cellpaint_pipeline_lib
+WORKDIR /opt/CellPainting-Claw
+COPY . /opt/CellPainting-Claw
 
-RUN conda env create -f /opt/cellpaint_pipeline_lib/environment/lyx_env_reference.yml \
+RUN conda env create -f /opt/CellPainting-Claw/environment/cellpainting-claw.environment.yml \
  && conda clean -afy
 
-RUN /opt/conda/envs/lyx_env/bin/pip install -e /opt/cellpaint_pipeline_lib[mcp,data-access,test]
+RUN /opt/conda/envs/cellpainting-claw/bin/pip install -e /opt/CellPainting-Claw[mcp,data-access,test]
 
 USER cellpaint
 ENV HOME=/home/cellpaint
-ENV PATH=/home/cellpaint/.local/bin:/opt/conda/envs/lyx_env/bin:/opt/conda/bin:$PATH
+ENV PATH=/home/cellpaint/.local/bin:/opt/conda/envs/cellpainting-claw/bin:/opt/conda/bin:$PATH
 
 RUN curl -fsSL https://openclaw.ai/install-cli.sh | bash -s -- --no-onboard
 
 WORKDIR /workspace/state/openclaw/workspace
-ENTRYPOINT ["/usr/bin/tini", "--", "/opt/cellpaint_pipeline_lib/integrations/openclaw/docker/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/opt/CellPainting-Claw/integrations/openclaw/docker/entrypoint.sh"]
 CMD ["gateway"]

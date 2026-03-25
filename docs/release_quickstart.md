@@ -1,22 +1,22 @@
 # Release Quickstart
 
-This document is the shortest path from a clean checkout to a releasable `cellpaint_pipeline_lib` package bundle.
+This document is the shortest path from a clean checkout to a releasable `CellPainting-Claw` package bundle.
 
 ## 1. Prepare the Environment
 
 Use the validated Conda environment:
 
 ```bash
-conda env create -f /root/pipeline/cellpaint_pipeline_lib/environment/lyx_env_reference.yml
-conda activate lyx_env
+conda env create -f /root/pipeline/CellPainting-Claw/environment/cellpainting-claw.environment.yml
+conda activate cellpainting-claw
 ```
 
-If `lyx_env` already exists, reuse it.
+If `cellpainting-claw` already exists, reuse it.
 
 ## 2. Install the Library
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 pip install -e .
 ```
 
@@ -38,7 +38,7 @@ Keep `configs/project_config.example.json` as the validated machine-local refere
 Run the release smoke-test wrapper:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 ./scripts/run_release_smoke_test.sh
 ```
 
@@ -55,7 +55,7 @@ Default output location:
 ## 4. Build the Release Bundle
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 ./scripts/build_release_bundle.sh
 ```
 
@@ -115,7 +115,7 @@ Before publishing or sharing a release:
 Immediately before publication:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 ./scripts/run_release_smoke_test.sh
 ./scripts/build_release_bundle.sh
 ```

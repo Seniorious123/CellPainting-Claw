@@ -5,7 +5,7 @@ This directory defines the Docker-first OpenClaw runtime for the Cell Painting p
 ## Goals
 
 - keep OpenClaw inside a dedicated runtime boundary
-- keep the validated Python stack in `lyx_env`
+- keep the validated Python stack in `cellpainting-claw`
 - avoid granting unnecessary host-level access
 - preserve the stable library interfaces: CLI, Python API, and local MCP server
 - avoid storing provider keys in repository-managed Docker config files
@@ -79,14 +79,14 @@ That keeps the validated backend directories available inside the runtime.
 If the daemon is not already running:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/docker
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
 ./start_docker_restricted.sh
 ```
 
 ## Build and Run
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/docker
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
 cp .env.example .env
 # edit .env
 ./compose_up.sh
@@ -102,7 +102,7 @@ This starts:
 In a second shell:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/docker
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
 ./compose_acp_client.sh
 ```
 
@@ -112,13 +112,13 @@ For the current OpenClaw release, this wrapper launches the TUI path.
 
 Use this config path for direct CLI calls inside the runtime:
 
-- `/opt/cellpaint_pipeline_lib/integrations/openclaw/docker/project_config.docker.json`
+- `/opt/CellPainting-Claw/integrations/openclaw/docker/project_config.docker.json`
 
 Example:
 
 ```bash
-/opt/conda/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-skill \
-  --config /opt/cellpaint_pipeline_lib/integrations/openclaw/docker/project_config.docker.json \
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill \
+  --config /opt/CellPainting-Claw/integrations/openclaw/docker/project_config.docker.json \
   --skill run-full-workflow
 ```
 

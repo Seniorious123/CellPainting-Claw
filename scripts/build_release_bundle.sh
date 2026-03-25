@@ -30,7 +30,7 @@ with pyproject.open('rb') as fh:
     project = tomllib.load(fh)
 version = project['project']['version']
 stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-bundle_name = f'cellpaint_pipeline_lib-{version}-release-{stamp}'
+bundle_name = f'cellpainting-claw-{version}-release-{stamp}'
 staging = dist / bundle_name
 archive = dist / f'{bundle_name}.tar.gz'
 checksum = dist / f'{bundle_name}.sha256'

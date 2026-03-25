@@ -2,7 +2,7 @@
 
 ## Goal
 
-`cellpaint_pipeline_lib` is not meant to be another loose collection of scripts. Its role is to turn the validated Cell Painting workflow into a reusable software interface.
+`CellPainting-Claw` is not meant to be another loose collection of scripts. Its role is to turn the validated Cell Painting workflow into a reusable software interface.
 
 The practical goals are:
 

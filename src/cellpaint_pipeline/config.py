@@ -333,13 +333,13 @@ DATA_ACCESS_CONFIG_FIELD_GUIDE: tuple[dict[str, Any], ...] = (
     {
         'name': 'data_cache_root',
         'level': 'recommended',
-        'default': 'workspace_root/cellpaint_pipeline_lib/cache/data',
+        'default': 'workspace_root/cellpainting-claw/cache/data',
         'description': 'Default cache root for downloaded gallery data.',
     },
     {
         'name': 'index_cache_root',
         'level': 'recommended',
-        'default': 'workspace_root/cellpaint_pipeline_lib/cache/index',
+        'default': 'workspace_root/cellpainting-claw/cache/index',
         'description': 'Default cache root for listing snapshots and access-package metadata.',
     },
     {
@@ -390,12 +390,12 @@ def _build_data_access_config(payload: dict[str, Any], workspace_root: Path) -> 
         data_cache_root=_resolve_from_base(
             workspace_root,
             payload.get("data_cache_root"),
-            workspace_root / "cellpaint_pipeline_lib" / "cache" / "data",
+            workspace_root / "cellpainting-claw" / "cache" / "data",
         ),
         index_cache_root=_resolve_from_base(
             workspace_root,
             payload.get("index_cache_root"),
-            workspace_root / "cellpaint_pipeline_lib" / "cache" / "index",
+            workspace_root / "cellpainting-claw" / "cache" / "index",
         ),
         preferred_packages=tuple(str(item) for item in payload.get("preferred_packages", ["boto3", "cpgdata", "quilt3"])),
     )

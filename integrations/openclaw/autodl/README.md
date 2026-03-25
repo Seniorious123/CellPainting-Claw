@@ -38,7 +38,7 @@ Current controls include:
 
 - `OPENCLAW_HOME` under `integrations/openclaw/autodl/state`
 - workspace under `integrations/openclaw/autodl/workspace`
-- `repoRoot` pinned to `cellpaint_pipeline_lib`
+- `repoRoot` pinned to the local `CellPainting-Claw` checkout
 - browser and canvas tools denied
 - elevated tooling disabled
 
@@ -49,14 +49,14 @@ The platform instance boundary still matters more than OpenClaw itself.
 Install OpenClaw if needed:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/autodl
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl
 ./install_openclaw_cli.sh
 ```
 
 Create a local provider env file:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/autodl
+cd /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl
 cp provider.env.example provider.env
 ```
 
@@ -101,8 +101,8 @@ Default endpoints:
 If you want to run the same controlled project config without natural-language routing:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-pipeline-skill           --config /root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/autodl/project_config.autodl.json           --skill run-full-workflow
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-pipeline-skill           --config /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl/project_config.autodl.json           --skill run-full-workflow
 ```
 
 ## Release Guidance

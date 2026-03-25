@@ -1,62 +1,88 @@
-# cellpaint_pipeline_lib
+# CellPainting-Claw
 
-`cellpaint_pipeline_lib` packages the validated Cell Painting workflow into a reusable Python library, CLI, and agent-facing integration layer.
+CellPainting-Claw is a release-oriented software interface for validated Cell Painting workflows.
 
-The library keeps the validated backend workspaces in place while providing:
+It turns a previously script-heavy analysis setup into a cleaner package with four public layers:
 
-- stable configuration loading
-- stable CLI entrypoints
-- stable Python public APIs
-- data-access planning helpers for Cell Painting Gallery and JUMP-style sources
-- segmentation and DeepProfiler integration paths
-- MCP and agent integration surfaces for NanoBot and OpenClaw
+- a Python API for reproducible workflow execution
+- a CLI for standardized pipeline runs
+- a skill layer for agent-facing task routing
+- MCP integration surfaces for NanoBot and OpenClaw
+
+The project is designed to sit on top of validated backend workspaces rather than hide them. In practice, that means you can keep the proven profiling, segmentation, and DeepProfiler assets, while exposing them through a cleaner and more automatable interface.
+
+## Project Naming
+
+This repository uses two public names on purpose:
+
+- `CellPainting-Claw` is the main project, package distribution, and full workflow interface
+- `CellPainting-Skills` is the skill-oriented layer for agent and automation entrypoints
+
+In Python, that maps to:
+
+- `import cellpainting_claw as cp`
+- `import cellpainting_skills as cps`
+
+On the command line, that maps to:
+
+- `cellpainting-claw`
+- `cellpainting-skills`
 
 ## Scope
 
-The current library covers four major areas:
+The current release covers four major areas:
 
 1. Data access and download planning
 2. Profiling and evaluation
 3. Segmentation, single-cell crops, and preview generation
 4. DeepProfiler export, project assembly, profiling, and feature collection
 
-The library is designed to sit alongside the validated backend workspaces rather than replace them immediately.
-
 ## Recommended Public API Order
 
-When you need a stable library entrypoint, use this order:
+When you need a stable top-level entrypoint, use this order:
 
 1. `run_end_to_end_pipeline`
 2. `run_pipeline_skill`
 3. `run_pipeline_preset`
 4. `run_deepprofiler_pipeline`
 
-Example:
+Main package example:
 
 ```python
-import cellpaint_pipeline as cp
+import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json(
-    "/root/pipeline/cellpaint_pipeline_lib/configs/project_config.example.json"
+    "/root/pipeline/CellPainting-Claw/configs/project_config.example.json"
 )
 result = cp.run_end_to_end_pipeline(config)
 print(result.output_dir)
 ```
 
-## Quick Start
+Skill-layer example:
 
-Install into `lyx_env`:
+```python
+import cellpainting_skills as cps
 
-```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-pip install -e .
+print(cps.available_pipeline_skills())
 ```
 
-Run the smoke test:
+## Quick Start
+
+Create an environment and install the package:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline smoke-test \
+cd /root/pipeline/CellPainting-Claw
+conda env create -f environment/cellpainting-claw.environment.yml
+conda activate cellpainting-claw
+pip install -e .
+export PYTHON_BIN="$(command -v python)"
+```
+
+Run the lightweight smoke test:
+
+```bash
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw smoke-test \
   --config configs/project_config.example.json \
   --output-path outputs/smoke_test_report.json
 ```
@@ -64,9 +90,16 @@ PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline sm
 Run the default high-level workflow:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline run-end-to-end-pipeline \
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline \
   --config configs/project_config.example.json
+```
+
+Inspect the skill catalog:
+
+```bash
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_skills list
 ```
 
 ## Release Workflow
@@ -74,7 +107,7 @@ PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline ru
 For release-facing verification and packaging:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 ./scripts/run_release_smoke_test.sh
 ./scripts/build_release_bundle.sh
 ```
@@ -83,30 +116,31 @@ Generated release artifacts are written under `dist/`.
 
 ## Public Surfaces
 
-Primary Python entrypoints:
+Primary Python entrypoints through `cellpainting_claw`:
 
-- `cellpaint_pipeline.ProjectConfig`
-- `cellpaint_pipeline.run_end_to_end_pipeline`
-- `cellpaint_pipeline.run_pipeline_skill`
-- `cellpaint_pipeline.run_pipeline_preset`
-- `cellpaint_pipeline.run_deepprofiler_pipeline`
-- `cellpaint_pipeline.summarize_data_access`
-- `cellpaint_pipeline.build_data_request`
-- `cellpaint_pipeline.build_download_plan`
-- `cellpaint_pipeline.execute_download_plan`
-- `cellpaint_pipeline.run_mcp_server`
+- `cellpainting_claw.ProjectConfig`
+- `cellpainting_claw.run_end_to_end_pipeline`
+- `cellpainting_claw.run_pipeline_skill`
+- `cellpainting_claw.run_pipeline_preset`
+- `cellpainting_claw.run_deepprofiler_pipeline`
+- `cellpainting_claw.summarize_data_access`
+- `cellpainting_claw.build_data_request`
+- `cellpainting_claw.build_download_plan`
+- `cellpainting_claw.execute_download_plan`
+- `cellpainting_claw.run_mcp_server`
+
+Primary skill-layer entrypoints through `cellpainting_skills`:
+
+- `cellpainting_skills.available_pipeline_skills`
+- `cellpainting_skills.get_pipeline_skill_definition`
+- `cellpainting_skills.pipeline_skill_definition_to_dict`
+- `cellpainting_skills.run_pipeline_skill`
 
 Primary CLI entrypoints:
 
-- `run-end-to-end-pipeline`
-- `run-pipeline-skill`
-- `run-pipeline-preset`
-- `run-deepprofiler-pipeline`
-- `run-profiling-suite`
-- `run-segmentation-suite`
-- `plan-data-access`
-- `execute-download-plan`
-- `serve-mcp`
+- `cellpainting-claw`
+- `cellpainting-skills`
+- `cellpainting-claw-tests`
 
 ## OpenClaw Release Tracks
 
@@ -117,7 +151,7 @@ Two OpenClaw deployment tracks are maintained:
 - `integrations/openclaw/docker/`
   Preferred for standard Linux hosts with real Docker support.
 
-Both tracks now use env-driven provider setup. Repository-managed JSON templates do not store provider keys.
+Both tracks use env-driven provider setup. Repository-managed JSON templates do not store provider keys.
 
 ## Documentation Map
 

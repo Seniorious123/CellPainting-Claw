@@ -4,7 +4,7 @@
 
 The reference environment file is:
 
-- `environment/lyx_env_reference.yml`
+- `environment/cellpainting-claw.environment.yml`
 
 It includes the validated stack used for:
 
@@ -17,18 +17,18 @@ It includes the validated stack used for:
 ## Create the Environment
 
 ```bash
-conda env create -f /root/pipeline/cellpaint_pipeline_lib/environment/lyx_env_reference.yml
-conda activate lyx_env
+conda env create -f /root/pipeline/CellPainting-Claw/environment/cellpainting-claw.environment.yml
+conda activate cellpainting-claw
 ```
 
-If you already have a working `lyx_env`, you can reuse it.
+If you already have a working `cellpainting-claw`, you can reuse it.
 
 ## Install the Library
 
 Editable installation:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
+cd /root/pipeline/CellPainting-Claw
 pip install -e .
 ```
 
@@ -44,8 +44,8 @@ pip install -e .[mcp]
 Source-only execution without editable installation also works:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline --help
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw --help
 ```
 
 ## Minimal Post-Install Checks
@@ -53,15 +53,15 @@ PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline --
 Validate the example project config:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline show-config           --config configs/project_config.example.json
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw show-config           --config configs/project_config.example.json
 ```
 
 Run the smoke test:
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline smoke-test           --config configs/project_config.example.json           --output-path outputs/smoke_test_report.json
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw smoke-test           --config configs/project_config.example.json           --output-path outputs/smoke_test_report.json
 ```
 
 A healthy smoke test confirms that:
@@ -74,9 +74,9 @@ A healthy smoke test confirms that:
 ## Recommended Test Commands
 
 ```bash
-cd /root/pipeline/cellpaint_pipeline_lib
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline.test_suites fast
-PYTHONPATH=src /root/miniconda3/envs/lyx_env/bin/python -m cellpaint_pipeline.test_suites extended
+cd /root/pipeline/CellPainting-Claw
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites fast
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites extended
 ```
 
 ## Data-Access Note

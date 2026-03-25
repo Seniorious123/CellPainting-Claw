@@ -1,6 +1,6 @@
 # Public API Contract
 
-This document defines the recommended public entrypoints for `cellpaint_pipeline_lib`.
+This document defines the recommended public entrypoints for `CellPainting-Claw`.
 
 ## Goal
 

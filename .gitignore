@@ -16,3 +16,4 @@ integrations/openclaw/autodl/provider.env
 integrations/openclaw/docker/.env
 integrations/nanobot/*.db
 integrations/nanobot/*.log
+docs/_build/
