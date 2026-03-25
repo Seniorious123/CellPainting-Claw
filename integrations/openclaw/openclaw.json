@@ -1,0 +1,25 @@
+{
+  "gateway": {
+    "mode": "local",
+    "port": 18789
+  },
+  "logging": {
+    "level": "info"
+  },
+  "env": {
+    "shellEnv": {
+      "enabled": true,
+      "timeoutMs": 15000
+    }
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/root/pipeline/cellpaint_pipeline_lib/integrations/openclaw/workspace",
+      "repoRoot": "/root/pipeline/cellpaint_pipeline_lib",
+      "skipBootstrap": true,
+      "heartbeat": {
+        "every": "0m"
+      }
+    }
+  }
+}
