@@ -7,7 +7,7 @@ It turns a previously script-heavy analysis setup into a cleaner package with fo
 - a Python API for reproducible workflow execution
 - a CLI for standardized pipeline runs
 - a skill layer for agent-facing task routing
-- MCP integration surfaces for NanoBot and OpenClaw
+- MCP integration surfaces for OpenClaw and related MCP-compatible agents
 
 The project is designed to sit on top of validated backend workspaces rather than hide them. In practice, that means you can keep the proven profiling, segmentation, and DeepProfiler assets while exposing them through a cleaner and more automatable interface.
 

@@ -10,7 +10,7 @@
 
 - wrapping the validated Cell Painting workflow as a reusable library
 - running profiling, segmentation, and DeepProfiler branches through stable entrypoints
-- exposing the workflow to MCP, NanoBot, and OpenClaw-style agent systems
+- exposing the workflow to MCP and OpenClaw-style agent systems
 - preparing a source bundle that can be shared or published more safely
 
 ## Main Improvements in This Release
@@ -25,7 +25,7 @@
 ## Recommended First Commands
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/run_release_smoke_test.sh
 ./scripts/build_release_bundle.sh
 ```

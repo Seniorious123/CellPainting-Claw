@@ -85,10 +85,10 @@ Use these when you explicitly need lower-level control.
 
 ## Internal Layers
 
-The following areas should be treated as internal implementation details, even if they are importable:
+The following areas should be treated as internal implementation details, even if they remain importable through compatibility layers:
 
-- `cellpaint_pipeline.workflows.*` internal branching details
-- `cellpaint_pipeline.runner` subprocess plumbing
+- internal workflow branching details
+- subprocess runner plumbing
 - adapter internals and helper functions beginning with `_`
 
 These may change to support future packaging, OpenClaw integration, or runtime compatibility work.

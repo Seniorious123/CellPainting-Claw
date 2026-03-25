@@ -14,7 +14,7 @@ Do not treat preview PNG directories, sample visualizations, or other helper ima
 
 ## Machine-Readable Helpers
 
-Use these helpers from `cellpaint_pipeline.public_api`:
+Use these helpers from `cellpainting_claw`:
 
 - `available_public_api_output_contracts()`
 - `get_public_api_output_contract(name)`

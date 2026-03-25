@@ -8,7 +8,7 @@ The practical goals are:
 
 1. Stabilize the main raw-image-to-pycytominer path.
 2. Bring segmentation, single-cell crops, previews, and DeepProfiler exports under the same interface.
-3. Expose a clean contract for future automation layers such as MCP, NanoBot, and OpenClaw.
+3. Expose a clean contract for future automation layers such as MCP and OpenClaw.
 
 ## Why a Separate Parallel Directory
 

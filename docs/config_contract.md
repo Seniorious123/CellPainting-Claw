@@ -4,7 +4,7 @@ This document defines how to read `project_config.example.json` and which config
 
 ## Machine-Readable Helpers
 
-Use these helpers from `cellpaint_pipeline.config` or the package root:
+Use these helpers from `cellpainting_claw`:
 
 - `project_config_field_guide()`
 - `data_access_config_field_guide()`
@@ -71,10 +71,10 @@ A minimal practical config for this library should explicitly pin:
 
 Validated machine-local reference:
 
-- `/root/pipeline/CellPainting-Claw/configs/project_config.example.json`
+- `configs/project_config.example.json`
 
 Portable distribution template:
 
-- `/root/pipeline/CellPainting-Claw/configs/project_config.portable.example.json`
+- `configs/project_config.portable.example.json`
 
 Use `show-config` after editing the JSON to confirm all relative paths resolve the way you expect.

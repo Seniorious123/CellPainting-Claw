@@ -53,5 +53,5 @@ This checklist is for moving `CellPainting-Claw` from a validated internal libra
 
 - Keep MCP tool names stable.
 - Keep machine-readable tool metadata available.
-- Provide one clear handoff path for NanoBot or OpenClaw.
+- Provide one clear handoff path for OpenClaw or other MCP-compatible clients.
 - Avoid exposing unstable low-level workflow details as default agent tools.

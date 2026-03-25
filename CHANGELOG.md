@@ -25,7 +25,7 @@
 ### Removed
 
 - Secret-bearing OpenClaw backup configs from the repository-managed tree.
-- Local temporary build artifacts, caches, and local NanoBot database state.
+- Local temporary build artifacts, caches, and leftover agent runtime state.
 
 ### Validated
 

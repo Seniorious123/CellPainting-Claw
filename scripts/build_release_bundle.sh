@@ -53,7 +53,6 @@ include_paths = [
     'scripts',
     'release',
     'integrations/openclaw',
-    'integrations/nanobot',
 ]
 
 exclude_dir_names = {
@@ -66,7 +65,6 @@ exclude_file_suffixes = {'.pyc', '.pyo'}
 exclude_file_names = {
     'provider.env',
     '.env',
-    'nanobot.db',
 }
 
 copied = []

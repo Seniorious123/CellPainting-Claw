@@ -458,11 +458,11 @@ def build_parser(
     validation_report_parser.add_argument('--config', required=True, help='Path to project config JSON.')
     validation_report_parser.add_argument('--output-path', default=None, help='Optional JSON path for the aggregated validation report.')
 
-    list_mcp_tools_parser = subparsers.add_parser('list-mcp-tools', help='List the NanoBot-ready MCP tool wrappers exposed by the library.')
+    list_mcp_tools_parser = subparsers.add_parser('list-mcp-tools', help='List the MCP tool wrappers exposed by the library.')
 
-    show_mcp_catalog_parser = subparsers.add_parser('show-mcp-tool-catalog', help='Print the NanoBot-ready MCP tool catalog with schemas and routing metadata.')
+    show_mcp_catalog_parser = subparsers.add_parser('show-mcp-tool-catalog', help='Print the MCP tool catalog with schemas and routing metadata.')
 
-    run_mcp_tool_parser = subparsers.add_parser('run-mcp-tool', help='Run one NanoBot-ready MCP wrapper tool through a single dispatcher.')
+    run_mcp_tool_parser = subparsers.add_parser('run-mcp-tool', help='Run one MCP wrapper tool through a single dispatcher.')
     run_mcp_tool_parser.add_argument('--tool', required=True, choices=available_mcp_tools(), help='MCP tool name.')
     run_mcp_tool_parser.add_argument('--config', default=None, help='Optional project config JSON. Required for config-backed MCP tools.')
     run_mcp_tool_parser.add_argument('--params-json', default='{}', help='JSON object of keyword arguments passed to the selected MCP tool.')
@@ -476,7 +476,7 @@ def build_parser(
     run_public_api_parser.add_argument('--config', default=None, help='Optional project config JSON. Required for config-backed entrypoints.')
     run_public_api_parser.add_argument('--params-json', default='{}', help='JSON object of keyword arguments passed to the selected entrypoint.')
 
-    serve_mcp_parser = subparsers.add_parser('serve-mcp', help='Run the optional MCP server wrapper for NanoBot or other MCP clients.')
+    serve_mcp_parser = subparsers.add_parser('serve-mcp', help='Run the optional MCP server wrapper for OpenClaw or other MCP clients.')
     serve_mcp_parser.add_argument('--transport', default='stdio', choices=['stdio', 'streamable-http'], help='MCP transport mode.')
     serve_mcp_parser.add_argument('--host', default=None, help='Optional host override for HTTP transport.')
     serve_mcp_parser.add_argument('--port', type=int, default=None, help='Optional port override for HTTP transport.')

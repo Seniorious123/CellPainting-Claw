@@ -32,7 +32,7 @@ def create_mcp_server() -> Any:
 
     @mcp.tool()
     def list_mcp_tools() -> list[dict[str, Any]]:
-        """List NanoBot-ready MCP tools exposed by this server."""
+        """List MCP tools exposed by this server."""
         return mcp_tool_catalog()
 
     @mcp.tool()

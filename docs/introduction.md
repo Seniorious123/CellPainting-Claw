@@ -11,7 +11,7 @@ In many Cell Painting projects, the practical workflow is proven but fragmented 
 - a Python API for reproducible orchestration
 - a CLI for standardized runs
 - a skill layer for task-oriented automation
-- MCP integration surfaces for agent systems such as NanoBot and OpenClaw
+- MCP integration surfaces for agent systems such as OpenClaw
 
 ## Public Naming
 

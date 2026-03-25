@@ -7,7 +7,7 @@ It turns a previously script-heavy analysis setup into a cleaner package with fo
 - a Python API for reproducible workflow execution
 - a CLI for standardized pipeline runs
 - a skill layer for agent-facing task routing
-- MCP integration surfaces for NanoBot and OpenClaw
+- MCP integration surfaces for OpenClaw and related MCP-compatible agents
 
 The project is designed to sit on top of validated backend workspaces rather than hide them. In practice, that means you can keep the proven profiling, segmentation, and DeepProfiler assets, while exposing them through a cleaner and more automatable interface.
 
@@ -52,7 +52,7 @@ Main package example:
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json(
-    "/root/pipeline/CellPainting-Claw/configs/project_config.example.json"
+    "configs/project_config.example.json"
 )
 result = cp.run_end_to_end_pipeline(config)
 print(result.output_dir)
@@ -71,7 +71,7 @@ print(cps.available_pipeline_skills())
 Create an environment and install the package:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 conda env create -f environment/cellpainting-claw.environment.yml
 conda activate cellpainting-claw
 pip install -e .
@@ -81,7 +81,7 @@ export PYTHON_BIN="$(command -v python)"
 Run the lightweight smoke test:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw smoke-test \
   --config configs/project_config.example.json \
   --output-path outputs/smoke_test_report.json
@@ -90,7 +90,7 @@ PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw smoke-test \
 Run the default high-level workflow:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline \
   --config configs/project_config.example.json
 ```
@@ -98,7 +98,7 @@ PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline \
 Inspect the skill catalog:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_skills list
 ```
 
@@ -107,7 +107,7 @@ PYTHONPATH=src $PYTHON_BIN -m cellpainting_skills list
 For release-facing verification and packaging:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/run_release_smoke_test.sh
 ./scripts/build_release_bundle.sh
 ```
@@ -168,7 +168,7 @@ Both tracks use env-driven provider setup. Repository-managed JSON templates do 
 - `docs/release_quickstart.md`: shortest path from clean checkout to release bundle
 - `docs/publishing_guide.md`: publication-safe sharing guidance
 - `docs/release_readiness_checklist.md`: publication checklist
-- `docs/nanobot_mcp_preparation.md`: MCP and NanoBot integration notes
+- `integrations/openclaw/`: OpenClaw deployment and runtime helpers
 
 ## Publication Hygiene
 

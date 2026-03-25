@@ -9,14 +9,15 @@ Run a minimal validated check of `CellPainting-Claw` without touching advanced i
 ## 1. Create or Reuse `cellpainting-claw`
 
 ```bash
-conda env create -f /root/pipeline/CellPainting-Claw/environment/cellpainting-claw.environment.yml
+cd <repo-root>
+conda env create -f environment/cellpainting-claw.environment.yml
 conda activate cellpainting-claw
 ```
 
 ## 2. Install the Package
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 pip install -e .
 ```
 
@@ -32,7 +33,7 @@ Use one of these:
 ## 4. Verify the Config
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw show-config \
   --config configs/project_config.portable.example.json
 ```
@@ -40,14 +41,14 @@ PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw show-config \
 ## 5. Run the Minimal Smoke Test
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/run_release_smoke_test.sh
 ```
 
 ## 6. Run a Main Pipeline Entry
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline \
   --config configs/project_config.example.json
 ```
@@ -57,12 +58,11 @@ PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline \
 When the core workflow is validated, continue with:
 
 - `integrations/openclaw/`
-- `integrations/nanobot/`
-- `docs/nanobot_mcp_preparation.md`
+- `integrations/openclaw/`
 
 ## 8. Release Packaging
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/build_release_bundle.sh
 ```

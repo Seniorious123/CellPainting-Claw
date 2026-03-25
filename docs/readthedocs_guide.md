@@ -11,7 +11,7 @@ The repository already contains the core RTD build files:
 - `docs/requirements.txt`
 - the `docs/` content tree with RTD-style section landing pages
 
-Read the Docs should therefore be able to build the site directly from the GitHub repository without relying on the local `lyx_env` runtime.
+Read the Docs should therefore be able to build the site directly from the GitHub repository without relying on the local runtime environment.
 
 ## Recommended Publication Flow
 
@@ -47,4 +47,4 @@ After a successful import and build, Read the Docs will host a documentation sit
 
 - Read the Docs is only the hosted documentation platform. It does not execute the Cell Painting pipeline itself.
 - The main runtime environment for pipeline execution remains separate from the RTD build environment.
-- Because the RTD build runs in its own hosted environment, the repository no longer needs to hard-code a local environment name such as `lyx_env` for online documentation publishing.
+- Because the RTD build runs in its own hosted environment, the repository no longer needs to hard-code a specific local environment name for online documentation publishing.

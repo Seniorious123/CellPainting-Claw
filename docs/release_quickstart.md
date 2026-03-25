@@ -7,7 +7,8 @@ This document is the shortest path from a clean checkout to a releasable `CellPa
 Use the validated Conda environment:
 
 ```bash
-conda env create -f /root/pipeline/CellPainting-Claw/environment/cellpainting-claw.environment.yml
+cd <repo-root>
+conda env create -f environment/cellpainting-claw.environment.yml
 conda activate cellpainting-claw
 ```
 
@@ -16,7 +17,7 @@ If `cellpainting-claw` already exists, reuse it.
 ## 2. Install the Library
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 pip install -e .
 ```
 
@@ -38,7 +39,7 @@ Keep `configs/project_config.example.json` as the validated machine-local refere
 Run the release smoke-test wrapper:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/run_release_smoke_test.sh
 ```
 
@@ -55,7 +56,7 @@ Default output location:
 ## 4. Build the Release Bundle
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/build_release_bundle.sh
 ```
 
@@ -87,7 +88,6 @@ The release bundle is source-oriented. It includes:
 - `scripts/`
 - `release/`
 - `integrations/openclaw/`
-- `integrations/nanobot/`
 
 ## 6. What Is Excluded
 
@@ -115,7 +115,7 @@ Before publishing or sharing a release:
 Immediately before publication:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 ./scripts/run_release_smoke_test.sh
 ./scripts/build_release_bundle.sh
 ```

@@ -10,7 +10,7 @@ It focuses on the importable, publication-facing surface rather than internal he
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json(
-    "/root/pipeline/CellPainting-Claw/configs/project_config.example.json"
+    "configs/project_config.example.json"
 )
 ```
 For skill-focused automation, you can also use:
@@ -129,7 +129,7 @@ End-to-end pipeline:
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json(
-    "/root/pipeline/CellPainting-Claw/configs/project_config.example.json"
+    "configs/project_config.example.json"
 )
 result = cp.run_end_to_end_pipeline(config)
 print(result.output_dir)

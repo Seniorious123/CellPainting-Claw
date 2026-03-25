@@ -17,14 +17,14 @@ Coverage focus:
 Run:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites fast
 ```
 
 Or, after installation:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 cellpaint-pipeline-tests fast
 ```
 
@@ -42,21 +42,21 @@ Coverage focus:
 Run:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites extended
 ```
 
 Or, after installation:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 cellpaint-pipeline-tests extended
 ```
 
 ## List Available Suites
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd <repo-root>
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw.test_suites --list
 ```
 

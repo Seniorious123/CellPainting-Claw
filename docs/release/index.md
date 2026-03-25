@@ -9,5 +9,4 @@ This section collects release-facing documentation, publication guidance, and in
 ../publishing_guide
 ../readthedocs_guide
 ../release_readiness_checklist
-../nanobot_mcp_preparation
 ```
