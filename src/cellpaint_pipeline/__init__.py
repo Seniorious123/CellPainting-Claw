@@ -1,6 +1,6 @@
 """Reusable Cell Painting workflow wrapper library."""
 
-__version__ = '0.1.26'
+__version__ = '0.1.0'
 
 from cellpaint_pipeline.config import (
     ConfigContractError,
