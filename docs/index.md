@@ -8,3 +8,10 @@ CellPainting-Claw provides a standardized, release-oriented interface for runnin
 
 introduction/index
 ```
+
+```{toctree}
+:maxdepth: 2
+:caption: Installation
+
+installation/index
+```
