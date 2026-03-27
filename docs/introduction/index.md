@@ -46,6 +46,8 @@ CellPainting-Claw therefore supports two usage styles:
 - direct use through Python and the command line
 - agent-mediated use through OpenClaw and MCP-compatible tooling
 
+OpenClaw is optional. The core workflow can be used directly without any agent layer.
+
 ## Scope and Boundaries
 
 This project is a workflow library and automation surface. It is not a replacement for CellProfiler, pycytominer, or DeepProfiler themselves. Instead, it provides a structured way to configure, invoke, and package those workflow stages through one repository.
