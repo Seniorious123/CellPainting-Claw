@@ -1,6 +1,6 @@
 # Introduction
 
-CellPainting-Claw is a Python package, command-line interface, and automation-facing workflow surface for Cell Painting analysis. It organizes a validated workflow into a cleaner public interface without requiring users to work directly through scattered scripts.
+CellPainting-Claw is a workflow library, command-line interface, and automation surface for standardized Cell Painting analysis. It packages a validated workflow into a cleaner public interface without requiring users to work directly through scattered scripts.
 
 ## Overview
 
@@ -37,9 +37,14 @@ In practical terms, the repository currently exposes:
 - a dedicated DeepProfiler branch through `run_deepprofiler_pipeline`
 - MCP server and tool wrappers for agent integration
 
-## OpenClaw Integration
+## OpenClaw and Agent Integration
 
-The repository includes an OpenClaw integration surface under `integrations/openclaw/`. That integration is complementary to the Python API and CLI rather than a replacement for them. The library remains usable without any agent framework.
+The repository includes an OpenClaw integration surface under `integrations/openclaw/`. In this project, OpenClaw is an agent-facing layer on top of the core library rather than the primary runtime. The Python API and CLI remain the canonical interfaces, while the OpenClaw path exposes the same workflow through MCP and natural-language-oriented agent interaction.
+
+CellPainting-Claw therefore supports two usage styles:
+
+- direct use through Python and the command line
+- agent-mediated use through OpenClaw and MCP-compatible tooling
 
 ## Scope and Boundaries
 
