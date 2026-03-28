@@ -7,6 +7,16 @@ CellPainting-Claw provides two main public CLI surfaces:
 
 It also exposes an agent-facing MCP surface through the main CLI, which is the bridge used by OpenClaw and other MCP-capable clients.
 
+## How To Read This Page
+
+The command-line layer is easiest to understand in three parts:
+
+- the main workflow CLI for direct pipeline execution
+- the skills CLI for task-oriented execution
+- the MCP-facing CLI for agent runtimes such as OpenClaw
+
+The main CLI remains the canonical shell-facing interface.
+
 ## Main Workflow CLI
 
 The main CLI is the broadest command-line surface. Important commands include:
@@ -58,6 +68,12 @@ This is the layer that OpenClaw talks to. In other words:
 
 ## Minimal Examples
 
+Define one config variable first:
+
+```bash
+CONFIG=configs/project_config.portable.example.json
+```
+
 Inspect the CLI surface:
 
 ```bash
@@ -68,13 +84,17 @@ cellpainting-skills --help
 Run the standard top-level workflow:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config configs/project_config.portable.example.json
+cellpainting-claw run-end-to-end-pipeline --config "$CONFIG"
 ```
 
 Start the MCP server for OpenClaw or another MCP client:
 
 ```bash
-cellpainting-claw serve-mcp   --transport streamable-http   --host 127.0.0.1   --port 8768   --path /mcp
+cellpainting-claw serve-mcp \
+  --transport streamable-http \
+  --host 127.0.0.1 \
+  --port 8768 \
+  --path /mcp
 ```
 
 Inspect the MCP tool layer directly:
@@ -90,4 +110,10 @@ Inspect the skills catalog:
 cellpainting-skills list
 ```
 
-The command-line layer mirrors the workflow structure described in the earlier documentation sections and stays aligned with the public Python API and MCP surface.
+## Related Pages
+
+For more detail, continue to:
+
+- [Quick Start](../quick_start/index.md)
+- [Running the Full Pipeline](../workflows/running_the_full_pipeline.md)
+- [OpenClaw](../openclaw/index.md)

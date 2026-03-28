@@ -28,7 +28,11 @@ The orchestration layer currently supports two DeepProfiler-oriented workflow mo
 
 This distinction is useful when you want to prepare DeepProfiler inputs first and postpone the full feature-extraction run.
 
-## Relevant Entry Points
+## When To Enter This Branch Directly
+
+Use the DeepProfiler branch when your main target is a learned per-cell representation rather than a classical profile table.
+
+## Relevant Public Entry Points
 
 This branch is exposed through commands such as:
 
@@ -37,3 +41,9 @@ This branch is exposed through commands such as:
 - `cellpainting-claw run-end-to-end-pipeline --config ... --deepprofiler-mode full`
 
 When using the top-level orchestration command, the DeepProfiler branch is enabled through the `deepprofiler_mode` setting.
+
+## Related Pages
+
+- [Shared Upstream Stage](shared_upstream.md)
+- [Classical Profiling Branch](classical_profiling.md)
+- [Running the Full Pipeline](running_the_full_pipeline.md)

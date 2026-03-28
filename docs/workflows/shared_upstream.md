@@ -2,7 +2,7 @@
 
 The shared upstream stage begins with raw Cell Painting image data and passes through segmentation-oriented processing. In the current repository, this stage is centered on CellProfiler and on the native segmentation helpers that wrap the validated backend assets.
 
-## What This Stage Does
+## Workflow Logic
 
 This is the common stage that turns raw microscopy data into structured workflow outputs. It is shared by both downstream branches, which means it is the point where the workflow stops being only image data and starts becoming reusable analysis data.
 
@@ -25,7 +25,7 @@ This stage produces the structured outputs that support both downstream branches
 
 Some of these outputs are table-based, while others are image-based. Together they form the shared intermediate layer used by the rest of the workflow.
 
-## When To Use This Stage Directly
+## When To Enter This Stage Directly
 
 Enter this stage directly when you want to focus on segmentation artifacts themselves, for example when you need:
 
@@ -34,7 +34,7 @@ Enter this stage directly when you want to focus on segmentation artifacts thems
 - single-cell crops
 - preview images for visual inspection
 
-## Relevant Entry Points
+## Relevant Public Entry Points
 
 The shared stage can appear through several public commands, depending on how much of the workflow you want to run:
 
@@ -43,3 +43,9 @@ The shared stage can appear through several public commands, depending on how mu
 - `cellpainting-claw run-end-to-end-pipeline --config ...`
 
 For most users, the top-level orchestration entrypoint remains the preferred default. Use the narrower segmentation commands when you specifically want segmentation outputs without running the full workflow.
+
+## Related Pages
+
+- [Classical Profiling Branch](classical_profiling.md)
+- [DeepProfiler Branch](deepprofiler.md)
+- [Running the Full Pipeline](running_the_full_pipeline.md)

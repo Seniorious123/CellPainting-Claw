@@ -19,7 +19,7 @@ The main outputs of this branch are feature tables, including:
 
 These outputs are table-based analysis artifacts. They are intended for classical downstream analysis rather than for image-centric representation learning.
 
-## When To Use This Branch
+## When To Enter This Branch Directly
 
 Use the classical profiling branch when your main target is a standard Cell Painting profile workflow, for example when you need:
 
@@ -28,7 +28,7 @@ Use the classical profiling branch when your main target is a standard Cell Pain
 - normalized features for comparison across conditions
 - a feature-selected table for downstream modeling or evaluation
 
-## Relevant Entry Points
+## Relevant Public Entry Points
 
 This branch is exposed through commands such as:
 
@@ -37,3 +37,9 @@ This branch is exposed through commands such as:
 - `cellpainting-claw run-end-to-end-pipeline --config ...`
 
 The direct profiling suite is useful when you want the classical profiling path without running the entire multi-stage workflow.
+
+## Related Pages
+
+- [Shared Upstream Stage](shared_upstream.md)
+- [DeepProfiler Branch](deepprofiler.md)
+- [Running the Full Pipeline](running_the_full_pipeline.md)
