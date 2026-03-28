@@ -1,6 +1,6 @@
 # OpenClaw
 
-This section documents the OpenClaw integration surface for CellPainting-Claw.
+This section documents the **OpenClaw integration surface** for CellPainting-Claw.
 
 OpenClaw is an **optional natural-language front end** for the same workflow library. It does **not replace the core pipeline implementation**.
 
@@ -76,7 +76,7 @@ cp provider.env.example provider.env
 ./run_openclaw_tui.sh
 ```
 
-The gateway wrapper starts the OpenClaw gateway together with the local CellPainting-Claw MCP server.
+The gateway wrapper starts the **OpenClaw gateway** together with the local **CellPainting-Claw MCP server**.
 
 ## Shortest Docker Path
 
@@ -110,7 +110,7 @@ For example:
 Run the standard Cell Painting pipeline with config X and write outputs to Y.
 ```
 
-Under the hood, the agent should still be routing to the same public workflow surfaces described in the rest of this documentation.
+Under the hood, the agent should still be routing to the **same public workflow surfaces** described in the rest of this documentation.
 
 ## Boundaries and Expectations
 
@@ -132,7 +132,7 @@ When OpenClaw fails, the main failure classes are usually:
 - MCP server not reachable
 - valid agent connection but invalid workflow config or missing backend dependencies
 
-A useful debugging order is:
+A useful **debugging order** is:
 
 1. run the core CLI directly
 2. start the MCP server and confirm it stays healthy

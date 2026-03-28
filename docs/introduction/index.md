@@ -13,17 +13,17 @@ The main ideas of the project are:
 
 ## What The Repository Exposes
 
-The current repository exposes two public Python packages:
+The current repository exposes **two public Python packages**:
 
 - `cellpainting_claw` for the main workflow interface
 - `cellpainting_skills` for task-oriented routing and automation-friendly skill names
 
-It also exposes two main public command-line interfaces:
+It also exposes **two main public command-line interfaces**:
 
 - `cellpainting-claw`
 - `cellpainting-skills`
 
-In addition, the repository can expose the same workflow through an MCP server for agent-facing runtimes such as OpenClaw.
+In addition, the repository can expose the same workflow through an **MCP server** for **agent-facing runtimes** such as OpenClaw.
 
 ## Workflow Structure
 
@@ -65,7 +65,7 @@ The main outputs of this branch are per-cell deep feature vectors or embeddings 
 
 CellPainting-Claw is designed around a small set of **stable top-level entrypoints**. The main package is intended to be the default interface for users who want a reproducible workflow surface, while the skills package provides a narrower layer for automation and agent-style routing.
 
-In practical terms, the repository exposes:
+In practical terms, the repository exposes **four main public layers**:
 
 - configuration loading through `ProjectConfig`
 - top-level workflow execution through `run_end_to_end_pipeline`
@@ -78,18 +78,18 @@ In practical terms, the repository exposes:
 
 The repository includes an OpenClaw integration surface under `integrations/openclaw/`. In this project, OpenClaw is an **agent-facing layer on top of the core library** rather than the primary runtime. The Python API and CLI remain the canonical interfaces, while the OpenClaw path exposes the same workflow through MCP and natural-language-oriented agent interaction.
 
-CellPainting-Claw therefore supports two usage styles:
+CellPainting-Claw therefore supports **two usage styles**:
 
 - direct use through Python and the command line
 - agent-mediated use through OpenClaw and MCP-compatible tooling
 
-OpenClaw is optional. The core workflow can be used directly without any agent layer.
+**OpenClaw is optional.** The core workflow can be used directly without any agent layer.
 
 ## Scope and Boundaries
 
 This project is a workflow library and automation surface. It is **not a replacement for CellProfiler, pycytominer, or DeepProfiler themselves**. Instead, it provides a structured way to configure, invoke, and package those workflow stages through one repository.
 
-The public surface is intentionally release-oriented: it emphasizes stable entrypoints, reusable configuration, and documented automation hooks.
+The public surface is intentionally **release-oriented**: it emphasizes **stable entrypoints**, **reusable configuration**, and **documented automation hooks**.
 
 ## Where To Go Next
 

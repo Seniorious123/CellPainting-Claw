@@ -10,11 +10,11 @@ Before installing the package, make sure you have:
 - Conda available on the target machine
 - permission to create a dedicated environment for the workflow
 
-CellPainting-Claw currently ships with a validated Conda environment file:
+CellPainting-Claw currently ships with a **validated Conda environment file**:
 
 - `environment/cellpainting-claw.environment.yml`
 
-That environment targets Python 3.10 and includes the workflow dependencies used by this repository, including CellProfiler, pycytominer, and the DeepProfiler-related stack.
+That environment targets **Python 3.10** and includes the workflow dependencies used by this repository, including **CellProfiler**, **pycytominer**, and the **DeepProfiler-related stack**.
 
 ## Recommended Installation Path
 
@@ -31,11 +31,11 @@ Then install the package itself in editable mode:
 pip install -e .
 ```
 
-This is the recommended installation path for the current project because the validated workflow depends on a mixed Conda and pip stack.
+This is the **recommended installation path** for the current project because the validated workflow depends on a **mixed Conda and pip stack**.
 
 ## What Gets Installed
 
-After installation, the repository exposes these main public interfaces.
+After installation, the repository exposes **these main public interfaces**.
 
 ### Python packages
 
@@ -59,7 +59,7 @@ pip install -e .[data-access]
 pip install -e .[deepprofiler]
 ```
 
-In the current repository, the validated Conda environment already includes the main workflow stack used by the standard installation path.
+In the current repository, the **validated Conda environment already includes the main workflow stack** used by the standard installation path.
 
 ## Verify the Installation
 
@@ -77,13 +77,13 @@ import cellpainting_claw
 import cellpainting_skills
 ```
 
-If both the CLI and imports work, the package layer is installed correctly.
+If both the **CLI** and **imports** work, the **package layer is installed correctly**.
 
 ## Scope and Boundaries
 
-The Python API and CLI are the primary runtime interfaces.
+The **Python API** and **CLI** are the **primary runtime interfaces**.
 
-OpenClaw is optional. It is an additional agent-facing integration layer and is not required for installation or normal library use.
+**OpenClaw is optional.** It is an additional agent-facing integration layer and is not required for installation or normal library use.
 
 ## Where To Go Next
 
