@@ -1,43 +1,56 @@
 # Installation
 
-This page describes the current installation path for CellPainting-Claw based on the validated repository environment.
+This page describes the recommended installation path for CellPainting-Claw.
 
-## Requirements
+## Prerequisites
 
-CellPainting-Claw currently targets Python 3.10 and provides a validated Conda environment file in `environment/cellpainting-claw.environment.yml`. That environment includes the dependencies required for the main workflow surface, including CellProfiler, pycytominer, and DeepProfiler-related packages.
+Before installing the package, make sure you have:
 
-The repository is designed around Conda-based installation because the validated workflow depends on packages that are easier to manage together through Conda and pip in one environment.
+- a local checkout of the `CellPainting-Claw` repository
+- Conda available on the target machine
+- permission to create a dedicated environment for the workflow
 
-## Create the Environment
+CellPainting-Claw currently ships with a validated Conda environment file:
 
-From the repository root:
+- `environment/cellpainting-claw.environment.yml`
+
+That environment targets Python 3.10 and includes the workflow dependencies used by this repository, including CellProfiler, pycytominer, and the DeepProfiler-related stack.
+
+## Quick Install
+
+From the repository root, create and activate the Conda environment:
 
 ```bash
 conda env create -f environment/cellpainting-claw.environment.yml
 conda activate cellpainting-claw
 ```
 
-If the environment already exists, reuse it instead of recreating it.
-
-## Install the Package
-
-Install CellPainting-Claw in editable mode from the repository root:
+Then install the package itself in editable mode:
 
 ```bash
 pip install -e .
 ```
 
-This exposes the public Python packages and CLI entrypoints defined by the project:
+This is the recommended installation path for the current project because the validated workflow depends on a mixed Conda and pip stack.
+
+## Installed Interfaces
+
+After installation, the repository exposes these main public interfaces:
+
+### Python packages
 
 - `cellpainting_claw`
 - `cellpainting_skills`
+
+### Command-line entrypoints
+
 - `cellpainting-claw`
 - `cellpainting-skills`
 - `cellpainting-claw-tests`
 
-## Optional Dependency Groups
+## Optional Extras
 
-The project also defines optional extras in `pyproject.toml`. If needed, you can install them explicitly:
+The project also defines optional extras in `pyproject.toml`. These are mainly useful when building a more customized environment instead of relying on the validated Conda environment.
 
 ```bash
 pip install -e .[test]
@@ -46,11 +59,11 @@ pip install -e .[data-access]
 pip install -e .[deepprofiler]
 ```
 
-In practice, the validated Conda environment already includes the main workflow stack used by this repository.
+In the current repository, the validated Conda environment already includes the main workflow stack used by the standard installation path.
 
 ## Verify the Installation
 
-A minimal verification step is to check that the CLI is available:
+A minimal post-installation check is to confirm that the public CLI entrypoints are available:
 
 ```bash
 cellpainting-claw --help
@@ -64,8 +77,12 @@ import cellpainting_claw
 import cellpainting_skills
 ```
 
-## Notes
+If both the CLI and imports work, the package layer is installed correctly.
 
-- The Python API and CLI are the primary runtime interfaces.
-- OpenClaw is an additional agent-facing integration layer, not a requirement for installation.
-- Configuration and first workflow execution are covered in later documentation sections.
+## Installation Scope
+
+The Python API and CLI are the primary runtime interfaces.
+
+OpenClaw is optional. It is an additional agent-facing integration layer and is not required for installation or normal library use.
+
+Configuration and first workflow execution are covered in later documentation sections.
