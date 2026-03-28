@@ -2,15 +2,6 @@
 
 CellPainting-Claw is a documentation and workflow surface for **standardized Cell Painting pipelines from raw image data to analysis-ready outputs**. It brings together **dataset access**, **CellProfiler-based segmentation**, **classical profiling through `pycytominer`**, **DeepProfiler-based single-cell feature extraction**, and **agent-mediated natural-language execution** through one documented public interface.
 
-## At a Glance
-
-The main ideas of the project are:
-
-- **One shared upstream workflow backbone**: raw image data is converted into structured segmentation-derived outputs.
-- **Two downstream analysis branches**: the same upstream stage can continue toward either classical profile tables or DeepProfiler embeddings.
-- **Two execution styles**: the workflow can be run through Python and the CLI, or through an agent layer such as OpenClaw.
-- **One release-oriented interface layer**: validated backend assets stay in place, but the public surface becomes easier to reuse, automate, and document.
-
 ## Documentation Guide
 
 The documentation is organized around the main stages of use:
