@@ -1,6 +1,6 @@
 # Introduction
 
-CellPainting-Claw is a workflow library for standardized Cell Painting pipelines from raw image data to analysis-ready outputs. It organizes dataset access, CellProfiler-based segmentation, classical profiling through `pycytominer`, and DeepProfiler-based single-cell feature extraction into one reusable public interface, with CLI and agent-facing access layered on top.
+CellPainting-Claw is a workflow library for standardized Cell Painting pipelines from raw image data to analysis-ready outputs. It organizes dataset access, CellProfiler-based segmentation, classical profiling through `pycytominer`, and DeepProfiler-based single-cell feature extraction into one reusable public interface, so the same workflow can be run either through explicit CLI commands or through agent-mediated natural-language requests.
 
 ## What The Repository Exposes
 
