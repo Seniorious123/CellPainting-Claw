@@ -6,7 +6,7 @@ The classical profiling branch starts from CellProfiler-derived tables and conti
 
 In this branch, CellProfiler-derived tables are exported into a standardized single-cell table. That single-cell table is then processed by `pycytominer`.
 
-This branch is the path used when the desired output is a standard profiling table for downstream analysis rather than per-cell image embeddings.
+This branch is the path used when the desired result is a standard profile table for downstream analysis rather than a set of per-cell image embeddings.
 
 ## Main Outputs
 
@@ -17,7 +17,16 @@ The main outputs of this branch are feature tables, including:
 - normalized profiles
 - feature-selected profiles
 
-These outputs are table-based analysis artifacts, not image artifacts.
+These outputs are table-based analysis artifacts. They are intended for classical downstream analysis rather than for image-centric representation learning.
+
+## When To Use This Branch
+
+Use the classical profiling branch when your main target is a standard Cell Painting profile workflow, for example when you need:
+
+- a well-level or aggregated feature table
+- metadata-annotated profiles
+- normalized features for comparison across conditions
+- a feature-selected table for downstream modeling or evaluation
 
 ## Relevant Entry Points
 

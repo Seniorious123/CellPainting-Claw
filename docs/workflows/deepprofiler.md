@@ -6,7 +6,7 @@ The DeepProfiler branch starts from segmentation-guided cell localization and co
 
 In this branch, segmentation outputs are used to identify individual cells and crop them from the source images. Those single-cell crops are then prepared for DeepProfiler, which extracts learned features for each cell.
 
-This branch is used when the desired output is a deep feature representation or embedding rather than a classical profile table.
+This branch is used when the desired result is a deep feature representation or embedding rather than a classical profile table.
 
 ## Main Outputs
 
@@ -18,6 +18,15 @@ The main outputs of this branch are DeepProfiler artifacts such as:
 - per-cell feature vectors or embeddings
 
 These outputs are distinct from the `pycytominer` tables produced by the classical profiling branch.
+
+## Export Mode vs Full Mode
+
+The orchestration layer currently supports two DeepProfiler-oriented workflow modes beyond `off`:
+
+- `export`, which runs the segmentation branch in DeepProfiler export mode
+- `full`, which continues through DeepProfiler project creation, feature extraction, and collection
+
+This distinction is useful when you want to prepare DeepProfiler inputs first and postpone the full feature-extraction run.
 
 ## Relevant Entry Points
 

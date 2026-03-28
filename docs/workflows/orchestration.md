@@ -6,7 +6,7 @@ CellPainting-Claw provides several ways to run workflows, but one command is int
 
 ## Top-Level Orchestration
 
-The top-level orchestration layer is responsible for coordinating data access, profiling, segmentation, validation, and the optional DeepProfiler branch. This makes it the recommended first choice for users who want a stable high-level interface.
+The top-level orchestration layer coordinates data access, profiling, segmentation, validation, and the optional DeepProfiler branch. This makes it the recommended first choice for users who want one stable high-level interface instead of several lower-level commands.
 
 The orchestration layer currently supports DeepProfiler modes `off`, `export`, and `full`.
 
@@ -20,6 +20,14 @@ For more explicit control, the repository also exposes narrower workflow command
 - `run-deepprofiler-pipeline`
 
 These commands are useful when you want to enter one branch directly instead of using the top-level orchestration interface.
+
+## How To Choose
+
+A simple rule of thumb is:
+
+- use `run-end-to-end-pipeline` when you want the standard public workflow surface
+- use branch-specific commands when you already know which stage you want to run
+- use `run-workflow` when you need one of the named packaged multi-step workflows directly
 
 ## Practical Guidance
 
