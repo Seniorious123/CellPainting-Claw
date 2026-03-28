@@ -11,6 +11,7 @@ The documentation is organized around the main stages of use:
 - **Quick Start** shows the shortest path from installation to a first workflow run.
 - **Workflows** explains the shared upstream stage, the classical profiling branch, the DeepProfiler branch, and the orchestration layer.
 - **API** documents the public Python packages and command-line interfaces.
+- **OpenClaw** documents the optional natural-language and MCP-facing integration layer.
 
 ## Reading Path
 
@@ -21,6 +22,7 @@ For a first pass through the project, the recommended reading order is:
 3. Quick Start
 4. Workflows
 5. API
+6. OpenClaw, if you want agent-mediated or natural-language execution
 
 ```{toctree}
 :maxdepth: 2
@@ -55,4 +57,11 @@ workflows/index
 :caption: API
 
 api/index
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: OpenClaw
+
+openclaw/index
 ```
