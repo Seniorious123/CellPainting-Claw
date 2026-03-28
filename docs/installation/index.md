@@ -1,6 +1,15 @@
 # Installation
 
-This page describes the recommended installation path for CellPainting-Claw.
+This page describes the recommended installation path for CellPainting-Claw. The goal of installation is to obtain a working runtime for **raw-data-to-profile workflows**, including **CellProfiler-based segmentation**, **classical profiling through `pycytominer`**, and the **DeepProfiler branch**, with the public **Python**, **CLI**, and **agent-facing MCP** surfaces available on top.
+
+## At a Glance
+
+The recommended installation strategy is:
+
+- **use the validated Conda environment** shipped with the repository
+- **install the package in editable mode** from the repository root
+- **verify both CLI and Python imports** before attempting a real workflow run
+- **treat OpenClaw as optional** rather than part of the base installation path
 
 ## Prerequisites
 
@@ -16,7 +25,7 @@ CellPainting-Claw currently ships with a validated Conda environment file:
 
 That environment targets Python 3.10 and includes the workflow dependencies used by this repository, including CellProfiler, pycytominer, and the DeepProfiler-related stack.
 
-## Quick Install
+## Recommended Installation Path
 
 From the repository root, create and activate the Conda environment:
 
@@ -33,9 +42,9 @@ pip install -e .
 
 This is the recommended installation path for the current project because the validated workflow depends on a mixed Conda and pip stack.
 
-## Installed Interfaces
+## What Gets Installed
 
-After installation, the repository exposes these main public interfaces:
+After installation, the repository exposes these main public interfaces.
 
 ### Python packages
 
@@ -79,10 +88,17 @@ import cellpainting_skills
 
 If both the CLI and imports work, the package layer is installed correctly.
 
-## Installation Scope
+## Scope and Boundaries
 
 The Python API and CLI are the primary runtime interfaces.
 
 OpenClaw is optional. It is an additional agent-facing integration layer and is not required for installation or normal library use.
 
-Configuration and first workflow execution are covered in later documentation sections.
+## Where To Go Next
+
+After installation, the recommended next pages are:
+
+- [Quick Start](../quick_start/index.md) for the shortest first run
+- [Workflows](../workflows/index.md) for the pipeline structure
+- [API](../api/index.md) for the public interfaces
+- [OpenClaw](../openclaw/index.md) if you want natural-language or agent-mediated execution
