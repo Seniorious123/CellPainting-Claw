@@ -25,12 +25,13 @@ This page assumes that you already have:
 
 If not, start with the earlier installation and quick start pages first.
 
-## 1. Pick the Config File
+## 1. Define the Core Run Variables
 
-Most users should start from the portable config template:
+Most users should start from the portable config template and define one output directory for the run:
 
 ```bash
 CONFIG=configs/project_config.portable.example.json
+OUTPUT=runs/end_to_end_standard
 ```
 
 If you maintain your own runtime-specific config, substitute that path in the commands below.
@@ -55,9 +56,9 @@ cellpainting-claw smoke-test --config "$CONFIG"
 
 This does not replace a real workflow run, but it is a cheap way to verify that the public CLI, the config loader, and the packaged delivery layer are wired together correctly.
 
-## 4. Optional: Inspect Data Access Before Execution
+## 4. Optional: Inspect or Plan Data Access
 
-If your workflow also needs dataset discovery or download planning, check the resolved data-access layer first:
+If your workflow also needs dataset discovery or download planning, inspect the resolved data-access layer first:
 
 ```bash
 cellpainting-claw show-data-access --config "$CONFIG"
@@ -65,7 +66,7 @@ cellpainting-claw check-data-access --config "$CONFIG"
 cellpainting-claw summarize-data-access --config "$CONFIG"
 ```
 
-When you want a reusable transfer plan before a workflow run, create it explicitly:
+When you want a reusable transfer plan before the workflow run, create it explicitly:
 
 ```bash
 cellpainting-claw plan-data-access   --config "$CONFIG"   --dataset-id YOUR_DATASET_ID   --source-id YOUR_SOURCE_ID   --output-path runs/download_plan.json
@@ -77,14 +78,14 @@ Then execute that saved plan:
 cellpainting-claw execute-download-plan   --config "$CONFIG"   --plan-path runs/download_plan.json
 ```
 
-These steps are optional. If your data is already available locally, you can move directly to the pipeline run itself.
+These steps are optional. If your data is already available locally, move directly to the workflow run itself.
 
 ## 5. Run the Standard End-to-End Workflow
 
 The minimal full workflow command is:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir runs/end_to_end_standard
+cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir "$OUTPUT"
 ```
 
 By default, this orchestration run includes:
@@ -96,7 +97,43 @@ By default, this orchestration run includes:
 
 The command prints a JSON summary to standard output and also writes persistent run metadata into the run directory.
 
-## 6. Include a Data-Access Summary or Download Step in the Same Run
+## 6. Understand What This Run Produces
+
+A standard orchestration run writes a small set of top-level orchestration artifacts together with branch-specific subdirectories.
+
+At the run root, the main files are:
+
+- `end_to_end_pipeline_manifest.json`
+- `run_report.md`
+- `validation_report.json` when validation reporting is enabled
+
+Depending on the selected options, the run root can also contain:
+
+- `data_access_summary.json`
+- `download_plan.json`
+- `download_execution.json`
+- `profiling/`
+- `segmentation/`
+
+The profiling branch writes its own manifest under `profiling/`, and the segmentation branch writes its own manifest under `segmentation/`.
+
+## 7. Inspect the Output Directory
+
+After a successful run, inspect the run root first:
+
+```bash
+ls "$OUTPUT"
+```
+
+Then inspect the orchestration manifest directly if you want the machine-readable summary of what ran:
+
+```bash
+cat "$OUTPUT/end_to_end_pipeline_manifest.json"
+```
+
+This is usually the fastest way to confirm which stages ran, which suite names were selected, and where the branch-specific outputs were written.
+
+## 8. Include a Data-Access Summary or Download Step in the Same Run
 
 If you want the orchestration layer itself to write a data summary or execute a download plan as part of the same run, add the relevant flags:
 
@@ -112,7 +149,7 @@ To execute the planned download step in the same orchestration run, add:
 
 Use this integrated path when you want one run root to contain both workflow artifacts and the data-access planning metadata that produced them.
 
-## 7. Enable the DeepProfiler Branch
+## 9. Enable the DeepProfiler Branch
 
 The top-level orchestration entrypoint also supports the DeepProfiler branch through `--deepprofiler-mode`.
 
@@ -136,31 +173,7 @@ cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir ru
 
 When `--deepprofiler-mode` is not `off`, the orchestration layer switches the segmentation side into the DeepProfiler-oriented segmentation suite automatically.
 
-## 8. Inspect the Output Directory
-
-After a successful run, inspect the run root first:
-
-```bash
-ls runs/end_to_end_standard
-```
-
-The main files written by the orchestration layer are:
-
-- `end_to_end_pipeline_manifest.json`
-- `run_report.md`
-- `validation_report.json` when validation reporting is enabled
-
-Depending on the selected options, the run root can also contain:
-
-- `data_access_summary.json`
-- `download_plan.json`
-- `download_execution.json`
-- `profiling/`
-- `segmentation/`
-
-The profiling branch writes its own manifest under `profiling/`, and the segmentation branch writes its own manifest under `segmentation/`.
-
-## 9. Run the Same Workflow Through OpenClaw
+## 10. Run the Same Workflow Through OpenClaw
 
 The CLI remains the canonical interface, but the same library can also be exposed to an agent through MCP and OpenClaw.
 
