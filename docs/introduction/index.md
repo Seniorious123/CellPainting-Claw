@@ -1,34 +1,35 @@
 # Introduction
 
-CellPainting-Claw is a workflow library, command-line interface, and automation surface for standardized Cell Painting analysis. It packages a validated workflow into a cleaner public interface without requiring users to work directly through scattered scripts.
+CellPainting-Claw is a workflow library, command-line interface, and automation surface for standardized Cell Painting analysis. It packages a validated workflow into a cleaner public interface so that users do not have to work directly through a scattered script collection.
 
-## Overview
+## What The Repository Exposes
 
 The current repository exposes two public Python packages:
 
 - `cellpainting_claw` for the main workflow interface
-- `cellpainting_skills` for skill-oriented task routing
+- `cellpainting_skills` for task-oriented routing and automation-friendly skill names
 
-It also exposes three command-line entrypoints:
+It also exposes two main public command-line interfaces:
 
 - `cellpainting-claw`
 - `cellpainting-skills`
-- `cellpainting-claw-tests`
+
+In addition, the repository can expose the same workflow through an MCP server for agent-facing runtimes such as OpenClaw.
 
 ## Workflow Structure
 
-The current CellPainting-Claw workflow is best understood as one shared upstream stage followed by two downstream analysis branches.
+The workflow is best understood as one shared upstream stage followed by two downstream analysis branches.
 
 ### Shared Upstream Stage
 
-The shared upstream stage starts from raw Cell Painting image data and runs segmentation-oriented processing through CellProfiler. This stage produces the structured outputs that support both downstream branches, including:
+The shared upstream stage starts from raw Cell Painting image data and runs segmentation-oriented processing through CellProfiler and the repository's segmentation wrappers. This stage produces the structured outputs that support both downstream branches, including:
 
 - image-level and object-level measurement tables
 - segmentation labels, masks, and outlines
 - single-cell localization information
 - optional single-cell image crops and preview images
 
-In practice, this segmentation backbone is the common point where raw microscopy data becomes reusable workflow data.
+In practical terms, this segmentation backbone is the point where raw microscopy data becomes reusable workflow data.
 
 ### Classical Profiling Branch
 
@@ -41,7 +42,7 @@ In this branch, CellProfiler-derived single-cell tables are exported into a stan
 - normalized profiles
 - feature-selected profiles
 
-This is the branch used when the goal is a standard Cell Painting profiling output suitable for conventional downstream analysis.
+This is the branch used when the goal is a standard Cell Painting profiling output for conventional downstream analysis.
 
 ### DeepProfiler Branch
 
@@ -55,7 +56,7 @@ The main outputs of this branch are per-cell deep feature vectors or embeddings 
 
 CellPainting-Claw is designed around a small set of stable top-level entrypoints. The main package is intended to be the default interface for users who want a reproducible workflow surface, while the skills package provides a narrower layer for automation and agent-style routing.
 
-In practical terms, the repository currently exposes:
+In practical terms, the repository exposes:
 
 - configuration loading through `ProjectConfig`
 - top-level workflow execution through `run_end_to_end_pipeline`
@@ -79,8 +80,14 @@ OpenClaw is optional. The core workflow can be used directly without any agent l
 
 This project is a workflow library and automation surface. It is not a replacement for CellProfiler, pycytominer, or DeepProfiler themselves. Instead, it provides a structured way to configure, invoke, and package those workflow stages through one repository.
 
-The current public surface is intentionally release-oriented: it emphasizes stable entrypoints, reusable configuration, and documented automation hooks.
+The public surface is intentionally release-oriented: it emphasizes stable entrypoints, reusable configuration, and documented automation hooks.
 
-## Next Step
+## Where To Go Next
 
-The next documentation sections will rebuild installation, quick start, workflows, and API reference around this workflow structure and public interface.
+After this introduction, the recommended next pages are:
+
+- [Installation](../installation/index.md) for environment setup
+- [Quick Start](../quick_start/index.md) for the shortest first run
+- [Workflows](../workflows/index.md) for the shared upstream stage and the two downstream branches
+- [API](../api/index.md) for the stable public interfaces
+- [OpenClaw](../openclaw/index.md) if you want natural-language or agent-mediated execution
