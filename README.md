@@ -1,5 +1,7 @@
 # CellPainting-Claw
 
+[Documentation](https://cellpainting-claw.readthedocs.io/en/latest/)
+
 CellPainting-Claw is a release-oriented software interface for validated Cell Painting workflows.
 
 It turns a previously script-heavy analysis setup into a cleaner package with four public layers:
