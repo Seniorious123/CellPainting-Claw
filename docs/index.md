@@ -22,3 +22,10 @@ installation/index
 
 quick_start/index
 ```
+
+```{toctree}
+:maxdepth: 2
+:caption: Workflows
+
+workflows/index
+```
