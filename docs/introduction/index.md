@@ -1,6 +1,15 @@
 # Introduction
 
-CellPainting-Claw is a workflow library for standardized Cell Painting pipelines from raw image data to analysis-ready outputs. It organizes dataset access, CellProfiler-based segmentation, classical profiling through `pycytominer`, and DeepProfiler-based single-cell feature extraction into one reusable public interface, so the same workflow can be run either through explicit CLI commands or through agent-mediated natural-language requests.
+CellPainting-Claw is a workflow library for **standardized Cell Painting pipelines from raw image data to analysis-ready outputs**. It organizes **dataset access**, **CellProfiler-based segmentation**, **classical profiling through `pycytominer`**, and **DeepProfiler-based single-cell feature extraction** into one reusable public interface, so the same workflow can be run either through **explicit CLI commands** or through **agent-mediated natural-language requests**.
+
+## At a Glance
+
+The main ideas of the project are:
+
+- **One upstream workflow backbone**: raw image data is converted into structured segmentation-derived outputs.
+- **Two downstream branches**: the same upstream stage can continue toward either classical `pycytominer` profiles or DeepProfiler embeddings.
+- **Two execution styles**: the workflow can be run directly through Python and the CLI, or through an agent layer such as OpenClaw.
+- **One public interface layer**: validated backend assets stay in place, but the public surface becomes easier to reuse, automate, and document.
 
 ## What The Repository Exposes
 
@@ -18,7 +27,7 @@ In addition, the repository can expose the same workflow through an MCP server f
 
 ## Workflow Structure
 
-The workflow is best understood as one shared upstream stage followed by two downstream analysis branches.
+The workflow is best understood as **one shared upstream stage** followed by **two downstream analysis branches**.
 
 ### Shared Upstream Stage
 
@@ -33,7 +42,7 @@ In practical terms, this segmentation backbone is the point where raw microscopy
 
 ### Classical Profiling Branch
 
-The first downstream branch is the classical profiling path.
+The first downstream branch is the **classical profiling path**.
 
 In this branch, CellProfiler-derived single-cell tables are exported into a standardized single-cell table and then processed by `pycytominer`. The main outputs of this branch are feature tables for downstream analysis, including:
 
@@ -46,7 +55,7 @@ This is the branch used when the goal is a standard Cell Painting profiling outp
 
 ### DeepProfiler Branch
 
-The second downstream branch is the DeepProfiler path.
+The second downstream branch is the **DeepProfiler path**.
 
 In this branch, segmentation results are used to identify and crop individual cells from the source images. Those single-cell image crops are then prepared for DeepProfiler, which produces learned feature representations for each cell.
 
@@ -54,7 +63,7 @@ The main outputs of this branch are per-cell deep feature vectors or embeddings 
 
 ## Public Interface Design
 
-CellPainting-Claw is designed around a small set of stable top-level entrypoints. The main package is intended to be the default interface for users who want a reproducible workflow surface, while the skills package provides a narrower layer for automation and agent-style routing.
+CellPainting-Claw is designed around a small set of **stable top-level entrypoints**. The main package is intended to be the default interface for users who want a reproducible workflow surface, while the skills package provides a narrower layer for automation and agent-style routing.
 
 In practical terms, the repository exposes:
 
@@ -67,7 +76,7 @@ In practical terms, the repository exposes:
 
 ## OpenClaw and Agent Integration
 
-The repository includes an OpenClaw integration surface under `integrations/openclaw/`. In this project, OpenClaw is an agent-facing layer on top of the core library rather than the primary runtime. The Python API and CLI remain the canonical interfaces, while the OpenClaw path exposes the same workflow through MCP and natural-language-oriented agent interaction.
+The repository includes an OpenClaw integration surface under `integrations/openclaw/`. In this project, OpenClaw is an **agent-facing layer on top of the core library** rather than the primary runtime. The Python API and CLI remain the canonical interfaces, while the OpenClaw path exposes the same workflow through MCP and natural-language-oriented agent interaction.
 
 CellPainting-Claw therefore supports two usage styles:
 
@@ -78,7 +87,7 @@ OpenClaw is optional. The core workflow can be used directly without any agent l
 
 ## Scope and Boundaries
 
-This project is a workflow library and automation surface. It is not a replacement for CellProfiler, pycytominer, or DeepProfiler themselves. Instead, it provides a structured way to configure, invoke, and package those workflow stages through one repository.
+This project is a workflow library and automation surface. It is **not a replacement for CellProfiler, pycytominer, or DeepProfiler themselves**. Instead, it provides a structured way to configure, invoke, and package those workflow stages through one repository.
 
 The public surface is intentionally release-oriented: it emphasizes stable entrypoints, reusable configuration, and documented automation hooks.
 
