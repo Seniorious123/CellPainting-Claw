@@ -2,15 +2,6 @@
 
 This page describes the recommended installation path for CellPainting-Claw. The goal of installation is to obtain a working runtime for **raw-data-to-profile workflows**, including **CellProfiler-based segmentation**, **classical profiling through `pycytominer`**, and the **DeepProfiler branch**, with the public **Python**, **CLI**, and **agent-facing MCP** surfaces available on top.
 
-## At a Glance
-
-The recommended installation strategy is:
-
-- **use the validated Conda environment** shipped with the repository
-- **install the package in editable mode** from the repository root
-- **verify both CLI and Python imports** before attempting a real workflow run
-- **treat OpenClaw as optional** rather than part of the base installation path
-
 ## Prerequisites
 
 Before installing the package, make sure you have:
