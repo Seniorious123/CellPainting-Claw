@@ -79,6 +79,9 @@ The skills layer is useful for automation and agent-facing routing, but it is no
 
 ## What Comes Next
 
-After Quick Start, the next documentation layers will cover workflows and API usage in more detail.
+After Quick Start, the next documentation sections move in two directions:
 
-In the final documentation structure, the API section will come after the practical getting-started material so that the first experience stays task-oriented rather than reference-oriented.
+- workflow-oriented pages that explain the shared upstream stage and the two downstream branches in more detail
+- API pages that document the public Python and CLI interfaces
+
+This keeps the first reading path practical and task-oriented while still leaving room for a full reference section later in the documentation.
