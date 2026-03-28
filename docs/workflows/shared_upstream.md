@@ -42,7 +42,7 @@ The shared stage can appear through several public commands, depending on how mu
 - `cellpainting-claw run-workflow --config ... --workflow post-cellprofiler-native-segmentation-suite`
 - `cellpainting-claw run-end-to-end-pipeline --config ...`
 
-For most users, the **top-level orchestration entrypoint** remains the preferred default. Use the narrower segmentation commands when you specifically want segmentation outputs without running the full workflow.
+For most users, the **top-level workflow entrypoint** remains the preferred default. Use the narrower segmentation commands when you specifically want segmentation outputs without running the full workflow.
 
 ## Related Pages
 

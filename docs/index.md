@@ -9,7 +9,7 @@ The documentation is organized around the main stages of use:
 - **Introduction** explains the workflow structure, including the shared segmentation backbone and the two downstream analysis branches.
 - **Installation** describes the recommended environment and package installation path.
 - **Quick Start** shows the shortest path from installation to a first workflow run.
-- **Workflows** explains the shared upstream stage, the classical profiling branch, the DeepProfiler branch, and the orchestration layer.
+- **Workflows** explains the shared upstream stage, the classical profiling branch, the DeepProfiler branch, and the top-level workflow execution layer.
 - **API** documents the public Python packages and command-line interfaces.
 - **OpenClaw** documents the optional natural-language and MCP-facing integration layer.
 

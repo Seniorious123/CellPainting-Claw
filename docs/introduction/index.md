@@ -65,7 +65,7 @@ The main outputs of this branch are per-cell deep feature vectors or embeddings 
 
 CellPainting-Claw is designed around a small set of **stable top-level entrypoints**. The main package is intended to be the default interface for users who want a reproducible workflow surface, while the skills package provides a narrower layer for automation and agent-style routing.
 
-In practical terms, the repository exposes **four main public layers**:
+In practical terms, the repository exposes **these main public surfaces**:
 
 - configuration loading through `ProjectConfig`
 - top-level workflow execution through `run_end_to_end_pipeline`

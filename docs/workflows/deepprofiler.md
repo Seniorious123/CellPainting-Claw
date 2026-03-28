@@ -21,7 +21,7 @@ These outputs are distinct from the `pycytominer` tables produced by the classic
 
 ## Export Mode vs Full Mode
 
-The orchestration layer currently supports **two DeepProfiler-oriented workflow modes** beyond `off`:
+The top-level workflow entrypoint currently supports **two DeepProfiler-oriented workflow modes** beyond `off`:
 
 - `export`, which runs the segmentation branch in DeepProfiler export mode
 - `full`, which continues through DeepProfiler project creation, feature extraction, and collection
@@ -40,7 +40,7 @@ This branch is exposed through commands such as:
 - `cellpainting-claw run-workflow --config ... --workflow segmentation-and-deepprofiler-full-stack`
 - `cellpainting-claw run-end-to-end-pipeline --config ... --deepprofiler-mode full`
 
-When using the top-level orchestration command, the DeepProfiler branch is enabled through the `deepprofiler_mode` setting.
+When using the top-level workflow command, the DeepProfiler branch is enabled through the `deepprofiler_mode` setting.
 
 ## Related Pages
 

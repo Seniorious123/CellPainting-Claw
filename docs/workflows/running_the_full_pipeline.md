@@ -54,7 +54,7 @@ Use the smoke test before a first real run on a new machine:
 cellpainting-claw smoke-test --config "$CONFIG"
 ```
 
-This does not replace a real workflow run, but it is a cheap way to verify that the **public CLI**, the **config loader**, and the **packaged delivery layer** are wired together correctly.
+This does not replace a real workflow run, but it is a cheap way to verify that the **public CLI**, the **config loader**, and the **installed package layer** are wired together correctly.
 
 ## 4. Optional: Inspect or Plan Data Access
 
@@ -96,7 +96,7 @@ cellpainting-claw run-end-to-end-pipeline \
   --output-dir "$OUTPUT"
 ```
 
-By default, this orchestration run includes:
+By default, this top-level workflow run includes:
 
 - the configured profiling suite
 - the configured segmentation suite
@@ -107,7 +107,7 @@ The command prints a JSON summary to standard output and also writes persistent 
 
 ## 6. Understand What This Run Produces
 
-A standard orchestration run writes a **small set of top-level orchestration artifacts** together with **branch-specific subdirectories**.
+A standard full workflow run writes a **small set of workflow-level artifacts** together with **branch-specific subdirectories**.
 
 At the run root, the main files are:
 
@@ -133,7 +133,7 @@ After a successful run, inspect the run root first:
 ls "$OUTPUT"
 ```
 
-Then inspect the orchestration manifest directly if you want the machine-readable summary of what ran:
+Then inspect the workflow manifest directly if you want the machine-readable summary of what ran:
 
 ```bash
 cat "$OUTPUT/end_to_end_pipeline_manifest.json"
@@ -143,7 +143,7 @@ This is usually the fastest way to confirm **which stages ran**, **which suite n
 
 ## 8. Include a Data-Access Summary or Download Step in the Same Run
 
-If you want the orchestration layer itself to write a data summary or execute a download plan as part of the same run, add the relevant flags:
+If you want the top-level workflow command itself to write a data summary or execute a download plan as part of the same run, add the relevant flags:
 
 ```bash
 cellpainting-claw run-end-to-end-pipeline \
@@ -155,7 +155,7 @@ cellpainting-claw run-end-to-end-pipeline \
   --source-id YOUR_SOURCE_ID
 ```
 
-To execute the planned download step in the same orchestration run, add:
+To execute the planned download step in the same workflow run, add:
 
 ```bash
   --execute-data-download-step
@@ -165,7 +165,7 @@ Use this integrated path when you want one run root to contain both workflow art
 
 ## 9. Enable the DeepProfiler Branch
 
-The top-level orchestration entrypoint also supports the DeepProfiler branch through `--deepprofiler-mode`.
+The top-level workflow entrypoint also supports the DeepProfiler branch through `--deepprofiler-mode`.
 
 The available modes are:
 
@@ -182,7 +182,7 @@ cellpainting-claw run-end-to-end-pipeline \
   --deepprofiler-mode full
 ```
 
-If you want the DeepProfiler branch without running the classical profiling branch in the same orchestration call, you can make that explicit:
+If you want the DeepProfiler branch without running the classical profiling branch in the same top-level workflow call, you can make that explicit:
 
 ```bash
 cellpainting-claw run-end-to-end-pipeline \
@@ -192,7 +192,7 @@ cellpainting-claw run-end-to-end-pipeline \
   --deepprofiler-mode full
 ```
 
-When `--deepprofiler-mode` is not `off`, the orchestration layer switches the segmentation side into the **DeepProfiler-oriented segmentation suite** automatically.
+When `--deepprofiler-mode` is not `off`, the top-level workflow command switches the segmentation side into the **DeepProfiler-oriented segmentation suite** automatically.
 
 ## 10. Run the Same Workflow Through OpenClaw
 

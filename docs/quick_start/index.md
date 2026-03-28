@@ -53,7 +53,7 @@ Use this step to confirm that the **installed package**, **configuration layer**
 
 ## 5. Run the Main Workflow Entry Point
 
-Once the configuration is valid, run the top-level orchestration entrypoint:
+Once the configuration is valid, run the top-level workflow entrypoint:
 
 ```bash
 cellpainting-claw run-end-to-end-pipeline --config "$CONFIG"
@@ -63,7 +63,7 @@ This command is the **main public entrypoint** for the standard workflow surface
 
 ## 6. Inspect the First Run Outputs
 
-After the first successful run, inspect the **generated run root** and the **orchestration manifest**.
+After the first successful run, inspect the **generated run root** and the **workflow manifest**.
 
 At minimum, a standard end-to-end run writes metadata such as:
 

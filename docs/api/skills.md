@@ -2,7 +2,7 @@
 
 `cellpainting_skills` is the **task-oriented public layer** of the repository.
 
-It is intended for automation systems and for users who prefer **stable task names** over lower-level orchestration arguments.
+It is intended for automation systems and for users who prefer **stable task names** over lower-level workflow parameters.
 
 ## Main Functions
 
@@ -31,7 +31,7 @@ This makes the skills layer especially useful for **automation**, **scripting**,
 
 Use the skills layer when:
 
-- you want **stable task names** instead of raw orchestration parameters
+- you want **stable task names** instead of raw workflow parameters
 - you are building **automation** on top of the library
 - you want a cleaner bridge between **direct API calls** and a **full agent interface**
 
