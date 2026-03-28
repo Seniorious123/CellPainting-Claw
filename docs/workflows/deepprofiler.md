@@ -1,16 +1,16 @@
 # DeepProfiler Branch
 
-The DeepProfiler branch starts from segmentation-guided cell localization and continues toward learned single-cell feature representations.
+The DeepProfiler branch starts from **segmentation-guided cell localization** and continues toward **learned single-cell feature representations**.
 
 ## Workflow Logic
 
 In this branch, segmentation outputs are used to identify individual cells and crop them from the source images. Those single-cell crops are then prepared for DeepProfiler, which extracts learned features for each cell.
 
-This branch is used when the desired result is a deep feature representation or embedding rather than a classical profile table.
+This branch is used when the desired result is a **deep feature representation or embedding** rather than a classical profile table.
 
 ## Main Outputs
 
-The main outputs of this branch are DeepProfiler artifacts such as:
+The main outputs of this branch are **DeepProfiler artifacts** such as:
 
 - exported DeepProfiler input bundles
 - materialized DeepProfiler project directories
@@ -21,16 +21,16 @@ These outputs are distinct from the `pycytominer` tables produced by the classic
 
 ## Export Mode vs Full Mode
 
-The orchestration layer currently supports two DeepProfiler-oriented workflow modes beyond `off`:
+The orchestration layer currently supports **two DeepProfiler-oriented workflow modes** beyond `off`:
 
 - `export`, which runs the segmentation branch in DeepProfiler export mode
 - `full`, which continues through DeepProfiler project creation, feature extraction, and collection
 
-This distinction is useful when you want to prepare DeepProfiler inputs first and postpone the full feature-extraction run.
+This distinction is useful when you want to **prepare DeepProfiler inputs first** and postpone the full feature-extraction run.
 
 ## When To Enter This Branch Directly
 
-Use the DeepProfiler branch when your main target is a learned per-cell representation rather than a classical profile table.
+Use the DeepProfiler branch when your main target is a **learned per-cell representation** rather than a classical profile table.
 
 ## Relevant Public Entry Points
 
