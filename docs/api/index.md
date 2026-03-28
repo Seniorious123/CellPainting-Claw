@@ -1,8 +1,8 @@
 # API
 
-This section documents the public interfaces exposed by CellPainting-Claw.
+This section documents the **public interfaces** exposed by CellPainting-Claw.
 
-The repository exposes four public access layers:
+The repository exposes **four public access layers**:
 
 - the main Python package `cellpainting_claw`
 - the task-oriented Python package `cellpainting_skills`
@@ -15,23 +15,23 @@ Not every interface has the same role.
 
 The intended public hierarchy is:
 
-1. use the main Python API when you want direct library control
-2. use the main CLI when you want explicit shell execution
-3. use the skills layer when stable task names are more useful than raw parameter bundles
-4. use the MCP and OpenClaw path when you want agent-mediated or natural-language execution
+1. use the **main Python API** when you want direct library control
+2. use the **main CLI** when you want explicit shell execution
+3. use the **skills layer** when stable task names are more useful than raw parameter bundles
+4. use the **MCP and OpenClaw path** when you want agent-mediated or natural-language execution
 
 This distinction matters for rigor:
 
-- the Python API and the main CLI are the canonical execution surfaces
-- the skills layer is a stable task-routing layer on top of the canonical workflow
-- the MCP surface exposes the same library for automation systems
-- OpenClaw is an optional agent front end, not a separate workflow implementation
+- the **Python API** and the **main CLI** are the canonical execution surfaces
+- the **skills layer** is a stable task-routing layer on top of the canonical workflow
+- the **MCP surface** exposes the same library for automation systems
+- **OpenClaw** is an optional agent front end, not a separate workflow implementation
 
 ## What This API Section Covers
 
-- **Public Entrypoints** identifies the stable top-level Python entrypoints.
-- **Skills** documents the task-oriented layer and its stable skill names.
-- **Command-Line Interface** documents the shell-facing and MCP-facing command surfaces.
+- **Public Entrypoints**: the stable top-level Python entrypoints
+- **Skills**: the task-oriented layer and its stable skill names
+- **Command-Line Interface**: the shell-facing and MCP-facing command surfaces
 
 For the OpenClaw runtime itself, see the dedicated OpenClaw section of the documentation.
 
@@ -43,7 +43,7 @@ For most readers, the best order is:
 2. skills
 3. command-line interface
 
-That order keeps the API reference centered on stable public behavior instead of internal modules.
+That order keeps the API reference centered on **stable public behavior** instead of internal modules.
 
 ```{toctree}
 :maxdepth: 1

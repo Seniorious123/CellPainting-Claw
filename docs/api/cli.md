@@ -1,21 +1,21 @@
 # Command-Line Interface
 
-CellPainting-Claw provides two main public CLI surfaces:
+CellPainting-Claw provides **two main public CLI surfaces**:
 
 - `cellpainting-claw`
 - `cellpainting-skills`
 
-It also exposes an agent-facing MCP surface through the main CLI, which is the bridge used by OpenClaw and other MCP-capable clients.
+It also exposes an **agent-facing MCP surface** through the main CLI, which is the bridge used by OpenClaw and other MCP-capable clients.
 
 ## How To Read This Page
 
 The command-line layer is easiest to understand in three parts:
 
-- the main workflow CLI for direct pipeline execution
-- the skills CLI for task-oriented execution
-- the MCP-facing CLI for agent runtimes such as OpenClaw
+- the **main workflow CLI** for direct pipeline execution
+- the **skills CLI** for task-oriented execution
+- the **MCP-facing CLI** for agent runtimes such as OpenClaw
 
-The main CLI remains the canonical shell-facing interface.
+The main CLI remains the **canonical shell-facing interface**.
 
 ## Main Workflow CLI
 
@@ -34,7 +34,7 @@ The main CLI is the broadest command-line surface. Important commands include:
 - `run-workflow`
 - `run-deepprofiler-pipeline`
 
-For most users, `run-end-to-end-pipeline` is the default CLI entrypoint.
+For most users, `run-end-to-end-pipeline` is the **default CLI entrypoint**.
 
 ## Skills CLI
 
@@ -44,7 +44,7 @@ The skills CLI is a narrower task-oriented surface. Its main commands are:
 - `describe`
 - `run`
 
-Use this CLI when named task execution is a better fit than working directly with lower-level workflow options.
+Use this CLI when **named task execution** is a better fit than working directly with lower-level workflow options.
 
 ## MCP and Agent-Facing CLI
 
@@ -62,9 +62,9 @@ The main MCP-oriented commands are:
 
 This is the layer that OpenClaw talks to. In other words:
 
-- `cellpainting-claw` is the direct human-facing CLI
-- `serve-mcp` exposes the workflow as MCP tools
-- OpenClaw provides the natural-language agent front end on top of that MCP surface
+- `cellpainting-claw` is the **direct human-facing CLI**
+- `serve-mcp` exposes the workflow as **MCP tools**
+- OpenClaw provides the **natural-language agent front end** on top of that MCP surface
 
 ## Minimal Examples
 
