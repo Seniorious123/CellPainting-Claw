@@ -1,4 +1,4 @@
-# Orchestration
+# Running the Full Pipeline
 
 CellPainting-Claw provides several ways to run workflows, but one command is intended to be the main public orchestration entrypoint:
 

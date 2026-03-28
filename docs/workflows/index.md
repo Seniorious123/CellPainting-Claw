@@ -11,7 +11,7 @@ The documentation in this section is organized in the same order as the workflow
 - **Shared Upstream Stage** explains how raw image data is converted into segmentation-driven workflow outputs.
 - **Classical Profiling Branch** explains how CellProfiler-derived tables are turned into standard profile tables through `pycytominer`.
 - **DeepProfiler Branch** explains how segmentation-guided single-cell crops are turned into learned feature vectors.
-- **Orchestration** explains how the public workflow entrypoints connect these pieces together.
+- **Running the Full Pipeline** explains how the public workflow entrypoints connect these pieces together.
 
 ```{toctree}
 :maxdepth: 1
@@ -19,5 +19,5 @@ The documentation in this section is organized in the same order as the workflow
 shared_upstream
 classical_profiling
 deepprofiler
-orchestration
+running_the_full_pipeline
 ```
