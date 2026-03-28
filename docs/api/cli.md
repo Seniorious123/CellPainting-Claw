@@ -7,7 +7,7 @@ CellPainting-Claw provides two main public CLI surfaces:
 
 ## Main CLI
 
-The main CLI is the broadest public command-line surface. Important commands include:
+The main CLI is the broadest command-line surface. Important commands include:
 
 - `show-config`
 - `smoke-test`
@@ -17,15 +17,19 @@ The main CLI is the broadest public command-line surface. Important commands inc
 - `run-workflow`
 - `run-deepprofiler-pipeline`
 
+For most users, `run-end-to-end-pipeline` is the default CLI entrypoint.
+
 ## Skills CLI
 
-The skills CLI is a narrower task-oriented layer. Its main commands are:
+The skills CLI is a narrower task-oriented surface. Its main commands are:
 
 - `list`
 - `describe`
 - `run`
 
-## Examples
+Use this CLI when named task execution is a better fit than working directly with lower-level workflow options.
+
+## Minimal Examples
 
 ```bash
 cellpainting-claw --help
@@ -33,4 +37,4 @@ cellpainting-claw run-end-to-end-pipeline --config configs/project_config.portab
 cellpainting-skills list
 ```
 
-The command-line layer mirrors the workflow structure described in the earlier documentation sections.
+The command-line layer mirrors the workflow structure described in the earlier documentation sections and is intended to stay aligned with the public Python API.

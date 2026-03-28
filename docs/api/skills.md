@@ -13,9 +13,9 @@ The key public helpers in this layer are:
 - `pipeline_skill_definition_to_dict`
 - `run_pipeline_skill`
 
-## Current Skill Model
+## How This Layer Fits The Project
 
-In the current repository, each skill maps onto a named preset-backed workflow objective. Examples include:
+The skills layer sits above the raw workflow arguments and below a full agent interface. In practice, it gives the project a stable set of named tasks such as:
 
 - planning gallery data
 - running the profiling workflow
@@ -23,7 +23,9 @@ In the current repository, each skill maps onto a named preset-backed workflow o
 - running the DeepProfiler export or full branch
 - running the full workflow
 
-## Example
+This makes the skills layer especially useful for automation, scripting, and agent-facing routing.
+
+## Minimal Example
 
 ```python
 import cellpainting_skills as cps
@@ -31,4 +33,4 @@ import cellpainting_skills as cps
 print(cps.available_pipeline_skills())
 ```
 
-This layer is especially useful for automation and agent-facing routing, but it remains a public Python interface in its own right.
+The skills layer is optional, but it remains a public Python interface in its own right.
