@@ -15,14 +15,41 @@ It also exposes three command-line entrypoints:
 - `cellpainting-skills`
 - `cellpainting-claw-tests`
 
-## What CellPainting-Claw Covers
+## Workflow Structure
 
-Based on the current repository structure and public API, CellPainting-Claw covers four major areas:
+The current CellPainting-Claw workflow is best understood as one shared upstream stage followed by two downstream analysis branches.
 
-1. data access and download planning
-2. profiling and evaluation
-3. segmentation and single-cell crop generation
-4. DeepProfiler export, project assembly, profiling, and feature collection
+### Shared Upstream Stage
+
+The shared upstream stage starts from raw Cell Painting image data and runs segmentation-oriented processing through CellProfiler. This stage produces the structured outputs that support both downstream branches, including:
+
+- image-level and object-level measurement tables
+- segmentation labels, masks, and outlines
+- single-cell localization information
+- optional single-cell image crops and preview images
+
+In practice, this segmentation backbone is the common point where raw microscopy data becomes reusable workflow data.
+
+### Classical Profiling Branch
+
+The first downstream branch is the classical profiling path.
+
+In this branch, CellProfiler-derived single-cell tables are exported into a standardized single-cell table and then processed by `pycytominer`. The main outputs of this branch are feature tables for downstream analysis, including:
+
+- aggregated profiles
+- annotated profiles
+- normalized profiles
+- feature-selected profiles
+
+This is the branch used when the goal is a standard Cell Painting profiling output suitable for conventional downstream analysis.
+
+### DeepProfiler Branch
+
+The second downstream branch is the DeepProfiler path.
+
+In this branch, segmentation results are used to identify and crop individual cells from the source images. Those single-cell image crops are then prepared for DeepProfiler, which produces learned feature representations for each cell.
+
+The main outputs of this branch are per-cell deep feature vectors or embeddings rather than classical profile tables.
 
 ## Public Interface Design
 
@@ -56,4 +83,4 @@ The current public surface is intentionally release-oriented: it emphasizes stab
 
 ## Next Step
 
-The next documentation sections will rebuild installation, quick start, workflows, and API reference around this public interface.
+The next documentation sections will rebuild installation, quick start, workflows, and API reference around this workflow structure and public interface.
