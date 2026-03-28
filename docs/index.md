@@ -29,3 +29,10 @@ quick_start/index
 
 workflows/index
 ```
+
+```{toctree}
+:maxdepth: 2
+:caption: API
+
+api/index
+```
