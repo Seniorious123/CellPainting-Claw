@@ -11,6 +11,12 @@ The repository currently includes two config examples:
 
 For most users, start from the portable template and edit it for your environment.
 
+For the commands below, it is convenient to define one config variable first:
+
+```bash
+CONFIG=configs/project_config.portable.example.json
+```
+
 ## 2. Fill in the Core Paths
 
 Before running the workflow, make sure the configuration points at real locations on your machine. The most important fields are:
@@ -30,7 +36,7 @@ Those fields determine where the library finds the validated backend assets and 
 Before running anything expensive, check that the configuration resolves correctly:
 
 ```bash
-cellpainting-claw show-config   --config configs/project_config.portable.example.json
+cellpainting-claw show-config --config "$CONFIG"
 ```
 
 This is the fastest way to catch bad paths, missing files, or an incorrect Python interpreter before starting a workflow run.
@@ -40,7 +46,7 @@ This is the fastest way to catch bad paths, missing files, or an incorrect Pytho
 A first low-risk execution step is the built-in smoke test:
 
 ```bash
-cellpainting-claw smoke-test   --config configs/project_config.portable.example.json
+cellpainting-claw smoke-test --config "$CONFIG"
 ```
 
 Use this step to confirm that the installed package, configuration layer, and basic workflow plumbing are working together.
@@ -50,22 +56,34 @@ Use this step to confirm that the installed package, configuration layer, and ba
 Once the configuration is valid, run the top-level orchestration entrypoint:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config configs/project_config.portable.example.json
+cellpainting-claw run-end-to-end-pipeline --config "$CONFIG"
 ```
 
 This command is the main public entrypoint for the standard workflow surface. Depending on the configuration and flags, it can run the classical profiling branch together with the segmentation branch and, optionally, the DeepProfiler branch.
 
-## 6. Optional: Enable the DeepProfiler Branch
+## 6. Inspect the First Run Outputs
+
+After the first successful run, inspect the generated run root and the orchestration manifest.
+
+At minimum, a standard end-to-end run writes metadata such as:
+
+- `end_to_end_pipeline_manifest.json`
+- `run_report.md`
+- `validation_report.json` when validation reporting is enabled
+
+For a fuller walkthrough of output structure, branch behavior, and optional data-access steps, continue to [Running the Full Pipeline](../workflows/running_the_full_pipeline.md).
+
+## 7. Optional: Enable the DeepProfiler Branch
 
 If you want the DeepProfiler-oriented segmentation path in the same public entrypoint, add `--deepprofiler-mode`:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config configs/project_config.portable.example.json   --deepprofiler-mode full
+cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --deepprofiler-mode full
 ```
 
 Use `export` when you only want the standardized DeepProfiler export artifacts, or `full` when you want the DeepProfiler-oriented segmentation suite.
 
-## 7. Optional: Use OpenClaw for Natural-Language Execution
+## 8. Optional: Use OpenClaw for Natural-Language Execution
 
 The workflow can also be exposed to an agent through MCP and OpenClaw.
 
@@ -85,7 +103,7 @@ cd integrations/openclaw/autodl
 
 This gives you a natural-language front end to the same workflow library. OpenClaw is optional: the core workflow can always be used directly through Python and the CLI.
 
-## 8. Optional: Explore the Skills Layer
+## 9. Optional: Explore the Skills Layer
 
 If you want a more task-oriented interface, inspect the skills catalog:
 

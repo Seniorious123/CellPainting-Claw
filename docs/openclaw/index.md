@@ -15,6 +15,18 @@ The relationship between the components is:
 
 In practical terms, OpenClaw sits on top of the library. It is not a separate backend.
 
+## Before You Use OpenClaw
+
+OpenClaw should not be the first thing you debug.
+
+A reliable order is:
+
+1. confirm that the core `cellpainting-claw` CLI works
+2. confirm that the MCP server starts cleanly
+3. only then add the OpenClaw runtime on top
+
+That order separates workflow failures from agent-runtime failures.
+
 ## When To Use OpenClaw
 
 Use OpenClaw when you want:
@@ -40,16 +52,18 @@ Through the MCP surface, OpenClaw can reach the same public library surfaces tha
 
 This means the OpenClaw path is an automation layer over the validated workflow, not a separate workflow definition.
 
-## Minimal Runtime Paths
+## Runtime Choices
 
 The repository maintains two main OpenClaw runtime tracks:
 
 - `integrations/openclaw/autodl/` for AutoDL-like hosts without nested Docker
 - `integrations/openclaw/docker/` for standard Linux hosts with Docker support
 
-Both tracks keep provider credentials out of repository-managed templates and expose the same library-facing workflow surface underneath.
+For current OpenClaw releases, prefer the TUI path rather than the ACP client path.
 
-## Minimal AutoDL Launch Path
+Both runtime tracks keep provider credentials out of repository-managed templates and expose the same library-facing workflow surface underneath.
+
+## Shortest AutoDL Path
 
 On AutoDL-like hosts, the normal path is:
 
@@ -64,7 +78,7 @@ cp provider.env.example provider.env
 
 The gateway wrapper starts the OpenClaw gateway together with the local CellPainting-Claw MCP server.
 
-## Minimal Docker Launch Path
+## Shortest Docker Path
 
 On standard Docker-capable Linux hosts, the normal path is:
 
@@ -82,9 +96,15 @@ cd integrations/openclaw/docker
 ./compose_acp_client.sh
 ```
 
-## Natural-Language Usage
+## What Natural-Language Use Should Look Like
 
-A typical OpenClaw request should describe the workflow objective, the config file, and the output location clearly. For example:
+A useful OpenClaw request should describe:
+
+- the workflow objective
+- the config file
+- the output location
+
+For example:
 
 ```text
 Run the standard Cell Painting pipeline with config X and write outputs to Y.
@@ -112,10 +132,17 @@ When OpenClaw fails, the main failure classes are usually:
 - MCP server not reachable
 - valid agent connection but invalid workflow config or missing backend dependencies
 
-A useful debugging rule is:
+A useful debugging order is:
 
-1. confirm the core CLI works first
-2. confirm the MCP server starts cleanly
-3. only then debug the OpenClaw runtime and provider configuration
+1. run the core CLI directly
+2. start the MCP server and confirm it stays healthy
+3. start the OpenClaw runtime
+4. only then debug provider configuration or prompt-level behavior
 
-That order separates workflow failures from agent-runtime failures.
+## Related Pages
+
+For the core workflow itself, continue to:
+
+- [Quick Start](../quick_start/index.md)
+- [Running the Full Pipeline](../workflows/running_the_full_pipeline.md)
+- [Command-Line Interface](../api/cli.md)
