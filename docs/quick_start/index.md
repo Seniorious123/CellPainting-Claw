@@ -4,12 +4,12 @@ This page shows the shortest practical path from an installed CellPainting-Claw 
 
 ## 1. Choose a Configuration Template
 
-The repository currently includes two main starting points:
+The repository currently includes two config examples:
 
-- `configs/project_config.portable.example.json` for a new machine or a new deployment
-- `configs/project_config.example.json` for a validated machine-local setup that already matches the current backend layout
+- `configs/project_config.portable.example.json` as the recommended starting point for a new machine or a new deployment
+- `configs/project_config.example.json` as a repository-local validation example
 
-For most new setups, start from the portable template and edit it for your environment.
+For most users, start from the portable template and edit it for your environment.
 
 ## 2. Fill in the Core Paths
 
@@ -34,7 +34,7 @@ cellpainting-claw show-config \
   --config configs/project_config.portable.example.json
 ```
 
-This is the fastest way to catch bad paths, missing files, or an incorrect Python interpreter before starting a workflow.
+This is the fastest way to catch bad paths, missing files, or an incorrect Python interpreter before starting a workflow run.
 
 ## 4. Run a Lightweight Check
 
