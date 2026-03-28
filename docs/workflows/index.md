@@ -1,24 +1,24 @@
 # Workflows
 
-This section documents the workflow logic exposed by CellPainting-Claw.
+This section documents the **workflow logic** exposed by CellPainting-Claw.
 
-The project is organized around one shared upstream stage and two downstream branches:
+The project is organized around **one shared upstream stage** and **two downstream branches**:
 
 - a shared segmentation-oriented upstream stage
 - a classical profiling branch built around `pycytominer`
 - a DeepProfiler branch built around segmentation-guided single-cell crops
 
-## Workflow at a Glance
+## Workflow Logic
 
 The workflow is easiest to understand in this order:
 
-1. raw Cell Painting images enter the shared upstream stage
+1. raw Cell Painting images enter the **shared upstream stage**
 2. CellProfiler-driven segmentation produces masks, outlines, labels, measurements, and localization outputs
-3. those shared outputs feed one of two downstream branches
+3. those shared outputs feed one of **two downstream branches**
 4. the classical branch turns measurement tables into profile tables through `pycytominer`
 5. the DeepProfiler branch turns single-cell crops into learned feature vectors
 
-This means that segmentation is not a side product. It is the backbone that connects the raw images to both downstream analysis paths.
+This means that **segmentation is not a side product**. It is the backbone that connects the raw images to both downstream analysis paths.
 
 ## What Each Workflow Page Covers
 
@@ -29,7 +29,7 @@ This means that segmentation is not a side product. It is the backbone that conn
 
 ## Output Logic
 
-The outputs of the workflow fall into three groups:
+The outputs of the workflow fall into **three groups**:
 
 - segmentation outputs such as masks, outlines, object tables, and crop-ready localization data
 - classical profiling outputs such as aggregated, annotated, normalized, and feature-selected profile tables
@@ -37,9 +37,9 @@ The outputs of the workflow fall into three groups:
 
 That separation is important for interpreting the repository correctly:
 
-- `pycytominer` produces profile tables
-- the segmentation branch produces masks and crop-related artifacts
-- DeepProfiler consumes segmentation-guided image crops rather than replacing segmentation itself
+- `pycytominer` produces **profile tables**
+- the segmentation branch produces **masks and crop-related artifacts**
+- DeepProfiler consumes **segmentation-guided image crops** rather than replacing segmentation itself
 
 ## How To Read This Section
 

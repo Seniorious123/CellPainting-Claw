@@ -1,6 +1,6 @@
 # Running the Full Pipeline
 
-This page shows the practical end-to-end command sequence for the main public workflow surface.
+This page shows the **practical end-to-end command sequence** for the main public workflow surface.
 
 The standard high-level entrypoint is:
 
@@ -54,7 +54,7 @@ Use the smoke test before a first real run on a new machine:
 cellpainting-claw smoke-test --config "$CONFIG"
 ```
 
-This does not replace a real workflow run, but it is a cheap way to verify that the public CLI, the config loader, and the packaged delivery layer are wired together correctly.
+This does not replace a real workflow run, but it is a cheap way to verify that the **public CLI**, the **config loader**, and the **packaged delivery layer** are wired together correctly.
 
 ## 4. Optional: Inspect or Plan Data Access
 
@@ -69,13 +69,19 @@ cellpainting-claw summarize-data-access --config "$CONFIG"
 When you want a reusable transfer plan before the workflow run, create it explicitly:
 
 ```bash
-cellpainting-claw plan-data-access   --config "$CONFIG"   --dataset-id YOUR_DATASET_ID   --source-id YOUR_SOURCE_ID   --output-path runs/download_plan.json
+cellpainting-claw plan-data-access \
+  --config "$CONFIG" \
+  --dataset-id YOUR_DATASET_ID \
+  --source-id YOUR_SOURCE_ID \
+  --output-path runs/download_plan.json
 ```
 
 Then execute that saved plan:
 
 ```bash
-cellpainting-claw execute-download-plan   --config "$CONFIG"   --plan-path runs/download_plan.json
+cellpainting-claw execute-download-plan \
+  --config "$CONFIG" \
+  --plan-path runs/download_plan.json
 ```
 
 These steps are optional. If your data is already available locally, move directly to the workflow run itself.
@@ -85,7 +91,9 @@ These steps are optional. If your data is already available locally, move direct
 The minimal full workflow command is:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir "$OUTPUT"
+cellpainting-claw run-end-to-end-pipeline \
+  --config "$CONFIG" \
+  --output-dir "$OUTPUT"
 ```
 
 By default, this orchestration run includes:
@@ -99,7 +107,7 @@ The command prints a JSON summary to standard output and also writes persistent 
 
 ## 6. Understand What This Run Produces
 
-A standard orchestration run writes a small set of top-level orchestration artifacts together with branch-specific subdirectories.
+A standard orchestration run writes a **small set of top-level orchestration artifacts** together with **branch-specific subdirectories**.
 
 At the run root, the main files are:
 
@@ -131,14 +139,20 @@ Then inspect the orchestration manifest directly if you want the machine-readabl
 cat "$OUTPUT/end_to_end_pipeline_manifest.json"
 ```
 
-This is usually the fastest way to confirm which stages ran, which suite names were selected, and where the branch-specific outputs were written.
+This is usually the fastest way to confirm **which stages ran**, **which suite names were selected**, and **where the branch-specific outputs were written**.
 
 ## 8. Include a Data-Access Summary or Download Step in the Same Run
 
 If you want the orchestration layer itself to write a data summary or execute a download plan as part of the same run, add the relevant flags:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir runs/end_to_end_with_data   --include-data-access-summary   --plan-data-download   --dataset-id YOUR_DATASET_ID   --source-id YOUR_SOURCE_ID
+cellpainting-claw run-end-to-end-pipeline \
+  --config "$CONFIG" \
+  --output-dir runs/end_to_end_with_data \
+  --include-data-access-summary \
+  --plan-data-download \
+  --dataset-id YOUR_DATASET_ID \
+  --source-id YOUR_SOURCE_ID
 ```
 
 To execute the planned download step in the same orchestration run, add:
@@ -162,25 +176,36 @@ The available modes are:
 A typical DeepProfiler-oriented run looks like this:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir runs/end_to_end_deepprofiler   --deepprofiler-mode full
+cellpainting-claw run-end-to-end-pipeline \
+  --config "$CONFIG" \
+  --output-dir runs/end_to_end_deepprofiler \
+  --deepprofiler-mode full
 ```
 
 If you want the DeepProfiler branch without running the classical profiling branch in the same orchestration call, you can make that explicit:
 
 ```bash
-cellpainting-claw run-end-to-end-pipeline   --config "$CONFIG"   --output-dir runs/end_to_end_deepprofiler_only   --skip-profiling   --deepprofiler-mode full
+cellpainting-claw run-end-to-end-pipeline \
+  --config "$CONFIG" \
+  --output-dir runs/end_to_end_deepprofiler_only \
+  --skip-profiling \
+  --deepprofiler-mode full
 ```
 
-When `--deepprofiler-mode` is not `off`, the orchestration layer switches the segmentation side into the DeepProfiler-oriented segmentation suite automatically.
+When `--deepprofiler-mode` is not `off`, the orchestration layer switches the segmentation side into the **DeepProfiler-oriented segmentation suite** automatically.
 
 ## 10. Run the Same Workflow Through OpenClaw
 
-The CLI remains the canonical interface, but the same library can also be exposed to an agent through MCP and OpenClaw.
+The CLI remains the **canonical interface**, but the same library can also be exposed to an agent through MCP and OpenClaw.
 
 At the library level, the MCP server entrypoint is:
 
 ```bash
-cellpainting-claw serve-mcp   --transport streamable-http   --host 127.0.0.1   --port 8768   --path /mcp
+cellpainting-claw serve-mcp \
+  --transport streamable-http \
+  --host 127.0.0.1 \
+  --port 8768 \
+  --path /mcp
 ```
 
 In practice, most users should use the repository integration wrappers under `integrations/openclaw/` rather than launching OpenClaw manually. On AutoDL-like hosts, the usual path is:
@@ -191,11 +216,11 @@ cd integrations/openclaw/autodl
 ./run_openclaw_tui.sh
 ```
 
-That path gives you a natural-language front end, while the library continues to provide the stable workflow, CLI, public API, and MCP surfaces underneath.
+That path gives you a **natural-language front end**, while the library continues to provide the stable workflow, CLI, public API, and MCP surfaces underneath.
 
 ## When To Drop Down to Lower-Level Commands
 
-Use `run-end-to-end-pipeline` when you want one stable top-level execution surface.
+Use `run-end-to-end-pipeline` when you want **one stable top-level execution surface**.
 
 Drop down to narrower entrypoints only when you already know you want one branch directly, for example:
 

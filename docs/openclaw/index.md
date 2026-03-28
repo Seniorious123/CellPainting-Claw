@@ -2,22 +2,22 @@
 
 This section documents the OpenClaw integration surface for CellPainting-Claw.
 
-OpenClaw is an optional natural-language front end for the same workflow library. It does not replace the core pipeline implementation.
+OpenClaw is an **optional natural-language front end** for the same workflow library. It does **not replace the core pipeline implementation**.
 
 ## Role in the Stack
 
 The relationship between the components is:
 
-1. `cellpainting-claw` provides the canonical workflow library and CLI
-2. `cellpainting-claw serve-mcp` exposes that library as MCP tools
+1. `cellpainting-claw` provides the **canonical workflow library and CLI**
+2. `cellpainting-claw serve-mcp` exposes that library as **MCP tools**
 3. OpenClaw connects to that MCP surface and provides an agent-driven interface
-4. the agent can then trigger the same workflow capabilities through natural-language requests
+4. the agent can then trigger the same workflow capabilities through **natural-language requests**
 
-In practical terms, OpenClaw sits on top of the library. It is not a separate backend.
+In practical terms, OpenClaw sits on top of the library. It is **not a separate backend**.
 
 ## Before You Use OpenClaw
 
-OpenClaw should not be the first thing you debug.
+OpenClaw should **not be the first thing you debug**.
 
 A reliable order is:
 
@@ -31,9 +31,9 @@ That order separates workflow failures from agent-runtime failures.
 
 Use OpenClaw when you want:
 
-- natural-language task execution
-- an agent-facing interface for the workflow
-- MCP-based integration with a controlled runtime
+- **natural-language task execution**
+- an **agent-facing interface** for the workflow
+- **MCP-based integration** with a controlled runtime
 
 Use the Python API or the main CLI when you want:
 
@@ -50,16 +50,16 @@ Through the MCP surface, OpenClaw can reach the same public library surfaces tha
 - preset-oriented runs
 - MCP tool wrappers around the public API
 
-This means the OpenClaw path is an automation layer over the validated workflow, not a separate workflow definition.
+This means the OpenClaw path is an **automation layer over the validated workflow**, not a separate workflow definition.
 
 ## Runtime Choices
 
-The repository maintains two main OpenClaw runtime tracks:
+The repository maintains **two main OpenClaw runtime tracks**:
 
 - `integrations/openclaw/autodl/` for AutoDL-like hosts without nested Docker
 - `integrations/openclaw/docker/` for standard Linux hosts with Docker support
 
-For current OpenClaw releases, prefer the TUI path rather than the ACP client path.
+For current OpenClaw releases, prefer the **TUI path** rather than the ACP client path.
 
 Both runtime tracks keep provider credentials out of repository-managed templates and expose the same library-facing workflow surface underneath.
 
@@ -114,12 +114,12 @@ Under the hood, the agent should still be routing to the same public workflow su
 
 ## Boundaries and Expectations
 
-OpenClaw is useful, but it does not remove the need to understand the core workflow.
+OpenClaw is useful, but it does **not remove the need to understand the core workflow**.
 
 Important boundaries are:
 
-- the CLI and Python API remain the canonical interfaces
-- MCP is the bridge layer, not the workflow implementation itself
+- the CLI and Python API remain the **canonical interfaces**
+- MCP is the **bridge layer**, not the workflow implementation itself
 - provider configuration, gateway state, and model access remain runtime concerns outside the core pipeline library
 - workflow correctness still depends on the underlying config, data paths, and installed backends
 
