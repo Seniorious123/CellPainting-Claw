@@ -2,178 +2,172 @@
 
 [Documentation](https://cellpainting-claw.readthedocs.io/en/latest/)
 
-CellPainting-Claw is a release-oriented software interface for validated Cell Painting workflows.
+CellPainting-Claw is a **tool library for Cell Painting workflows**. It packages the difficult parts of a validated Cell Painting stack into a cleaner public interface for both **human users** and **agents**.
 
-It turns a previously script-heavy analysis setup into a cleaner package with four public layers:
+The repository is built around two public Python packages:
 
-- a Python API for reproducible workflow execution
-- a CLI for standardized pipeline runs
-- a skill layer for agent-facing task routing
-- MCP integration surfaces for OpenClaw and related MCP-compatible agents
+- `cellpainting_claw`: the main Python API and CLI for Cell Painting tools
+- `cellpainting_skills`: the skill-oriented layer for automation, task routing, and agent-facing execution
 
-The project is designed to sit on top of validated backend workspaces rather than hide them. In practice, that means you can keep the proven profiling, segmentation, and DeepProfiler assets, while exposing them through a cleaner and more automatable interface.
+Rather than replacing the underlying ecosystem, CellPainting-Claw provides a stable way to work with it.
 
-## Project Naming
+## What This Repository Integrates
 
-This repository uses two public names on purpose:
+CellPainting-Claw brings together the main tool families needed for a practical Cell Painting stack:
 
-- `CellPainting-Claw` is the main project, package distribution, and full workflow interface
-- `CellPainting-Skills` is the skill-oriented layer for agent and automation entrypoints
+- **CellProfiler** for image-based segmentation and classical measurement export
+- **pycytominer** for single-cell tables, normalization, feature selection, and well-level profiling outputs
+- **DeepProfiler** for single-cell image embedding workflows
+- **Cell Painting Gallery / JUMP-style data access helpers** for planning and preparing data retrieval
+- **MCP and OpenClaw integration** for agent-facing execution and natural-language-driven task routing
 
-In Python, that maps to:
+## Public Packages
 
-- `import cellpainting_claw as cp`
-- `import cellpainting_skills as cps`
+| Package | Purpose | Typical user |
+| --- | --- | --- |
+| `cellpainting_claw` | Main library surface for configs, CLI commands, profiling, segmentation, DeepProfiler export, and MCP serving | Python users, CLI users, reproducible workflow scripts |
+| `cellpainting_skills` | Skill catalog and skill runner for standardized task execution | Agents, automation layers, natural-language orchestration |
 
-On the command line, that maps to:
+Public CLI entrypoints:
 
 - `cellpainting-claw`
 - `cellpainting-skills`
+- `cellpainting-claw-tests`
 
-## Scope
+## Core Capabilities
 
-The current release covers four major areas:
+This repository is intended to be used as a **toolbox**, not only as one fixed linear workflow.
 
-1. Data access and download planning
-2. Profiling and evaluation
-3. Segmentation, single-cell crops, and preview generation
-4. DeepProfiler export, project assembly, profiling, and feature collection
+Current capabilities include:
 
-## Recommended Public API Order
+- **data access planning** for Cell Painting Gallery and JUMP-style sources
+- **classical profiling outputs** from CellProfiler-style tables into pycytominer outputs
+- **segmentation-derived artifacts** including label masks, preview images, and single-cell crops
+- **DeepProfiler preparation** including export-ready inputs and project assembly
+- **agent-facing execution** through skills, MCP tools, and OpenClaw integration
 
-When you need a stable top-level entrypoint, use this order:
+## Skills
 
-1. `run_end_to_end_pipeline`
-2. `run_pipeline_skill`
-3. `run_pipeline_preset`
-4. `run_deepprofiler_pipeline`
+`cellpainting_skills` defines a small set of stable task-level interfaces on top of the lower-level tools.
 
-Main package example:
+Current skill keys:
 
-```python
-import cellpainting_claw as cp
+- `plan-gallery-data`
+- `run-profiling-workflow`
+- `run-segmentation-workflow`
+- `run-deepprofiler-export`
+- `run-deepprofiler-full`
+- `run-full-workflow`
+- `run-full-workflow-with-data-plan`
 
-config = cp.ProjectConfig.from_json(
-    "configs/project_config.example.json"
-)
-result = cp.run_end_to_end_pipeline(config)
-print(result.output_dir)
-```
+The point of the skill layer is to make common tasks easier to call consistently from:
 
-Skill-layer example:
+- the command line
+- Python scripts
+- MCP-compatible agent runtimes
+- natural-language-driven automation layers
 
-```python
-import cellpainting_skills as cps
+## Runnable Demo
 
-print(cps.available_pipeline_skills())
-```
+The repository includes a **minimal runnable demo** with bundled backend assets and generated example outputs.
+
+Demo config:
+
+- `configs/project_config.demo.json`
+
+Demo backend roots:
+
+- `demo/backend/profiling_backend/`
+- `demo/backend/segmentation_backend/`
+
+Example generated outputs already included in the repository:
+
+- `demo/backend/profiling_backend/outputs/pycytominer/well_aggregated.parquet`
+- `demo/backend/profiling_backend/outputs/pycytominer/well_normalized.parquet`
+- `demo/backend/segmentation_backend/outputs/cellprofiler_masks/labels/`
+- `demo/backend/segmentation_backend/outputs/sample_previews_png/`
+- `demo/backend/segmentation_backend/outputs/single_cell_crops_masked/`
+
+This demo is meant to show the public interface on a small, publication-safe example rather than to provide a biologically meaningful benchmark dataset.
 
 ## Quick Start
 
-Create an environment and install the package:
+Create the environment and install the package:
 
 ```bash
 cd <repo-root>
 conda env create -f environment/cellpainting-claw.environment.yml
 conda activate cellpainting-claw
 pip install -e .
-export PYTHON_BIN="$(command -v python)"
 ```
 
-Run the lightweight smoke test:
+List the available skills:
 
 ```bash
 cd <repo-root>
-PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw smoke-test \
-  --config configs/project_config.example.json \
-  --output-path outputs/smoke_test_report.json
+cellpainting-skills list
 ```
 
-Run the default high-level workflow:
+Run a lightweight demo step on the bundled demo config:
 
 ```bash
 cd <repo-root>
-PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-end-to-end-pipeline \
-  --config configs/project_config.example.json
+cellpainting-claw run-profiling \
+  --config configs/project_config.demo.json \
+  --backend native \
+  --script-key validate-inputs
 ```
 
-Inspect the skill catalog:
+Run one skill on the same demo config:
 
 ```bash
 cd <repo-root>
-PYTHONPATH=src $PYTHON_BIN -m cellpainting_skills list
+cellpainting-skills run \
+  --config configs/project_config.demo.json \
+  --skill run-profiling-workflow
 ```
 
-## Release Workflow
+## Python API Example
 
-For release-facing verification and packaging:
+```python
+import cellpainting_claw as cp
 
-```bash
-cd <repo-root>
-./scripts/run_release_smoke_test.sh
-./scripts/build_release_bundle.sh
+config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
+result = cp.run_pipeline_skill(config, "run-profiling-workflow")
+print(result.ok)
 ```
 
-Generated release artifacts are written under `dist/`.
+## Agent and OpenClaw Integration
 
-## Public Surfaces
+CellPainting-Claw can be used directly through Python and CLI, but it also exposes an **agent-facing interface**.
 
-Primary Python entrypoints through `cellpainting_claw`:
+That layer is built around:
 
-- `cellpainting_claw.ProjectConfig`
-- `cellpainting_claw.run_end_to_end_pipeline`
-- `cellpainting_claw.run_pipeline_skill`
-- `cellpainting_claw.run_pipeline_preset`
-- `cellpainting_claw.run_deepprofiler_pipeline`
-- `cellpainting_claw.summarize_data_access`
-- `cellpainting_claw.build_data_request`
-- `cellpainting_claw.build_download_plan`
-- `cellpainting_claw.execute_download_plan`
-- `cellpainting_claw.run_mcp_server`
+- `cellpainting_skills` for stable task-level execution
+- MCP serving through the main package
+- OpenClaw runtime helpers under `integrations/openclaw/`
 
-Primary skill-layer entrypoints through `cellpainting_skills`:
+OpenClaw is **optional**. The core library does not depend on an agent runtime to be usable.
 
-- `cellpainting_skills.available_pipeline_skills`
-- `cellpainting_skills.get_pipeline_skill_definition`
-- `cellpainting_skills.pipeline_skill_definition_to_dict`
-- `cellpainting_skills.run_pipeline_skill`
+## What CellPainting-Claw Is Not
 
-Primary CLI entrypoints:
+CellPainting-Claw is not a replacement for CellProfiler, pycytominer, or DeepProfiler themselves.
 
-- `cellpainting-claw`
-- `cellpainting-skills`
-- `cellpainting-claw-tests`
+It is a **structured interface layer** over those tools so they can be used more consistently, packaged more cleanly, and exposed more safely to scripts, users, and agents.
 
-## OpenClaw Release Tracks
+## Documentation
 
-Two OpenClaw deployment tracks are maintained:
+Start here:
 
-- `integrations/openclaw/autodl/`
-  Preferred for AutoDL-like platforms that do not support nested Docker.
-- `integrations/openclaw/docker/`
-  Preferred for standard Linux hosts with real Docker support.
-
-Both tracks use env-driven provider setup. Repository-managed JSON templates do not store provider keys.
-
-## Documentation Map
-
-- `docs/install.md`: environment and installation
-- `docs/usage_guide.md`: common CLI and workflow usage patterns
-- `docs/python_api_help.md`: Python-side API overview
-- `docs/public_api_contract.md`: stable public API contract
-- `docs/public_api_output_contract.md`: canonical output contract
-- `docs/config_contract.md`: configuration schema guidance
-- `configs/project_config.portable.example.json`: portable distribution template
-- `docs/library_design.md`: architecture and design decisions
-- `docs/testing.md`: test tiers and commands
-- `docs/first_run_guide.md`: shortest external first-run guide
-- `docs/release_quickstart.md`: shortest path from clean checkout to release bundle
-- `docs/publishing_guide.md`: publication-safe sharing guidance
-- `docs/release_readiness_checklist.md`: publication checklist
-- `integrations/openclaw/`: OpenClaw deployment and runtime helpers
+- [Read the Docs](https://cellpainting-claw.readthedocs.io/en/latest/)
+- `docs/introduction/`
+- `docs/installation/`
+- `docs/quick_start/`
+- `docs/api/skills.md`
+- `integrations/openclaw/`
 
 ## Publication Hygiene
 
-Repository docs and config templates are English-only and do not store provider keys.
+Repository-managed docs and config templates are English-only and do not store provider keys.
 
 If a provider key was previously typed into a shell, written into a local config, or pasted into chat, rotate or revoke it before publishing the project.
