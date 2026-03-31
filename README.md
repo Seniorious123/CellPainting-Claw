@@ -2,7 +2,9 @@
 
 [Documentation](https://cellpainting-claw.readthedocs.io/en/latest/)
 
-CellPainting-Claw is a **tool library for Cell Painting workflows**. It packages the difficult parts of a validated Cell Painting stack into a cleaner public interface for both **human users** and **agents**.
+CellPainting-Claw is a **tool library for Cell Painting analysis**. It provides a cleaner public interface for the tasks that are usually scattered across backend scripts and separate tools: **data access planning**, **classical profiling with pycytominer outputs**, **segmentation-derived single-cell exports**, and **DeepProfiler-ready preparation**.
+
+The same repository is designed to work for both **human users** and **agents**.
 
 The repository is built around two public Python packages:
 
@@ -34,9 +36,32 @@ Public CLI entrypoints:
 - `cellpainting-skills`
 - `cellpainting-claw-tests`
 
-## Core Capabilities
+## How The Pieces Fit Together
+
+```text
+Cell Painting data sources
+        |
+        v
+Data-access helpers
+        |
+        +------------------------------+
+        |                              |
+        v                              v
+Classical profiling tools        Segmentation tools
+(CellProfiler -> pycytominer)    (masks, previews, single-cell crops)
+        |                              |
+        |                              v
+        |                        DeepProfiler-ready export
+        |                              |
+        +--------------+---------------+
+                       |
+                       v
+        Python API / CLI / Skills / MCP / OpenClaw
+```
 
 This repository is intended to be used as a **toolbox**, not only as one fixed linear workflow.
+
+## Core Capabilities
 
 Current capabilities include:
 
@@ -48,17 +73,19 @@ Current capabilities include:
 
 ## Skills
 
-`cellpainting_skills` defines a small set of stable task-level interfaces on top of the lower-level tools.
+`cellpainting_skills` defines stable task-level interfaces on top of the lower-level tools.
 
-Current skill keys:
+Current skill catalog:
 
-- `plan-gallery-data`
-- `run-profiling-workflow`
-- `run-segmentation-workflow`
-- `run-deepprofiler-export`
-- `run-deepprofiler-full`
-- `run-full-workflow`
-- `run-full-workflow-with-data-plan`
+| Skill key | What it does |
+| --- | --- |
+| `plan-gallery-data` | Builds a Cell Painting Gallery or JUMP-style data request summary and reusable download plan |
+| `run-profiling-workflow` | Runs the classical profiling route and produces pycytominer-oriented outputs |
+| `run-segmentation-workflow` | Runs the segmentation route and produces masks, previews, and single-cell crop artifacts |
+| `run-deepprofiler-export` | Runs the segmentation-derived export route needed before DeepProfiler-style embedding workflows |
+| `run-deepprofiler-full` | Runs the DeepProfiler branch beyond export, including project-oriented preparation |
+| `run-full-workflow` | Runs the standard profiling and segmentation tool set together |
+| `run-full-workflow-with-data-plan` | Builds a data-access plan first, then runs the standard full workflow |
 
 The point of the skill layer is to make common tasks easier to call consistently from:
 
