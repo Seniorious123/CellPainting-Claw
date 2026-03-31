@@ -30,7 +30,7 @@ class DeepProfilerProfileEnvSmokeTests(unittest.TestCase):
         run_command_mock,
     ) -> None:
         config = ProjectConfig.from_json(CONFIG_PATH)
-        find_spec_mock.return_value = SimpleNamespace(origin='/root/pipeline/DeepProfiler/deepprofiler/__init__.py')
+        find_spec_mock.return_value = SimpleNamespace(origin='/workspace/DeepProfiler/deepprofiler/__init__.py')
         with tempfile.TemporaryDirectory() as tmpdir:
             project_root = Path(tmpdir) / 'dp_project'
             (project_root / 'inputs' / 'config').mkdir(parents=True)
@@ -49,4 +49,4 @@ class DeepProfilerProfileEnvSmokeTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0)
             _, kwargs = run_command_mock.call_args
             self.assertIn('env', kwargs)
-            self.assertEqual(kwargs['env']['PYTHONPATH'], '/root/pipeline/DeepProfiler')
+            self.assertEqual(kwargs['env']['PYTHONPATH'], '/workspace/DeepProfiler')

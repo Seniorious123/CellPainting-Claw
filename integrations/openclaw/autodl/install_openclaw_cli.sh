@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEFAULT_OPENCLAW_BIN="/root/.openclaw/bin/openclaw"
+DEFAULT_OPENCLAW_BIN="${HOME}/.openclaw/bin/openclaw"
 if command -v openclaw >/dev/null 2>&1; then
   echo "openclaw is already installed: $(command -v openclaw)"
   exit 0
@@ -18,4 +18,4 @@ curl -fsSL https://openclaw.ai/install-cli.sh | bash -s -- --no-onboard
 echo
 echo "Installation finished."
 echo "Detected binary path (expected): $DEFAULT_OPENCLAW_BIN"
-echo "The runtime wrapper scripts add /root/.openclaw/bin automatically, so a shell restart is not required."
+echo "The runtime wrapper scripts add $HOME/.openclaw/bin automatically, so a shell restart is not required."

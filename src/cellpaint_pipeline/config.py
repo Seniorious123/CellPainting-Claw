@@ -93,15 +93,18 @@ class ProjectConfig:
                 f'See docs/config_contract.md for the required top-level contract.'
             )
 
+        config_dir = config_path.parent
         python_executable = payload.get("python_executable") or sys.executable
-        profiling_backend_root = Path(payload["profiling_backend_root"]).expanduser().resolve()
-        segmentation_backend_root = Path(payload["segmentation_backend_root"]).expanduser().resolve()
-        workspace_root = Path(payload["workspace_root"]).expanduser().resolve()
-        default_output_root = Path(payload["default_output_root"]).expanduser().resolve()
-        deepprofiler_export_root = Path(payload["deepprofiler_export_root"]).expanduser().resolve()
-        deepprofiler_project_root = Path(
-            payload.get("deepprofiler_project_root", default_output_root / "deepprofiler_project")
-        ).expanduser().resolve()
+        profiling_backend_root = _resolve_from_base(config_dir, payload["profiling_backend_root"], config_dir / payload["profiling_backend_root"])
+        segmentation_backend_root = _resolve_from_base(config_dir, payload["segmentation_backend_root"], config_dir / payload["segmentation_backend_root"])
+        workspace_root = _resolve_from_base(config_dir, payload["workspace_root"], config_dir / payload["workspace_root"])
+        default_output_root = _resolve_from_base(config_dir, payload["default_output_root"], config_dir / payload["default_output_root"])
+        deepprofiler_export_root = _resolve_from_base(config_dir, payload["deepprofiler_export_root"], config_dir / payload["deepprofiler_export_root"])
+        deepprofiler_project_root = _resolve_from_base(
+            config_dir,
+            payload.get("deepprofiler_project_root"),
+            default_output_root / "deepprofiler_project",
+        )
 
         for label, resolved_path in [
             ("profiling_backend_root", profiling_backend_root),
@@ -367,7 +370,7 @@ def project_config_contract_summary() -> dict[str, Any]:
         'project_fields': project_config_field_guide(),
         'data_access_fields': data_access_config_field_guide(),
         'notes': [
-            'ProjectConfig.from_json requires a small set of top-level paths and fills several backend-related defaults automatically.',
+            'ProjectConfig.from_json resolves relative top-level paths from the config file location and fills several backend-related defaults automatically.',
             'The data_access block is optional, but providing default_dataset_id and default_source_id is recommended for reproducible planning flows.',
         ],
     }

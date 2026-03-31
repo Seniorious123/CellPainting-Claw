@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /root/pipeline/CellPainting-Claw/integrations/nanobot
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 NANOBOT_BIN="${NANOBOT_BIN:-/home/linuxbrew/.linuxbrew/bin/nanobot}"
 if [ ! -x "$NANOBOT_BIN" ]; then
   if command -v nanobot >/dev/null 2>&1; then

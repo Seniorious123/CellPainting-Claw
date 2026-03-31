@@ -1,19 +1,19 @@
 {
   "project_name": "cellpaint_post_mvp_wrapper",
-  "python_executable": "/path/to/conda/envs/cellpainting-claw/bin/python",
-  "profiling_backend_root": "/root/pipeline/pycytominer_post_mvp",
+  "python_executable": "python",
+  "profiling_backend_root": "../demo/backend/profiling_backend",
   "profiling_backend_config": "configs/pipeline_config.json",
-  "segmentation_backend_root": "/root/pipeline/pycytominer_post_mvp/segmentation_post_mvp",
+  "segmentation_backend_root": "../demo/backend/segmentation_backend",
   "segmentation_backend_config": "configs/segmentation_config.json",
-  "workspace_root": "/root/pipeline",
-  "default_output_root": "/root/pipeline/CellPainting-Claw/outputs",
-  "deepprofiler_export_root": "/root/pipeline/CellPainting-Claw/exports/deepprofiler",
+  "workspace_root": "../demo/workspace",
+  "default_output_root": "../demo/workspace/outputs",
+  "deepprofiler_export_root": "../demo/workspace/exports/deepprofiler",
   "mask_export_runtime": {
     "num_shards": 24,
     "max_workers": 12,
     "threads_per_worker": 2
   },
-  "deepprofiler_project_root": "/root/pipeline/CellPainting-Claw/exports/deepprofiler_project",
+  "deepprofiler_project_root": "../demo/workspace/exports/deepprofiler_project",
   "deepprofiler_runtime": {
     "experiment_name": "cell_painting_cnn",
     "config_filename": "profile_config.json",
@@ -33,7 +33,7 @@
     "validation_batch_size": 64,
     "initialization": "random",
     "checkpoint_url": "https://zenodo.org/records/7114558/files/Cell_Painting_CNN_v1.hdf5?download=1",
-    "checkpoint_source_path": "/root/pipeline/CellPainting-Claw/exports/deepprofiler_project_validation_runnable_v3/outputs/cell_painting_cnn/checkpoint/Cell_Painting_CNN_v1.hdf5"
+    "checkpoint_source_path": ""
   },
   "data_access": {
     "gallery_bucket": "cellpainting-gallery",
@@ -42,8 +42,8 @@
     "use_unsigned": true,
     "default_dataset_id": "cpg0016-jump",
     "default_source_id": "source_4",
-    "data_cache_root": "/root/pipeline/CellPainting-Claw/cache/data",
-    "index_cache_root": "/root/pipeline/CellPainting-Claw/cache/index",
+    "data_cache_root": "../demo/workspace/cache/data",
+    "index_cache_root": "../demo/workspace/cache/index",
     "preferred_packages": [
       "boto3",
       "cpgdata",

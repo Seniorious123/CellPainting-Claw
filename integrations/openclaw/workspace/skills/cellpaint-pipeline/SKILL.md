@@ -30,13 +30,13 @@ $PYTHON_BIN -m cellpainting_claw list-pipeline-skills
 2. Task-oriented execution
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-full-workflow
 ```
 
 3. Stable public API dispatch
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
+$PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config $REPO_ROOT/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
 ```
 
 ## Useful skill keys
@@ -63,7 +63,7 @@ For each run, report:
 If the host is configured to use MCP, start the server with:
 
 ```bash
-/root/pipeline/CellPainting-Claw/integrations/openclaw/start_cellpaint_mcp_http.sh
+$REPO_ROOT/integrations/openclaw/start_cellpaint_mcp_http.sh
 ```
 
 Then prefer the MCP tools that mirror the same public surfaces:

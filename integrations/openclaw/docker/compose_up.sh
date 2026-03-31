@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 if [ -f ./.env ]; then
   echo "Using docker env file: $(pwd)/.env"
 else

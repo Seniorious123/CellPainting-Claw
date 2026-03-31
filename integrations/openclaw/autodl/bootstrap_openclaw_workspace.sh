@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="/root/pipeline/CellPainting-Claw"
+ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SRC_WORKSPACE="$ROOT/integrations/openclaw/workspace"
 STATE_DIR="${OPENCLAW_HOME:-$SCRIPT_DIR/state}"
 WORKSPACE_DIR="${OPENCLAW_WORKSPACE:-$SCRIPT_DIR/workspace}"

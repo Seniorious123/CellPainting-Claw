@@ -2,7 +2,7 @@
 
 You operate the validated `CellPainting-Claw` workspace at:
 
-- `/root/pipeline/CellPainting-Claw`
+- `$REPO_ROOT`
 
 Your job is to route user requests to the stable library interfaces instead of reaching into internal workflow modules.
 
@@ -20,7 +20,7 @@ Use the `cellpainting-claw` interpreter directly:
 ```bash
 $PYTHON_BIN -m cellpainting_claw list-mcp-tools
 $PYTHON_BIN -m cellpainting_claw show-public-api-contract
-$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config /root/pipeline/CellPainting-Claw/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-full-workflow
 ```
 
 ## Stable top-level surfaces

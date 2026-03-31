@@ -49,14 +49,14 @@ The platform instance boundary still matters more than OpenClaw itself.
 Install OpenClaw if needed:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl
+cd $REPO_ROOT/integrations/openclaw/autodl
 ./install_openclaw_cli.sh
 ```
 
 Create a local provider env file:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl
+cd $REPO_ROOT/integrations/openclaw/autodl
 cp provider.env.example provider.env
 ```
 
@@ -101,8 +101,10 @@ Default endpoints:
 If you want to run the same controlled project config without natural-language routing:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
-PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-pipeline-skill           --config /root/pipeline/CellPainting-Claw/integrations/openclaw/autodl/project_config.autodl.json           --skill run-full-workflow
+cd $REPO_ROOT
+PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-pipeline-skill \
+  --config $REPO_ROOT/integrations/openclaw/autodl/project_config.autodl.json \
+  --skill run-full-workflow
 ```
 
 ## Release Guidance

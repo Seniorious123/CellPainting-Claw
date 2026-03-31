@@ -2,9 +2,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_OPENCLAW_BIN="/root/.openclaw/bin/openclaw"
+DEFAULT_OPENCLAW_BIN="${HOME}/.openclaw/bin/openclaw"
 if [ -x "$DEFAULT_OPENCLAW_BIN" ]; then
-  export PATH="/root/.openclaw/bin:${PATH}"
+  export PATH="${HOME}/.openclaw/bin:${PATH}"
 fi
 OPENCLAW_BIN="${OPENCLAW_BIN:-$(command -v openclaw || true)}"
 

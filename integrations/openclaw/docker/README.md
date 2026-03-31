@@ -67,26 +67,32 @@ That is why:
 
 ## Expected Host Layout
 
-The compose file mounts:
+The compose file mounts your local pipeline checkout into the container runtime.
 
-- host: `/root/pipeline`
+Default mapping:
+
+- host: your local pipeline root
 - container: `/workspace/pipeline`
 
-That keeps the validated backend directories available inside the runtime.
+Inside the container, the repository is expected at:
+
+- `/workspace/pipeline/CellPainting-Claw`
+
+That keeps the demo backend and library checkout available inside the runtime.
 
 ## Start Docker on This Machine
 
 If the daemon is not already running:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
+cd $REPO_ROOT/integrations/openclaw/docker
 ./start_docker_restricted.sh
 ```
 
 ## Build and Run
 
 ```bash
-cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
+cd $REPO_ROOT/integrations/openclaw/docker
 cp .env.example .env
 # edit .env
 ./compose_up.sh
@@ -102,7 +108,7 @@ This starts:
 In a second shell:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw/integrations/openclaw/docker
+cd $REPO_ROOT/integrations/openclaw/docker
 ./compose_acp_client.sh
 ```
 

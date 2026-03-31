@@ -27,7 +27,7 @@ Without that key, NanoBot can start and load the MCP config, but it cannot compl
 Use the active CellPainting-Claw interpreter directly:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw
+cd $REPO_ROOT
 $PYTHON_BIN -m cellpainting_claw serve-mcp --transport streamable-http --host 127.0.0.1 --port 8768 --path /mcp
 ```
 
@@ -71,7 +71,7 @@ For `nanobot 0.0.60`, a simple YAML file works for basic agent metadata, but ric
 Typical sequence:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw/integrations/nanobot
+cd $REPO_ROOT/integrations/nanobot
 ./start_cellpaint_mcp_http.sh
 ```
 
@@ -79,6 +79,6 @@ In another shell:
 
 ```bash
 export OPENAI_API_KEY=...
-cd /root/pipeline/CellPainting-Claw/integrations/nanobot
+cd $REPO_ROOT/integrations/nanobot
 ./run_nanobot_local.sh
 ```

@@ -6,8 +6,8 @@ This directory maintains three OpenClaw tracks:
    Preferred on standard Linux hosts with real Docker support.
 2. `autodl/`
    Preferred on AutoDL-like hosts where nested Docker is not available.
-3. host-local scripts in this directory
-   Useful for debugging, but not the preferred release path.
+3. host-local wrappers in this directory
+   Thin entrypoints that forward to the sanitized `autodl/` runtime.
 
 ## Recommended Path
 
