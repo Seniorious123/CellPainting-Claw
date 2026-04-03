@@ -88,14 +88,6 @@ quick_start/index
 
 ```{toctree}
 :maxdepth: 2
-:caption: Workflows
-:hidden:
-
-workflows/index
-```
-
-```{toctree}
-:maxdepth: 2
 :caption: API
 :hidden:
 

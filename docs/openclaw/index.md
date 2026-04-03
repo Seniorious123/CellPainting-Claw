@@ -141,8 +141,8 @@ A useful **debugging order** is:
 
 ## Related Pages
 
-For the core workflow itself, continue to:
+For the core toolkit interfaces, continue to:
 
 - [Quick Start](../quick_start/index.md)
-- [Running the Full Pipeline](../workflows/running_the_full_pipeline.md)
-- [Command-Line Interface](../cli/index.md)
+- [CLI](../cli/index.md)
+- [Skills](../skills/index.md)

@@ -1,51 +1,38 @@
-# Workflows
+# Workflow Reference
 
-This section documents the **workflow logic** exposed by CellPainting-Claw.
+This section is a **supplementary reference** for readers who want extra detail about how the underlying processing chain fits together.
 
-The project is organized around **one shared upstream stage** and **two downstream branches**:
+It is not the main reading path for the project.
 
-- a shared segmentation-oriented upstream stage
-- a classical profiling branch built around `pycytominer`
-- a DeepProfiler branch built around segmentation-guided single-cell crops
+For most users, the primary documentation path is:
 
-## Workflow Logic
+- [Introduction](../introduction/index.md)
+- [Quick Start](../quick_start/index.md)
+- [API](../api/index.md)
+- [Skills](../skills/index.md)
+- [CLI](../cli/index.md)
+- [OpenClaw](../openclaw/index.md)
 
-The workflow is easiest to understand in this order:
+## What This Section Contains
 
-1. raw Cell Painting images enter the **shared upstream stage**
-2. CellProfiler-driven segmentation produces masks, outlines, labels, measurements, and localization outputs
-3. those shared outputs feed one of **two downstream branches**
-4. the classical branch turns measurement tables into profile tables through `pycytominer`
-5. the DeepProfiler branch turns single-cell crops into learned feature vectors
+The pages in this section describe the processing logic that connects:
 
-This means that **segmentation is not a side product**. It is the backbone that connects the raw images to both downstream analysis paths.
+- raw Cell Painting image inputs
+- segmentation-derived outputs such as labels, masks, and single-cell crops
+- classical profiling outputs through `pycytominer`
+- DeepProfiler-oriented preparation and downstream embedding workflows
 
-## What Each Workflow Page Covers
+Use this section when you want a more process-oriented explanation of how those components fit together.
 
-- **Shared Upstream Stage** explains how raw microscopy inputs become segmentation-derived workflow outputs.
-- **Classical Profiling Branch** explains how CellProfiler-derived tables are standardized and passed into `pycytominer`.
-- **DeepProfiler Branch** explains how segmentation-guided crops are exported and prepared for deep feature extraction.
-- **Running the Full Pipeline** explains how to run the full public workflow from configuration inspection to final output directories.
+## Suggested Use
 
-## Output Logic
+Treat these pages as supporting reference, not as the main way to learn the project structure.
 
-The outputs of the workflow fall into **three groups**:
+If you want to understand the public interfaces first, return to:
 
-- segmentation outputs such as masks, outlines, object tables, and crop-ready localization data
-- classical profiling outputs such as aggregated, annotated, normalized, and feature-selected profile tables
-- DeepProfiler outputs such as per-cell embeddings and collected feature tables
-
-That separation is important for interpreting the repository correctly:
-
-- `pycytominer` produces **profile tables**
-- the segmentation branch produces **masks and crop-related artifacts**
-- DeepProfiler consumes **segmentation-guided image crops** rather than replacing segmentation itself
-
-## How To Read This Section
-
-If you are learning the project for the first time, read these pages in order.
-
-If you already understand the branches and only need the execution recipe, jump directly to **Running the Full Pipeline**.
+- [API](../api/index.md)
+- [Skills](../skills/index.md)
+- [CLI](../cli/index.md)
 
 ```{toctree}
 :maxdepth: 1
