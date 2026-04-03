@@ -78,6 +78,8 @@ These commands expose broader combined runs and named task bundles:
 - `list-pipeline-skills`
 - `run-pipeline-skill`
 
+Use `run-end-to-end-pipeline` when you intentionally want one broad orchestration call. Use `run-pipeline-preset` or `run-pipeline-skill` when a named task or named bundle is a better fit than one large top-level run.
+
 ### DeepProfiler-Oriented Commands
 
 These commands cover DeepProfiler preparation and the dedicated DeepProfiler pipeline path:
