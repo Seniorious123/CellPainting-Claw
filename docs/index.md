@@ -104,6 +104,22 @@ api/index
 
 ```{toctree}
 :maxdepth: 2
+:caption: Skills
+:hidden:
+
+skills/index
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: CLI
+:hidden:
+
+cli/index
+```
+
+```{toctree}
+:maxdepth: 2
 :caption: OpenClaw
 :hidden:
 

@@ -145,4 +145,4 @@ For the core workflow itself, continue to:
 
 - [Quick Start](../quick_start/index.md)
 - [Running the Full Pipeline](../workflows/running_the_full_pipeline.md)
-- [Command-Line Interface](../api/cli.md)
+- [Command-Line Interface](../cli/index.md)

@@ -109,5 +109,5 @@ For OpenClaw-specific setup, continue to [OpenClaw](../openclaw/index.md).
 After Quick Start, the most useful next pages are:
 
 - [Introduction](../introduction/index.md) for the project scope and interface model
-- [API](../api/index.md) for the public Python, CLI, and skills interfaces
+- [API](../api/index.md) for the public Python interfaces
 - [OpenClaw](../openclaw/index.md) if you want agent-mediated execution

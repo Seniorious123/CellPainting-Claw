@@ -112,6 +112,6 @@ This page documents the **main Python toolkit surface**.
 
 If you want:
 
-- stable task names, continue to [CellPainting-Skills](skills.md)
-- shell-oriented execution, continue to [Command-Line Interface](cli.md)
+- stable task names, continue to [CellPainting-Skills](../skills/index.md)
+- shell-oriented execution, continue to [Command-Line Interface](../cli/index.md)
 - natural-language or agent-mediated execution, continue to [OpenClaw](../openclaw/index.md)

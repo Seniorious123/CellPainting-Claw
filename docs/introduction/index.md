@@ -94,5 +94,5 @@ After this introduction, the recommended next pages are:
 
 - [Installation](../installation/index.md) for environment setup
 - [Quick Start](../quick_start/index.md) for the shortest first run
-- [API](../api/index.md) for the public Python, CLI, and skills interfaces
+- [API](../api/index.md) for the public Python interfaces
 - [OpenClaw](../openclaw/index.md) if you want natural-language or agent-mediated execution

@@ -1,8 +1,8 @@
 # API
 
-This section documents the **public interfaces** exposed by CellPainting-Claw.
+This section documents the **Python-side public interfaces** exposed by CellPainting-Claw.
 
-The project is intended to be used through a small number of public access paths rather than through internal modules or backend-specific script collections.
+The API section is focused on the main toolkit entrypoints exposed through `cellpainting_claw`. The task-oriented `Skills` layer and the shell-facing `CLI` are documented as separate top-level sections.
 
 ## Main Public Access Paths
 
@@ -13,56 +13,32 @@ CellPainting-Claw currently exposes four main access paths:
 - the command-line interfaces `cellpainting-claw` and `cellpainting-skills`
 - the MCP surface used by OpenClaw and other agent-facing clients
 
-## How To Read This Section
+## What This API Section Covers
 
-For most readers, the most useful order is:
+This section focuses on the main Python toolkit surface, especially:
 
-1. **Public Entrypoints** for the main Python toolkit surface
-2. **CellPainting-Skills** for the task-oriented interface
-3. **Command-Line Interface** for shell-facing execution
+- `ProjectConfig`
+- public Python entrypoints
+- related public helpers exposed by the main package
 
-That order keeps the API section centered on the public interfaces that users and agents actually call.
+For the task-oriented layer, continue to [Skills](../skills/index.md).
 
-## What Each Page Covers
+For shell-facing usage, continue to [CLI](../cli/index.md).
+
+## Page Guide
 
 ### Public Entrypoints
 
-This page documents the main Python-side entrypoints exposed by `cellpainting_claw`.
+This page documents the most important Python entrypoints exposed by `cellpainting_claw`.
 
 Use it when you want to understand the canonical Python toolkit surface.
 
-### CellPainting-Skills
+## Relationship To Other Sections
 
-This page documents the task-oriented public layer exposed by `cellpainting_skills`.
-
-Use it when you want to understand:
-
-- what a skill means in this project
-- which stable skill keys currently exist
-- how the skills layer relates to the lower-level toolkit
-- how skills fit into automation and agent-facing execution
-
-### Command-Line Interface
-
-This page documents the public CLI surfaces.
-
-Use it when you want explicit shell commands instead of Python calls.
-
-## Relationship Between The Interfaces
-
-The interfaces are related, but they are not identical.
-
-- `cellpainting_claw` is the **main toolkit surface**
-- `cellpainting_skills` is the **task-oriented layer** on top of that toolkit
-- the CLI exposes those same capabilities for shell use
-- MCP exposes the same library for agent-facing runtimes
-
-OpenClaw is therefore **not a separate workflow implementation**. It is one of the agent-facing ways to use the same underlying public interfaces.
+The Python API, Skills layer, CLI, and MCP tooling all expose related parts of the same toolkit, but they are documented separately so each interface can be learned in the form users actually encounter.
 
 ```{toctree}
 :maxdepth: 1
 
 public_entrypoints
-skills
-cli
 ```
