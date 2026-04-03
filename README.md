@@ -19,7 +19,7 @@ CellPainting-Claw brings together the main tool families needed for a practical 
 
 - **CellProfiler** for image-based segmentation and classical measurement export
 - **pycytominer** for single-cell tables, normalization, feature selection, and well-level profiling outputs
-- **DeepProfiler** for single-cell image embedding workflows
+- **DeepProfiler** for single-cell image embedding pipelines
 - **Cell Painting Gallery / JUMP-style data access helpers** for planning and preparing data retrieval
 - **MCP and OpenClaw integration** for agent-facing execution and natural-language-driven task routing
 
@@ -27,7 +27,7 @@ CellPainting-Claw brings together the main tool families needed for a practical 
 
 | Package | Purpose | Typical user |
 | --- | --- | --- |
-| `cellpainting_claw` | Main library surface for configs, CLI commands, profiling, segmentation, DeepProfiler export, and MCP serving | Python users, CLI users, reproducible workflow scripts |
+| `cellpainting_claw` | Main library surface for configs, CLI commands, profiling, segmentation, DeepProfiler export, and MCP serving | Python users, CLI users, reproducible analysis scripts |
 | `cellpainting_skills` | Skill catalog and skill runner for standardized task execution | Agents, automation layers, natural-language orchestration |
 
 Public CLI entrypoints:
@@ -59,7 +59,7 @@ Classical profiling tools        Segmentation tools
         Python API / CLI / Skills / MCP / OpenClaw
 ```
 
-This repository is intended to be used as a **toolbox**, not only as one fixed linear workflow.
+This repository is intended to be used as a **toolbox** rather than only as one fixed linear run mode.
 
 ## Core Capabilities
 
@@ -82,10 +82,10 @@ Current skill catalog:
 | `plan-gallery-data` | Builds a Cell Painting Gallery or JUMP-style data request summary and reusable download plan |
 | `run-profiling-workflow` | Runs the classical profiling route and produces pycytominer-oriented outputs |
 | `run-segmentation-workflow` | Runs the segmentation route and produces masks, previews, and single-cell crop artifacts |
-| `run-deepprofiler-export` | Runs the segmentation-derived export route needed before DeepProfiler-style embedding workflows |
-| `run-deepprofiler-full` | Runs the DeepProfiler branch beyond export, including project-oriented preparation |
+| `run-deepprofiler-export` | Runs the segmentation-derived export route needed before DeepProfiler-style embedding runs |
+| `run-deepprofiler-full` | Runs the full DeepProfiler-oriented path beyond export, including project-oriented preparation |
 | `run-full-workflow` | Runs the standard profiling and segmentation tool set together |
-| `run-full-workflow-with-data-plan` | Builds a data-access plan first, then runs the standard full workflow |
+| `run-full-workflow-with-data-plan` | Builds a data-access plan first, then runs the standard combined tool set |
 
 The point of the skill layer is to make common tasks easier to call consistently from:
 
@@ -190,7 +190,7 @@ Start here:
 - `docs/introduction/`
 - `docs/installation/`
 - `docs/quick_start/`
-- `docs/api/skills.md`
+- `docs/skills/`
 - `integrations/openclaw/`
 
 ## Publication Hygiene

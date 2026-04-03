@@ -13,7 +13,7 @@ A skill does not define a separate backend. Instead, it gives a stable name to a
 - planning data access
 - running classical profiling
 - running segmentation exports
-- preparing DeepProfiler-oriented outputs
+- preparing DeepProfiler-oriented outputs and inputs
 - running a standard full tool combination
 
 This makes the library easier to use from:
@@ -59,20 +59,20 @@ Purpose:
 Run the segmentation route and produce masks, previews, and single-cell crop-related artifacts.
 
 Use it when:
-You want segmentation-derived outputs without focusing on the classical profiling branch.
+You want segmentation-derived outputs without focusing on the classical profiling path.
 
 ### `run-deepprofiler-export`
 
 Purpose:
-Run the export-oriented preparation needed before DeepProfiler-style embedding workflows.
+Run the export-oriented preparation needed before DeepProfiler-style embedding runs.
 
 Use it when:
-You want the segmentation-derived export artifacts used as the upstream input for DeepProfiler.
+You want the segmentation-derived export artifacts used as the input to DeepProfiler.
 
 ### `run-deepprofiler-full`
 
 Purpose:
-Run the DeepProfiler-oriented branch beyond export and into the full prepared DeepProfiler path.
+Run the DeepProfiler-oriented path beyond export and into the full prepared DeepProfiler path.
 
 Use it when:
 You want the DeepProfiler side of the toolkit rather than only the classical profiling outputs.
@@ -167,7 +167,7 @@ Use `cellpainting_claw` instead when:
 
 ## Relationship To OpenClaw
 
-OpenClaw does not introduce a separate workflow implementation.
+OpenClaw does not introduce a separate toolkit implementation.
 
 Instead, OpenClaw can call the same underlying CellPainting-Claw toolkit through MCP, and the skills layer is one of the most natural ways to expose task-level behavior to an agent runtime.
 

@@ -50,7 +50,7 @@ Use it when:
 - you want the library to coordinate multiple capability groups through one call
 - you are intentionally choosing the highest-level orchestration interface
 
-This function is still public, but it should not be treated as the only important interface in the project. CellPainting-Claw is a toolkit, not only one end-to-end wrapper.
+This function is still public, but it should not be treated as the only important interface in the project. CellPainting-Claw is a toolkit, not only one broad orchestration wrapper.
 
 ## `run_pipeline_preset`
 

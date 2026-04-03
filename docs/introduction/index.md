@@ -56,7 +56,7 @@ At a high level, CellPainting-Claw supports four main capability groups:
 - **data access planning** for Cell Painting Gallery and JUMP-style sources
 - **classical profiling** that converts CellProfiler-derived tables into pycytominer outputs
 - **segmentation-derived exports** such as masks, previews, and single-cell crops
-- **DeepProfiler-oriented preparation** for learned single-cell feature extraction workflows
+- **DeepProfiler-oriented preparation** for learned single-cell feature extraction tasks
 
 These capabilities are exposed through one documented interface layer rather than through separate script collections.
 
