@@ -13,7 +13,7 @@ In practice, Cell Painting work is often difficult to standardize because:
 - one user may want direct low-level tools, while another may want named tasks
 - agent runtimes need stable entrypoints instead of ad hoc shell procedures
 
-CellPainting-Claw addresses that interface problem rather than trying to replace the underlying scientific packages.
+CellPainting-Claw provides a stable interface layer across those tool families.
 
 ## Two Public Packages
 
@@ -23,13 +23,15 @@ CellPainting-Claw addresses that interface problem rather than trying to replace
 
 It is the package to use when you want:
 
-- the canonical Python API
-- the main CLI
+- one Python API for the main Cell Painting tasks
+- the main CLI and config contract
 - data-access helpers
 - profiling and segmentation tools
 - DeepProfiler preparation helpers
 - public CellProfiler `.cppipe` inspection and validation helpers
 - MCP serving for agent runtimes
+
+In short, import `cellpainting_claw` when you want the **broad toolkit layer**.
 
 ### `cellpainting_skills`
 
@@ -39,8 +41,10 @@ It is the package to use when you want:
 
 - stable skill names
 - automation-friendly task routing
-- one layer above the lower-level toolkit commands
+- a simpler way to run named tasks
 - a cleaner bridge between natural-language requests and concrete toolkit actions
+
+In short, import `cellpainting_skills` when you want the **task layer** rather than the full lower-level toolkit surface.
 
 ## Integrated Tool Families
 
@@ -56,7 +60,7 @@ CellPainting-Claw works with the main package families needed for a practical Ce
 
 ## Skills Matter In This Project
 
-The central public idea of the repository is **not one giant pipeline command**. The central public idea is a **toolkit plus a stable skill layer**.
+The central public idea of the repository is a **toolkit plus a stable skill layer**.
 
 Skills matter because they provide:
 

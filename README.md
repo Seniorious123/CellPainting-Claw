@@ -4,7 +4,7 @@
 
 CellPainting-Claw is a **Cell Painting toolkit for both humans and agents**. It provides a cleaner public interface for the tasks that are usually spread across backend scripts, package-specific wrappers, and separate runtimes.
 
-The repository is designed as a **tool repository**, not only as one fixed pipeline script.
+It packages the main task families needed for practical Cell Painting work into one reusable interface.
 
 ## Supported Packages
 
@@ -20,10 +20,10 @@ CellPainting-Claw integrates or wraps the following package and tool families:
 
 The repository exposes **two main public Python packages**.
 
-| Package | Role | What it contains |
+| Package | Role | When to use it |
 | --- | --- | --- |
-| `cellpainting_claw` | main toolkit package | config loading, data access, profiling tools, segmentation tools, DeepProfiler helpers, `.cppipe` helpers, MCP support |
-| `cellpainting_skills` | task-oriented package | skill catalog, task descriptions, skill runner, automation-friendly task surface |
+| `cellpainting_claw` | main toolkit package | use this when you want one Python package for config loading, data access, profiling, segmentation, DeepProfiler helpers, `.cppipe` inspection, and MCP serving |
+| `cellpainting_skills` | task-oriented package | use this when you want stable named tasks such as profiling, segmentation, or DeepProfiler export, especially for automation and agents |
 
 ## What The Repository Includes
 

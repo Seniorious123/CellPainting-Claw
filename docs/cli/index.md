@@ -75,7 +75,7 @@ Its main commands are:
 - `describe`
 - `run`
 
-This is the recommended first CLI for users who want to think in terms of **tasks** rather than tool families.
+This is the recommended first CLI for users who want to start from **tasks**.
 
 Minimal examples:
 
@@ -101,7 +101,7 @@ This is why it is often the best first CLI to show to a new user.
 
 `run-workflow` is an **advanced internal-style command** exposed by the main CLI.
 
-It exists for cases where you want to call a lower-level workflow alias directly, but it is **not the best starting point for most users**.
+It exists for cases where you want to call a lower-level workflow alias directly.
 
 For normal use:
 

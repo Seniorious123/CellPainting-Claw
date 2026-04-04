@@ -2,7 +2,7 @@
 
 `cellpainting_skills` is the **task-oriented package** of CellPainting-Claw.
 
-The point of this package is to expose the toolkit through **stable named tasks** instead of forcing every user or agent to decide which lower-level commands and options must be combined each time.
+This package exposes the toolkit through **stable named tasks** for users, automation, and agent runtimes.
 
 ## What A Skill Is
 
@@ -45,7 +45,7 @@ The current repository defines the following stable skills.
 
 ### `plan-gallery-data`
 
-Use this skill when the main question is **what data should be downloaded** rather than which analysis tool should run next.
+Use this skill when the main question is **what data should be downloaded**.
 
 Typical result:
 
@@ -87,7 +87,7 @@ Typical result:
 
 ### `run-deepprofiler-full`
 
-Use this skill when you want the **DeepProfiler-oriented tool path itself**, not only the export preparation.
+Use this skill when you want the **DeepProfiler-oriented tool path itself**.
 
 Typical result:
 
@@ -98,7 +98,7 @@ Typical result:
 
 ### `run-full-workflow`
 
-Use this skill when you want the **standard combined toolkit task** instead of choosing only one capability family.
+Use this skill when you want the **standard combined toolkit task**.
 
 Typical result:
 
@@ -188,7 +188,7 @@ Use `cellpainting_skills` when:
 - stable task names matter more than low-level command selection
 - you are building automation on top of the toolkit
 - you want the most agent-friendly public surface
-- you want one clear task entrypoint rather than a command family
+- you want one clear task entrypoint
 
 Use `cellpainting_claw` instead when:
 

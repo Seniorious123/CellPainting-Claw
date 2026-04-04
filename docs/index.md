@@ -2,7 +2,7 @@
 
 CellPainting-Claw is a **Cell Painting toolkit for both humans and agents**. It turns a stack that is usually spread across backend scripts, package-specific conventions, and separate runtimes into a cleaner public interface.
 
-The project is designed as a **tool repository**, not only as one fixed execution route.
+It packages the main task families needed for practical Cell Painting work into one reusable interface.
 
 ## Supported Packages
 
@@ -24,32 +24,31 @@ The repository exposes **two main public Python packages**.
 
 ### `cellpainting_claw`
 
-`cellpainting_claw` is the **main toolkit package**.
+`cellpainting_claw` is the **main Python package** of the toolkit.
 
-It includes:
+Use it when you want to:
 
-- configuration loading through `ProjectConfig`
-- data-access helpers
-- profiling tools and pycytominer-facing outputs
-- segmentation tools, masks, previews, and crop generation
-- DeepProfiler export and project helpers
-- CellProfiler `.cppipe` inspection and validation helpers
-- MCP server support for agent runtimes
+- load a project config and inspect what a run will do
+- plan data access or prepare dataset downloads
+- run profiling, segmentation, or DeepProfiler helper steps from Python
+- inspect which CellProfiler `.cppipe` template a config will use
+- expose the toolkit to an MCP-compatible agent runtime
 
-Use `cellpainting_claw` when you want the **full toolkit surface**.
+In practical terms, this is the package to import when you want the **full toolkit surface** in Python.
 
 ### `cellpainting_skills`
 
-`cellpainting_skills` is the **task-oriented package**.
+`cellpainting_skills` is the **task-oriented Python package**.
 
-It includes:
+Use it when you want to:
 
-- a stable skill catalog
-- skill definitions and descriptions
-- a skill runner for Python and CLI use
-- a more automation-friendly layer above the lower-level toolkit functions
+- browse the skill catalog
+- inspect what each skill does before running it
+- run named tasks such as profiling, segmentation, or DeepProfiler export
+- call the toolkit through a simpler task layer
+- give agents a more stable execution surface
 
-Use `cellpainting_skills` when you want **named tasks** instead of choosing lower-level tool combinations yourself.
+In practical terms, this is the package to import when you want to say **"run this named task"** instead of assembling lower-level steps yourself.
 
 ## What The Toolkit Contains
 

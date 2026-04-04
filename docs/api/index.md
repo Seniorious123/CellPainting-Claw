@@ -23,7 +23,7 @@ The Python API is easier to understand as **five helper families**.
 Use `cellpainting_claw` when you want:
 
 - the main Python toolkit surface
-- lower-level helper families
+- direct access to configuration, data access, profiling, segmentation, and DeepProfiler helpers
 - direct control over configuration and tool selection
 - public `.cppipe` inspection and validation helpers
 
@@ -33,7 +33,7 @@ Use `cellpainting_skills` when you want:
 
 - stable task names
 - one layer above the lower-level API
-- a simpler automation surface
+- a simpler automation surface for users, scripts, and agents
 
 ## What This API Section Focuses On
 

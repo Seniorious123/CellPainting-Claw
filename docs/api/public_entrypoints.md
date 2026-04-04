@@ -41,7 +41,7 @@ The project config accepts a `cellprofiler` block such as:
 }
 ```
 
-This block is what allows users to stay inside the public toolkit interface instead of editing backend files as the default workflow.
+This block gives users a public way to control CellProfiler pipeline selection through the toolkit interface.
 
 ## `.cppipe` Helper Family
 
@@ -123,11 +123,11 @@ This is more explicit than a skill and less raw than hand-building all orchestra
 
 Use this function only when you intentionally want the broader combined toolkit run.
 
-It is public, but it is **not the only important interface in the repository**. Most users should start with skills or smaller helper families first.
+It is most useful when you intentionally want the broad combined toolkit run. Most users should still start with skills or smaller helper families first.
 
 ### `run_deepprofiler_pipeline`
 
-Use this function when the task is specifically about the DeepProfiler tool family rather than the broader combined toolkit.
+Use this function when the task is specifically about the DeepProfiler tool family.
 
 ## Tool Execution Helpers
 
