@@ -10,6 +10,15 @@ from cellpaint_pipeline.adapters.deepprofiler_features import collect_deepprofil
 from cellpaint_pipeline.adapters.deepprofiler_project import build_deepprofiler_project
 from cellpaint_pipeline.adapters.deepprofiler_project import run_deepprofiler_profile
 from cellpaint_pipeline.config import ProjectConfig
+from cellpaint_pipeline.cppipe import (
+    available_cppipe_templates,
+    cppipe_template_definition_to_dict,
+    cppipe_validation_result_to_dict,
+    get_cppipe_template,
+    resolve_cppipe_selection,
+    resolved_cppipe_selection_to_dict,
+    validate_cppipe_configuration,
+)
 from cellpaint_pipeline.deepprofiler_pipeline import (
     deepprofiler_pipeline_result_to_dict,
     run_deepprofiler_pipeline,
@@ -126,6 +135,21 @@ def build_parser(
 
     data_access_show_parser = subparsers.add_parser('show-data-access', help='Print the resolved data-access configuration.')
     data_access_show_parser.add_argument('--config', required=True, help='Path to project config JSON.')
+
+    list_cppipe_templates_parser = subparsers.add_parser('list-cppipe-templates', help='List bundled .cppipe template keys exposed by the library.')
+    list_cppipe_templates_parser.add_argument('--kind', choices=['profiling', 'segmentation'], default=None, help='Optionally limit the list to profiling or segmentation templates.')
+    list_cppipe_templates_parser.add_argument('--config', default=None, help='Optional project config used to resolve bundled template paths.')
+
+    describe_cppipe_template_parser = subparsers.add_parser('describe-cppipe-template', help='Describe one bundled .cppipe template and optionally resolve its path under a project config.')
+    describe_cppipe_template_parser.add_argument('--template', required=True, help='Bundled .cppipe template key.')
+    describe_cppipe_template_parser.add_argument('--config', default=None, help='Optional project config used to resolve the template path.')
+
+    show_cppipe_selection_parser = subparsers.add_parser('show-cppipe-selection', help='Show the effective profiling or segmentation .cppipe selection under a project config.')
+    show_cppipe_selection_parser.add_argument('--config', required=True, help='Path to project config JSON.')
+    show_cppipe_selection_parser.add_argument('--kind', choices=['profiling', 'segmentation', 'all'], default='all', help='Show one side or both effective selections.')
+
+    validate_cppipe_config_parser = subparsers.add_parser('validate-cppipe-config', help='Validate the configured .cppipe template and custom-path selection.')
+    validate_cppipe_config_parser.add_argument('--config', required=True, help='Path to project config JSON.')
 
     data_access_check_parser = subparsers.add_parser('check-data-access', help='Report data-access package and executable availability.')
     data_access_check_parser.add_argument('--config', required=True, help='Path to project config JSON.')
@@ -588,6 +612,37 @@ def main(
                 'config': config.data_access.as_dict(),
             }, indent=2, ensure_ascii=False))
             return 0
+
+        if args.command == 'list-cppipe-templates':
+            config = ProjectConfig.from_json(args.config) if args.config else None
+            payload = [
+                cppipe_template_definition_to_dict(get_cppipe_template(key), config=config)
+                for key in available_cppipe_templates(kind=args.kind)
+            ]
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
+            return 0
+
+        if args.command == 'describe-cppipe-template':
+            config = ProjectConfig.from_json(args.config) if args.config else None
+            payload = cppipe_template_definition_to_dict(get_cppipe_template(args.template), config=config)
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
+            return 0
+
+        if args.command == 'show-cppipe-selection':
+            config = ProjectConfig.from_json(args.config)
+            kinds = ['profiling', 'segmentation'] if args.kind == 'all' else [args.kind]
+            payload = [
+                resolved_cppipe_selection_to_dict(resolve_cppipe_selection(config, kind))
+                for kind in kinds
+            ]
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
+            return 0
+
+        if args.command == 'validate-cppipe-config':
+            config = ProjectConfig.from_json(args.config)
+            result = validate_cppipe_configuration(config)
+            print(json.dumps(cppipe_validation_result_to_dict(result), indent=2, ensure_ascii=False))
+            return 0 if result.ok else 1
 
         if args.command == 'check-data-access':
             config = ProjectConfig.from_json(args.config)
@@ -1490,6 +1545,9 @@ def _native_segmentation_result_to_dict(result: object) -> dict:
             'step': 'build-mask-export-pipeline',
             'output_path': str(result.output_path),
             'module_count': result.module_count,
+            'source_cppipe_path': str(result.source_cppipe_path),
+            'selected_via': result.selected_via,
+            'execution_mode': result.execution_mode,
         }
     return {
         'implementation': 'native',

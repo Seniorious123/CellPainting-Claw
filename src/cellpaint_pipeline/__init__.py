@@ -3,9 +3,11 @@
 __version__ = '0.1.0'
 
 from cellpaint_pipeline.config import (
+    CellProfilerConfig,
     ConfigContractError,
     DataAccessConfig,
     ProjectConfig,
+    cellprofiler_config_field_guide,
     data_access_config_field_guide,
     project_config_contract_summary,
     project_config_field_guide,
@@ -13,6 +15,15 @@ from cellpaint_pipeline.config import (
 from cellpaint_pipeline.deepprofiler_pipeline import (
     deepprofiler_pipeline_result_to_dict,
     run_deepprofiler_pipeline,
+)
+from cellpaint_pipeline.cppipe import (
+    available_cppipe_templates,
+    cppipe_template_definition_to_dict,
+    cppipe_validation_result_to_dict,
+    get_cppipe_template,
+    resolve_cppipe_selection,
+    resolved_cppipe_selection_to_dict,
+    validate_cppipe_configuration,
 )
 from cellpaint_pipeline.data_access import (
     browse_quilt_package,
@@ -94,12 +105,21 @@ from cellpaint_pipeline.workflows.orchestration import run_workflow
 
 __all__ = [
     '__version__',
+    'CellProfilerConfig',
     'ConfigContractError',
     'DataAccessConfig',
     'ProjectConfig',
+    'cellprofiler_config_field_guide',
     'project_config_field_guide',
     'data_access_config_field_guide',
     'project_config_contract_summary',
+    'available_cppipe_templates',
+    'cppipe_template_definition_to_dict',
+    'cppipe_validation_result_to_dict',
+    'get_cppipe_template',
+    'resolve_cppipe_selection',
+    'resolved_cppipe_selection_to_dict',
+    'validate_cppipe_configuration',
     'deepprofiler_pipeline_result_to_dict',
     'run_deepprofiler_pipeline',
     'browse_quilt_package',

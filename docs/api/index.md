@@ -1,41 +1,68 @@
 # API
 
-This section documents the **Python-side public interfaces** exposed by CellPainting-Claw.
+This section documents the **Python-side toolkit surface** exposed by CellPainting-Claw.
 
-The API section is focused on the main toolkit entrypoints exposed through `cellpainting_claw`. The task-oriented `Skills` layer and the shell-facing `CLI` are documented as separate top-level sections.
+The main API package is `cellpainting_claw`. The task-oriented package `cellpainting_skills` is documented separately under [Skills](../skills/index.md).
 
-## Main Public Access Paths
+## What The Python API Covers
 
-CellPainting-Claw currently exposes four main access paths:
+The Python API is easier to understand as **five helper families**.
 
-- the main Python package `cellpainting_claw`
-- the task-oriented Python package `cellpainting_skills`
-- the command-line interfaces `cellpainting-claw` and `cellpainting-skills`
-- the MCP surface used by OpenClaw and other agent-facing clients
+| API family | What it covers |
+| --- | --- |
+| configuration | `ProjectConfig`, `CellProfilerConfig`, and config-contract helpers |
+| task entrypoints | `run_pipeline_skill`, `run_pipeline_preset`, `run_end_to_end_pipeline` |
+| tool execution | profiling suites, segmentation suites, DeepProfiler helpers |
+| data access | request building, download planning, download execution |
+| CellProfiler `.cppipe` helpers | template listing, selection resolution, and validation |
 
-## What This API Section Covers
+## Which Package To Use
 
-This section focuses on the main Python toolkit surface, especially:
+### `cellpainting_claw`
 
-- `ProjectConfig`
-- public Python entrypoints
-- related public helpers exposed by the main package
+Use `cellpainting_claw` when you want:
 
-For the task-oriented layer, continue to [Skills](../skills/index.md).
+- the main Python toolkit surface
+- lower-level helper families
+- direct control over configuration and tool selection
+- public `.cppipe` inspection and validation helpers
 
-For shell-facing usage, continue to [CLI](../cli/index.md).
+### `cellpainting_skills`
+
+Use `cellpainting_skills` when you want:
+
+- stable task names
+- one layer above the lower-level API
+- a simpler automation surface
+
+## What This API Section Focuses On
+
+This section focuses on:
+
+- the main config objects
+- the most important public entrypoints
+- the public helper families exposed by the main package
+- the `.cppipe` configuration and validation layer
+
+## Relationship To Other Sections
+
+If you want:
+
+- the full skill catalog, continue to [Skills](../skills/index.md)
+- shell-facing command groups, continue to [CLI](../cli/index.md)
+- agent-mediated use, continue to [OpenClaw](../openclaw/index.md)
 
 ## Page Guide
 
 ### Public Entrypoints
 
-This page documents the most important Python entrypoints exposed by `cellpainting_claw`.
+This page documents the main top-level functions and helper families exposed by `cellpainting_claw`.
 
-Use it when you want to understand the canonical Python toolkit surface.
+Use it when you want to answer questions such as:
 
-## Relationship To Other Sections
-
-The Python API, Skills layer, CLI, and MCP tooling all expose related parts of the same toolkit, but they are documented separately so each interface can be learned in the form users actually encounter.
+- which Python entrypoint should I call first?
+- which helper family is responsible for `.cppipe` selection?
+- when should I use skills instead of the lower-level API?
 
 ```{toctree}
 :maxdepth: 1

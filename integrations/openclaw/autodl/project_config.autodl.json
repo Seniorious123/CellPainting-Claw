@@ -52,5 +52,11 @@
     "cpgdata_inventory_bucket": "cellpainting-gallery-inventory",
     "cpgdata_index_prefix": "cellpainting-gallery/index",
     "cpgdata_inventory_prefix": "cellpainting-gallery/whole_bucket/"
+  },
+  "cellprofiler": {
+    "profiling_template": "profiling-analysis",
+    "segmentation_template": "segmentation-base",
+    "custom_profiling_cppipe_path": null,
+    "custom_segmentation_cppipe_path": null
   }
 }

@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from cellpaint_pipeline.config import ProjectConfig
+from cellpaint_pipeline.cppipe import resolve_cppipe_selection
 
 
 ARTICLE_PSEUDOCOLORS = {
@@ -95,6 +96,9 @@ class NativeSegmentationLoadDataResult:
 class NativeMaskExportPipelineResult:
     output_path: Path
     module_count: int
+    source_cppipe_path: Path
+    selected_via: str
+    execution_mode: str
 
 
 @dataclass(frozen=True)
@@ -203,23 +207,31 @@ def build_mask_export_pipeline_native(
     backend_payload = config.load_segmentation_backend_payload()
     paths_payload = backend_payload['paths']
 
-    source_pipeline = config.resolve_segmentation_backend_path(paths_payload['base_pipeline'])
+    selection = resolve_cppipe_selection(config, 'segmentation')
     resolved_output_path = output_path.resolve() if output_path is not None else config.resolve_segmentation_backend_path(paths_payload['mask_export_pipeline'])
 
-    pipeline_text = source_pipeline.read_text(encoding='utf-8')
-    pipeline_text = pipeline_text.replace('ModuleCount:33', 'ModuleCount:37', 1)
-    pipeline_text = re.sub(r'module_num:(\d+)', _renumber_module, pipeline_text)
+    if not selection.exists:
+        raise FileNotFoundError(f'Selected segmentation .cppipe does not exist: {selection.cppipe_path}')
 
-    anchor = 'ExportToSpreadsheet:[module_num:36|'
-    if anchor not in pipeline_text:
-        raise ValueError('Could not find the ExportToSpreadsheet anchor after renumbering.')
-    pipeline_text = pipeline_text.replace(anchor, f'{MODULE_INSERTION}\n\n{anchor}', 1)
+    pipeline_text = selection.cppipe_path.read_text(encoding='utf-8')
+    if selection.execution_mode == 'derive-mask-export':
+        pipeline_text = pipeline_text.replace('ModuleCount:33', 'ModuleCount:37', 1)
+        pipeline_text = re.sub(r'module_num:(\d+)', _renumber_module, pipeline_text)
 
-
+        anchor = 'ExportToSpreadsheet:[module_num:36|'
+        if anchor not in pipeline_text:
+            raise ValueError('Could not find the ExportToSpreadsheet anchor after renumbering.')
+        pipeline_text = pipeline_text.replace(anchor, f'{MODULE_INSERTION}\n\n{anchor}', 1)
 
     resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
     resolved_output_path.write_text(pipeline_text, encoding='utf-8')
-    return NativeMaskExportPipelineResult(output_path=resolved_output_path, module_count=37)
+    return NativeMaskExportPipelineResult(
+        output_path=resolved_output_path,
+        module_count=_extract_module_count(pipeline_text),
+        source_cppipe_path=selection.cppipe_path,
+        selected_via=selection.selected_via,
+        execution_mode=selection.execution_mode,
+    )
 
 
 def generate_sample_previews_native(
@@ -835,6 +847,13 @@ def _process_png_preview_chunk(task: dict) -> list[tuple[int, str]]:
         Image.fromarray((rgb * 255).astype(np.uint8), mode='RGB').save(preview_path)
         results.append((int(row['RowIndex']), str(preview_path)))
     return results
+
+
+def _extract_module_count(pipeline_text: str) -> int:
+    match = re.search(r'ModuleCount:(\d+)', pipeline_text)
+    if match is None:
+        raise ValueError('Could not determine ModuleCount from the generated .cppipe text.')
+    return int(match.group(1))
 
 
 def _renumber_module(match: re.Match[str]) -> str:

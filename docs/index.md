@@ -1,66 +1,109 @@
 # CellPainting-Claw
 
-CellPainting-Claw is a **Cell Painting toolkit** that packages commonly used analysis components behind a more consistent interface for both **human users** and **agent runtimes**.
+CellPainting-Claw is a **Cell Painting toolkit for both humans and agents**. It turns a stack that is usually spread across backend scripts, package-specific conventions, and separate runtimes into a cleaner public interface.
 
-Instead of asking users to work directly across scattered scripts, backend-specific wrappers, and tool-specific command conventions, this project exposes a cleaner public surface for **data access**, **segmentation**, **classical profiling**, **deep feature extraction**, and **agent-facing execution**.
+The project is designed as a **tool repository**, not only as one fixed execution route.
 
 ## Supported Packages
 
-CellPainting-Claw currently integrates or wraps the following core packages and tool families:
+CellPainting-Claw integrates or wraps the following package and tool families.
 
-- **CellProfiler** for segmentation, object measurements, masks, outlines, and single-cell localization outputs
-- **pycytominer** for classical Cell Painting profile generation from single-cell measurement tables
-- **DeepProfiler** for learned single-cell feature extraction from segmentation-guided crops
-- **cpgdata**, **quilt3**, **boto3**, and related data-access tooling for dataset discovery and download planning
-- **OpenClaw** through an MCP-facing integration layer for agent-mediated and natural-language execution
+| Package or tool | Role in the toolkit |
+| --- | --- |
+| `CellProfiler` | segmentation, masks, outlines, object localization, and classical measurement export |
+| `pycytominer` | single-cell to well-level profile generation, normalization, and feature selection |
+| `DeepProfiler` | learned single-cell feature extraction from segmentation-guided crops |
+| `boto3` | direct Cell Painting Gallery and S3-style access |
+| `quilt3` | package-oriented dataset discovery for Cell Painting Gallery / JUMP-style sources |
+| `cpgdata` | inventory-style data browsing and sync helpers |
+| `OpenClaw` | optional natural-language and MCP-based agent front end |
 
-## Main Packages
+## Public Python Packages
 
 The repository exposes **two main public Python packages**.
 
 ### `cellpainting_claw`
 
-`cellpainting_claw` is the **main toolkit interface**.
+`cellpainting_claw` is the **main toolkit package**.
 
-It is the package you use when you want:
+It includes:
 
-- direct Python entrypoints
-- the main command-line interface
-- access to segmentation, profiling, DeepProfiler, and data-access tools
-- the MCP server surface used by agent runtimes
+- configuration loading through `ProjectConfig`
+- data-access helpers
+- profiling tools and pycytominer-facing outputs
+- segmentation tools, masks, previews, and crop generation
+- DeepProfiler export and project helpers
+- CellProfiler `.cppipe` inspection and validation helpers
+- MCP server support for agent runtimes
 
-In practical terms, `cellpainting_claw` is the package that brings the underlying tools together into one reusable interface layer.
+Use `cellpainting_claw` when you want the **full toolkit surface**.
 
 ### `cellpainting_skills`
 
-`cellpainting_skills` is the **skills layer** of the toolkit.
+`cellpainting_skills` is the **task-oriented package**.
 
-It is the package you use when you want:
+It includes:
 
-- stable task names
-- automation-friendly task routing
-- a cleaner interface for scripting and agent use
-- a bridge between natural-language requests and concrete tool execution
+- a stable skill catalog
+- skill definitions and descriptions
+- a skill runner for Python and CLI use
+- a more automation-friendly layer above the lower-level toolkit functions
 
-In practical terms, `cellpainting_skills` does not replace the underlying tools. It organizes them into higher-level named capabilities that are easier for both users and agents to call.
+Use `cellpainting_skills` when you want **named tasks** instead of choosing lower-level tool combinations yourself.
 
-## What The Repository Includes
+## What The Toolkit Contains
 
-At the public interface level, the repository includes:
+At the release surface, CellPainting-Claw provides:
 
-- the **`cellpainting_claw` Python package**
-- the **`cellpainting_skills` Python package**
-- the **`cellpainting-claw` CLI**
-- the **`cellpainting-skills` CLI**
-- an **MCP server surface** for agent-facing runtimes
-- an **OpenClaw integration path** for natural-language execution
+- the `cellpainting_claw` Python API
+- the `cellpainting_skills` Python API
+- the `cellpainting-claw` command-line interface
+- the `cellpainting-skills` command-line interface
+- an MCP server surface for agent runtimes
+- an OpenClaw integration path
 
-Together, these components make the project usable in several styles:
+This means the same repository can be used as:
 
-- as a Python toolkit
-- as a command-line toolkit
-- as a skills-oriented automation layer
-- as an agent-accessible tool surface
+- a Python toolkit
+- a shell toolkit
+- a skills-oriented automation layer
+- an agent-facing tool surface
+
+## Current Skill Catalog
+
+Skills are the **core task interface** of the project.
+
+| Skill key | Main purpose | Typical result |
+| --- | --- | --- |
+| `plan-gallery-data` | prepare a data summary and reusable download plan | data-access summary and plan JSON |
+| `run-profiling-workflow` | run the classical profiling tool path | single-cell tables and pycytominer outputs |
+| `run-segmentation-workflow` | run the segmentation tool path | masks, previews, and single-cell crops |
+| `run-deepprofiler-export` | prepare DeepProfiler-ready inputs | DeepProfiler export metadata and inputs |
+| `run-deepprofiler-full` | run the DeepProfiler-oriented tool path | project files and collected deep features |
+| `run-full-workflow` | run the standard profiling and segmentation tool set together | combined profiling and segmentation outputs |
+| `run-full-workflow-with-data-plan` | plan data access first, then run the standard combined tool set | plan artifacts plus combined outputs |
+
+## Why This Project Exists
+
+Cell Painting stacks are powerful, but they are often difficult to use consistently because:
+
+- the important tools live in different packages
+- one user may want low-level control while another wants task-oriented commands
+- human users and agents need different interaction styles
+- backend script collections are difficult to expose as a stable public interface
+
+CellPainting-Claw exists to solve that interface problem.
+
+## Where To Start
+
+Start with these pages:
+
+- [Introduction](introduction/index.md)
+- [Quick Start](quick_start/index.md)
+- [Skills](skills/index.md)
+- [API](api/index.md)
+- [CLI](cli/index.md)
+- [OpenClaw](openclaw/index.md)
 
 ```{toctree}
 :maxdepth: 2

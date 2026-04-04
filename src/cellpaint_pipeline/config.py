@@ -46,6 +46,26 @@ class DataAccessConfig:
 
 
 @dataclass(frozen=True)
+class CellProfilerConfig:
+    profiling_template: str
+    segmentation_template: str
+    custom_profiling_cppipe_path: Path | None
+    custom_segmentation_cppipe_path: Path | None
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "profiling_template": self.profiling_template,
+            "segmentation_template": self.segmentation_template,
+            "custom_profiling_cppipe_path": (
+                str(self.custom_profiling_cppipe_path) if self.custom_profiling_cppipe_path is not None else None
+            ),
+            "custom_segmentation_cppipe_path": (
+                str(self.custom_segmentation_cppipe_path) if self.custom_segmentation_cppipe_path is not None else None
+            ),
+        }
+
+
+@dataclass(frozen=True)
 class ProjectConfig:
     project_name: str
     python_executable: str
@@ -60,6 +80,7 @@ class ProjectConfig:
     mask_export_runtime: dict[str, int | str | bool]
     deepprofiler_runtime: dict[str, Any]
     data_access: DataAccessConfig
+    cellprofiler: CellProfilerConfig
 
     @classmethod
     def from_json(cls, path: str | Path) -> "ProjectConfig":
@@ -138,6 +159,7 @@ class ProjectConfig:
             )
 
         data_access = _build_data_access_config(dict(payload.get("data_access", {})), workspace_root)
+        cellprofiler = _build_cellprofiler_config(dict(payload.get("cellprofiler", {})), config_dir)
 
         return cls(
             project_name=payload["project_name"],
@@ -153,6 +175,7 @@ class ProjectConfig:
             mask_export_runtime=dict(payload.get("mask_export_runtime", {})),
             deepprofiler_runtime=dict(payload.get("deepprofiler_runtime", {})),
             data_access=data_access,
+            cellprofiler=cellprofiler,
         )
 
     @property
@@ -188,6 +211,7 @@ class ProjectConfig:
             "mask_export_runtime": self.mask_export_runtime,
             "deepprofiler_runtime": self.deepprofiler_runtime,
             "data_access": self.data_access.as_dict(),
+            "cellprofiler": self.cellprofiler.as_dict(),
             "log_root": str(self.log_root),
         }
 
@@ -269,6 +293,12 @@ PROJECT_CONFIG_FIELD_GUIDE: tuple[dict[str, Any], ...] = (
         'level': 'recommended',
         'default': '{} with library defaults',
         'description': 'Nested data-access configuration block covering gallery, Quilt, and cpgdata defaults.',
+    },
+    {
+        'name': 'cellprofiler',
+        'level': 'recommended',
+        'default': '{} with library defaults',
+        'description': 'Nested CellProfiler pipeline-selection block covering bundled template choice and optional custom .cppipe overrides.',
     },
 )
 
@@ -354,12 +384,44 @@ DATA_ACCESS_CONFIG_FIELD_GUIDE: tuple[dict[str, Any], ...] = (
 )
 
 
+CELLPROFILER_CONFIG_FIELD_GUIDE: tuple[dict[str, Any], ...] = (
+    {
+        'name': 'profiling_template',
+        'level': 'recommended',
+        'default': 'profiling-analysis',
+        'description': 'Bundled profiling-side .cppipe template key used when no custom profiling .cppipe path is provided.',
+    },
+    {
+        'name': 'segmentation_template',
+        'level': 'recommended',
+        'default': 'segmentation-base',
+        'description': 'Bundled segmentation-side .cppipe template key used when no custom segmentation .cppipe path is provided.',
+    },
+    {
+        'name': 'custom_profiling_cppipe_path',
+        'level': 'advanced',
+        'default': None,
+        'description': 'Optional custom profiling .cppipe path. When set, it overrides profiling_template.',
+    },
+    {
+        'name': 'custom_segmentation_cppipe_path',
+        'level': 'advanced',
+        'default': None,
+        'description': 'Optional custom segmentation .cppipe path. When set, it overrides segmentation_template.',
+    },
+)
+
+
 def project_config_field_guide() -> list[dict[str, Any]]:
     return [dict(item) for item in PROJECT_CONFIG_FIELD_GUIDE]
 
 
 def data_access_config_field_guide() -> list[dict[str, Any]]:
     return [dict(item) for item in DATA_ACCESS_CONFIG_FIELD_GUIDE]
+
+
+def cellprofiler_config_field_guide() -> list[dict[str, Any]]:
+    return [dict(item) for item in CELLPROFILER_CONFIG_FIELD_GUIDE]
 
 
 def project_config_contract_summary() -> dict[str, Any]:
@@ -369,9 +431,11 @@ def project_config_contract_summary() -> dict[str, Any]:
         'advanced_project_fields': [item['name'] for item in PROJECT_CONFIG_FIELD_GUIDE if item['level'] == 'advanced'],
         'project_fields': project_config_field_guide(),
         'data_access_fields': data_access_config_field_guide(),
+        'cellprofiler_fields': cellprofiler_config_field_guide(),
         'notes': [
             'ProjectConfig.from_json resolves relative top-level paths from the config file location and fills several backend-related defaults automatically.',
             'The data_access block is optional, but providing default_dataset_id and default_source_id is recommended for reproducible planning flows.',
+            'The cellprofiler block is optional. Bundled template defaults are used unless custom .cppipe override paths are provided.',
         ],
     }
 
@@ -404,6 +468,21 @@ def _build_data_access_config(payload: dict[str, Any], workspace_root: Path) -> 
     )
 
 
+def _build_cellprofiler_config(payload: dict[str, Any], config_root: Path) -> CellProfilerConfig:
+    return CellProfilerConfig(
+        profiling_template=str(payload.get("profiling_template", "profiling-analysis")),
+        segmentation_template=str(payload.get("segmentation_template", "segmentation-base")),
+        custom_profiling_cppipe_path=_resolve_optional_from_base(
+            config_root,
+            payload.get("custom_profiling_cppipe_path"),
+        ),
+        custom_segmentation_cppipe_path=_resolve_optional_from_base(
+            config_root,
+            payload.get("custom_segmentation_cppipe_path"),
+        ),
+    )
+
+
 def _resolve_under_root(root: Path, value: str) -> Path:
     path = Path(value).expanduser()
     if path.is_absolute():
@@ -414,6 +493,15 @@ def _resolve_under_root(root: Path, value: str) -> Path:
 def _resolve_from_base(base: Path, value: str | Path | None, default: Path) -> Path:
     if value is None:
         return default.expanduser().resolve()
+    path = Path(value).expanduser()
+    if path.is_absolute():
+        return path.resolve()
+    return (base / path).resolve()
+
+
+def _resolve_optional_from_base(base: Path, value: str | Path | None) -> Path | None:
+    if value in (None, ''):
+        return None
     path = Path(value).expanduser()
     if path.is_absolute():
         return path.resolve()

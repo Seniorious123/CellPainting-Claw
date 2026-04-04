@@ -2,35 +2,19 @@
 
 The main Python toolkit surface is exposed through `cellpainting_claw`.
 
-This page describes the most important public Python entrypoints and how they relate to one another.
+This page describes the most important public entrypoints and helper families, with an emphasis on **what each one is for**.
 
-## What Counts As A Public Entrypoint
+## Configuration Layer
 
-In this project, a public entrypoint is a stable top-level function exposed for normal library use.
-
-These functions are the Python-side counterparts of the documented CLI and skills layers. They are the functions users should prefer over internal modules when writing notebooks, scripts, wrappers, or automation.
-
-## Main Public Entrypoints
-
-The most important top-level entrypoints are:
-
-- `ProjectConfig`
-- `run_end_to_end_pipeline`
-- `run_pipeline_preset`
-- `run_pipeline_skill`
-- `run_deepprofiler_pipeline`
-
-The package also exposes public helpers for data access and lower-level suite execution, but the functions above are the most important starting points for most readers.
-
-## `ProjectConfig`
+### `ProjectConfig`
 
 `ProjectConfig` is the main configuration object used across the toolkit.
 
-Use it when:
+Use it when you need:
 
-- loading a project config JSON
-- resolving backend roots and output roots
-- passing one consistent configuration object into the public Python API
+- one resolved config object for Python calls
+- backend-root and output-root resolution
+- access to nested config blocks such as data access or CellProfiler selection
 
 Minimal example:
 
@@ -40,78 +24,148 @@ import cellpainting_claw as cp
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
 ```
 
-## `run_end_to_end_pipeline`
+### `CellProfilerConfig`
 
-`run_end_to_end_pipeline` is the broadest top-level orchestration entrypoint.
+`CellProfilerConfig` is the nested config object that controls the **public `.cppipe` selection layer**.
 
-Use it when:
+The project config accepts a `cellprofiler` block such as:
 
-- you want one standard combined run from the main toolkit surface
-- you want the library to coordinate multiple capability groups through one call
-- you are intentionally choosing the highest-level orchestration interface
+```json
+{
+  "cellprofiler": {
+    "profiling_template": "profiling-analysis",
+    "segmentation_template": "segmentation-base",
+    "custom_profiling_cppipe_path": null,
+    "custom_segmentation_cppipe_path": null
+  }
+}
+```
 
-This function is still public, but it should not be treated as the only important interface in the project. CellPainting-Claw is a toolkit, not only one broad orchestration wrapper.
+This block is what allows users to stay inside the public toolkit interface instead of editing backend files as the default workflow.
 
-## `run_pipeline_preset`
+## `.cppipe` Helper Family
 
-`run_pipeline_preset` executes a named preset.
+The main package exposes a public helper family for CellProfiler `.cppipe` inspection and validation.
 
-Use it when:
+The most important helpers are:
 
-- you already know the task shape you want
-- you want a named parameter bundle without calling lower-level orchestration options directly
-- you are building a reproducible wrapper around known toolkit behavior
+- `available_cppipe_templates`
+- `get_cppipe_template`
+- `cppipe_template_definition_to_dict`
+- `resolve_cppipe_selection`
+- `resolved_cppipe_selection_to_dict`
+- `validate_cppipe_configuration`
+- `cppipe_validation_result_to_dict`
 
-A preset is lower-level than a skill and more explicit about the implementation shape.
+Use this helper family when you want to:
 
-## `run_pipeline_skill`
+- inspect the bundled `.cppipe` catalog
+- resolve which `.cppipe` a config will actually use
+- validate a custom `.cppipe` path before a longer task starts
 
-`run_pipeline_skill` executes a named skill.
-
-Use it when:
-
-- stable task names are more important than raw parameter bundles
-- you are building automation or agent-facing execution
-- you want a task-level interface on top of the broader toolkit
-
-This is the most important bridge between the main Python toolkit and the `cellpainting_skills` layer.
-
-## `run_deepprofiler_pipeline`
-
-`run_deepprofiler_pipeline` is the dedicated public entrypoint for the DeepProfiler-oriented path.
-
-Use it when:
-
-- you want to enter the DeepProfiler side of the toolkit directly
-- you are working with DeepProfiler preparation, project assembly, or profile collection as a dedicated task
-- you do not want to start from the broader combined orchestration surface
-
-## Supporting Public Areas
-
-The package also exposes public helpers for:
-
-- data-access planning through functions such as `build_data_request`, `build_download_plan`, and `execute_download_plan`
-- direct suite execution through `run_profiling_suite` and `run_segmentation_suite`
-- public API discovery helpers exposed through the public API module
-
-These helpers are still part of the public surface, but they are more specialized than the main entrypoints listed above.
-
-## Minimal Example
+Minimal example:
 
 ```python
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-profiling-workflow")
-print(result.ok)
+selection = cp.resolve_cppipe_selection(config, "segmentation")
+validation = cp.validate_cppipe_configuration(config)
+
+print(selection.cppipe_path)
+print(validation.ok)
 ```
+
+Current phase-1 scope:
+
+- **segmentation** consumes the selected `.cppipe` at runtime
+- **profiling** exposes the same inspection and validation helpers, while the public profiling route remains post-CellProfiler-oriented
+
+## Task Entry Layer
+
+These are the most important task-oriented entrypoints exposed by the main package.
+
+| Function | When to use it |
+| --- | --- |
+| `run_pipeline_skill` | when you want a stable named task |
+| `run_pipeline_preset` | when you want a named parameter bundle |
+| `run_end_to_end_pipeline` | when you intentionally want one broad combined run |
+| `run_deepprofiler_pipeline` | when you want the dedicated DeepProfiler path directly |
+
+### `run_pipeline_skill`
+
+This is the most important bridge between the main package and the skills layer.
+
+Use it when:
+
+- task names matter more than low-level option selection
+- you are building automation or agent-facing wrappers
+- you want one stable task entrypoint such as `run-segmentation-workflow`
+
+Example:
+
+```python
+import cellpainting_claw as cp
+
+config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
+result = cp.run_pipeline_skill(config, "run-segmentation-workflow")
+print(result.ok)
+print(result.segmentation_output_dir)
+```
+
+### `run_pipeline_preset`
+
+Use `run_pipeline_preset` when you already know the lower-level task shape you want, but you still want to call it through a named bundle.
+
+This is more explicit than a skill and less raw than hand-building all orchestration arguments yourself.
+
+### `run_end_to_end_pipeline`
+
+Use this function only when you intentionally want the broader combined toolkit run.
+
+It is public, but it is **not the only important interface in the repository**. Most users should start with skills or smaller helper families first.
+
+### `run_deepprofiler_pipeline`
+
+Use this function when the task is specifically about the DeepProfiler tool family rather than the broader combined toolkit.
+
+## Tool Execution Helpers
+
+The main package also exposes lower-level execution helpers for users who do not want to start from skills.
+
+Examples include:
+
+- `run_profiling_suite`
+- `run_segmentation_suite`
+- `run_segmentation_bundle`
+- `run_deepprofiler_full_stack`
+
+Use these when you want one **tool-family runner** without moving all the way up to a combined task.
+
+## Data-Access Helpers
+
+The main package also exposes public data-access helpers such as:
+
+- `build_data_request`
+- `build_download_plan`
+- `execute_download_plan`
+- `summarize_data_access`
+
+Use these when the main question is about **dataset discovery and planning**, not yet about profiling or segmentation execution.
+
+## Choosing The Right Python Entry Point
+
+A practical rule is:
+
+- use `run_pipeline_skill` first
+- use `run_pipeline_preset` when you want a named bundle with more explicit task shape
+- use `run_end_to_end_pipeline` only when you intentionally want the broad combined run
+- use lower-level helper families when you want direct control over data access, suites, or `.cppipe` selection
 
 ## Relationship To Other Public Layers
 
-This page documents the **main Python toolkit surface**.
-
 If you want:
 
-- stable task names, continue to [CellPainting-Skills](../skills/index.md)
-- shell-oriented execution, continue to [Command-Line Interface](../cli/index.md)
+- the task catalog, continue to [Skills](../skills/index.md)
+- shell-facing command groups, continue to [CLI](../cli/index.md)
 - natural-language or agent-mediated execution, continue to [OpenClaw](../openclaw/index.md)

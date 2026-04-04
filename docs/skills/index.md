@@ -1,27 +1,21 @@
 # CellPainting-Skills
 
-`cellpainting_skills` is the **task-oriented public layer** of CellPainting-Claw.
+`cellpainting_skills` is the **task-oriented package** of CellPainting-Claw.
 
-It exists so that common Cell Painting tasks can be called through **stable task names** instead of requiring users or agents to work directly with lower-level parameter combinations.
+The point of this package is to expose the toolkit through **stable named tasks** instead of forcing every user or agent to decide which lower-level commands and options must be combined each time.
 
-## What A Skill Means In This Project
+## What A Skill Is
 
-In this project, a **skill** is a named task interface.
+In this project, a skill is a **named task interface**.
 
-A skill does not define a separate backend. Instead, it gives a stable name to a commonly used tool-level action or tool combination, such as:
+A skill does not define a separate backend. It maps a stable task name onto the validated toolkit implementation underneath.
 
-- planning data access
-- running classical profiling
-- running segmentation exports
-- preparing DeepProfiler-oriented outputs and inputs
-- running a standard full tool combination
+This makes the project easier to use from:
 
-This makes the library easier to use from:
-
-- command-line automation
-- Python scripts
+- Python automation
+- shell automation
 - MCP-compatible systems
-- agent runtimes such as OpenClaw
+- OpenClaw and other agent runtimes
 
 ## Public Python Surface
 
@@ -33,88 +27,127 @@ The main Python helpers exposed by `cellpainting_skills` are:
 - `pipeline_skill_definition_to_dict`
 - `run_pipeline_skill`
 
-## Current Skill Catalog
+## Skill Catalog
 
-The current repository defines the following stable skill keys.
+The current repository defines the following stable skills.
+
+| Skill key | Main tool families | What it is for | Typical outputs |
+| --- | --- | --- | --- |
+| `plan-gallery-data` | data access | inspect a dataset and build a reusable download plan | data-access summary and plan JSON |
+| `run-profiling-workflow` | classical profiling | run the pycytominer-oriented profiling path | single-cell tables, pycytominer outputs, validation report |
+| `run-segmentation-workflow` | segmentation | run the segmentation tool family | masks, previews, masked crops, unmasked crops |
+| `run-deepprofiler-export` | segmentation + DeepProfiler preparation | prepare the export artifacts needed before DeepProfiler profiling | DeepProfiler-ready export inputs and manifests |
+| `run-deepprofiler-full` | segmentation + DeepProfiler | run the DeepProfiler-oriented task path | project files, profile outputs, collected deep features |
+| `run-full-workflow` | profiling + segmentation | run the standard combined tool set | profiling outputs plus segmentation outputs |
+| `run-full-workflow-with-data-plan` | data access + profiling + segmentation | build a data plan first, then run the standard combined tool set | plan artifacts plus combined toolkit outputs |
+
+## Each Skill In Plain Terms
 
 ### `plan-gallery-data`
 
-Purpose:
-Prepare a Cell Painting Gallery or JUMP-style data summary together with a reusable download plan.
+Use this skill when the main question is **what data should be downloaded** rather than which analysis tool should run next.
 
-Use it when:
-You want to inspect or prepare data access before running profiling or segmentation tools.
+Typical result:
+
+- a dataset summary
+- a reusable download plan
+- no profiling or segmentation run
 
 ### `run-profiling-workflow`
 
-Purpose:
-Run the classical profiling route and produce profiling-oriented outputs based on the configured backend.
+Use this skill when the main goal is **classical Cell Painting profiling**.
 
-Use it when:
-You want the pycytominer-oriented path without also running the segmentation export or DeepProfiler-oriented path.
+Typical result:
+
+- single-cell measurement tables
+- pycytominer-oriented outputs
+- validation reporting for the profiling-side task
 
 ### `run-segmentation-workflow`
 
-Purpose:
-Run the segmentation route and produce masks, previews, and single-cell crop-related artifacts.
+Use this skill when the main goal is **segmentation-derived artifacts**.
 
-Use it when:
-You want segmentation-derived outputs without focusing on the classical profiling path.
+Typical result:
+
+- CellProfiler-style masks and related outputs
+- preview images
+- single-cell crop artifacts
+
+This skill is also the clearest place where the current `.cppipe` selection layer matters at runtime.
 
 ### `run-deepprofiler-export`
 
-Purpose:
-Run the export-oriented preparation needed before DeepProfiler-style embedding runs.
+Use this skill when you want to **stop after preparing DeepProfiler-ready inputs**.
 
-Use it when:
-You want the segmentation-derived export artifacts used as the input to DeepProfiler.
+Typical result:
+
+- export metadata
+- DeepProfiler-ready image and location inputs
+- no full DeepProfiler project or profile run yet
 
 ### `run-deepprofiler-full`
 
-Purpose:
-Run the DeepProfiler-oriented path beyond export and into the full prepared DeepProfiler path.
+Use this skill when you want the **DeepProfiler-oriented tool path itself**, not only the export preparation.
 
-Use it when:
-You want the DeepProfiler side of the toolkit rather than only the classical profiling outputs.
+Typical result:
+
+- export artifacts
+- project assembly
+- profiling outputs
+- collected deep feature tables
 
 ### `run-full-workflow`
 
-Purpose:
-Run the standard combined tool set used by the repository for the main profiling and segmentation surfaces.
+Use this skill when you want the **standard combined toolkit task** instead of choosing only one capability family.
 
-Use it when:
-You want the standard combined run instead of selecting only one capability group.
+Typical result:
+
+- profiling outputs
+- segmentation outputs
+- validation reporting
 
 ### `run-full-workflow-with-data-plan`
 
-Purpose:
-Prepare a data-access plan first and then run the standard combined tool set.
+Use this skill when you want the same combined toolkit task, but with the **data-planning step made explicit** as part of the same task.
 
-Use it when:
-You want to keep the data-access preparation step explicit as part of the same task-level entrypoint.
+Typical result:
 
-## How Skills Are Implemented
+- data-access summary and plan
+- profiling outputs
+- segmentation outputs
+- validation reporting
 
-In the current implementation, each skill is defined by a small structured object containing:
+## How Skills Relate To The Toolkit
 
-- a stable `key`
-- a human-readable `description`
-- a `preset_key` used by the lower-level implementation
-- optional `defaults`
+The skills layer is intentionally one step above the lower-level toolkit surface.
 
-This means that the skills layer is currently a **named task layer over the lower-level preset system**.
+In the current implementation, each skill maps to:
 
-That is intentional: the skill name is the stable public handle, while the lower-level preset mapping remains an implementation detail.
+- a stable skill `key`
+- a task `description`
+- a lower-level `preset_key`
+- optional default options
+
+That design is intentional:
+
+- the **skill name** is the stable public handle
+- the **preset mapping** remains an implementation detail
+
+## Skills And `.cppipe` Configuration
+
+Skills do **not** expose raw CellProfiler `.cppipe` complexity directly.
+
+Instead:
+
+- the skill chooses the task
+- the project config chooses the effective `.cppipe`
+- the toolkit validates the selection before a longer run
+
+This keeps skills stable while still allowing advanced CellProfiler customization underneath.
 
 ## CLI Usage
 
-The skills layer has its own CLI:
-
-```bash
-cellpainting-skills --help
-```
-
-The three main commands are:
+The skills layer has its own CLI.
 
 ### List all skills
 
@@ -125,7 +158,7 @@ cellpainting-skills list
 ### Describe one skill
 
 ```bash
-cellpainting-skills describe --skill run-profiling-workflow
+cellpainting-skills describe --skill run-segmentation-workflow
 ```
 
 ### Run one skill
@@ -133,48 +166,38 @@ cellpainting-skills describe --skill run-profiling-workflow
 ```bash
 cellpainting-skills run \
   --config configs/project_config.demo.json \
-  --skill run-profiling-workflow
+  --skill run-segmentation-workflow
 ```
 
 ## Python Usage
 
-A minimal Python example looks like this:
-
 ```python
-import cellpainting_skills as cps
 import cellpainting_claw as cp
+import cellpainting_skills as cps
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
 print(cps.available_pipeline_skills())
-result = cps.run_pipeline_skill(config, "run-profiling-workflow")
+result = cps.run_pipeline_skill(config, "run-segmentation-workflow")
 print(result.ok)
 ```
 
-## When To Use Skills Instead Of Other Interfaces
+## When To Use Skills
 
 Use `cellpainting_skills` when:
 
-- you want **stable task names**
-- you are building **automation** on top of the library
-- you want a more agent-friendly public surface
-- you want one layer above the raw main CLI and Python entrypoints
+- stable task names matter more than low-level command selection
+- you are building automation on top of the toolkit
+- you want the most agent-friendly public surface
+- you want one clear task entrypoint rather than a command family
 
 Use `cellpainting_claw` instead when:
 
-- you want the broader toolkit surface directly
-- you need lower-level CLI commands such as profiling-side or data-access commands
-- you want the canonical Python package and MCP server surface
-
-## Relationship To OpenClaw
-
-OpenClaw does not introduce a separate toolkit implementation.
-
-Instead, OpenClaw can call the same underlying CellPainting-Claw toolkit through MCP, and the skills layer is one of the most natural ways to expose task-level behavior to an agent runtime.
-
-This is why `cellpainting_skills` is important to the project: it is not only a convenience wrapper for users, but also part of the bridge between the toolkit and agent-facing execution.
+- you want lower-level tool access directly
+- you need data-access helpers, suite runners, or configuration helpers
+- you want the canonical Python package and main CLI
 
 ## Related Pages
 
-- [Public Entrypoints](../api/public_entrypoints.md)
-- [Command-Line Interface](../cli/index.md)
+- [API](../api/index.md)
+- [CLI](../cli/index.md)
 - [OpenClaw](../openclaw/index.md)
