@@ -2,7 +2,7 @@
 
 This section documents the **Python-side toolkit surface** exposed by CellPainting-Claw.
 
-The main API package is `cellpainting_claw`. The task-oriented package `cellpainting_skills` is documented separately under [Skills](../skills/index.md).
+The main API package is `cellpainting_claw`. The agent- and automation-facing task package `cellpainting_skills` is documented separately under [Skills](../skills/index.md).
 
 ## What The Python API Covers
 
@@ -31,9 +31,9 @@ Use `cellpainting_claw` when you want:
 
 Use `cellpainting_skills` when you want:
 
-- stable task names
+- stable named tasks
 - one layer above the lower-level API
-- a simpler automation surface for users, scripts, and agents
+- a simpler task surface for automation and agent callers
 
 ## What This API Section Focuses On
 

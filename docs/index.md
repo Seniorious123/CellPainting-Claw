@@ -38,17 +38,17 @@ In practical terms, this is the package to import when you want the **full toolk
 
 ### `cellpainting_skills`
 
-`cellpainting_skills` is the **task-oriented Python package**.
+`cellpainting_skills` is the **agent- and automation-facing Python package**.
 
 Use it when you want to:
 
 - browse the skill catalog
-- inspect what each skill does before running it
-- run named tasks such as profiling, segmentation, or DeepProfiler export
-- call the toolkit through a simpler task layer
-- give agents a more stable execution surface
+- inspect what each named task will do before running it
+- run stable tasks such as profiling, segmentation, or DeepProfiler export
+- map scripted or natural-language requests onto validated toolkit actions
+- give agents a narrower and more stable execution surface
 
-In practical terms, this is the package to import when you want to say **"run this named task"** instead of assembling lower-level steps yourself.
+In practical terms, import `cellpainting_skills` when you want to say **"run this named task"** and let the toolkit route that request to the right validated implementation.
 
 ## What The Toolkit Contains
 

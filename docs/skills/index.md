@@ -1,8 +1,8 @@
 # CellPainting-Skills
 
-`cellpainting_skills` is the **task-oriented package** of CellPainting-Claw.
+`cellpainting_skills` is the **agent- and automation-facing task package** of CellPainting-Claw.
 
-This package exposes the toolkit through **stable named tasks** for users, automation, and agent runtimes.
+This package exposes the toolkit through **stable named tasks** that map user requests, scripts, and agent calls onto validated toolkit actions.
 
 ## What A Skill Is
 
@@ -16,6 +16,7 @@ This makes the project easier to use from:
 - shell automation
 - MCP-compatible systems
 - OpenClaw and other agent runtimes
+- any caller that should choose a named task instead of assembling lower-level options
 
 ## Public Python Surface
 
@@ -185,10 +186,10 @@ print(result.ok)
 
 Use `cellpainting_skills` when:
 
-- stable task names matter more than low-level command selection
+- you want one stable named task such as `run-segmentation-workflow`
 - you are building automation on top of the toolkit
 - you want the most agent-friendly public surface
-- you want one clear task entrypoint
+- you want natural-language requests to land on a controlled task interface
 
 Use `cellpainting_claw` instead when:
 

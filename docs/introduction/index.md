@@ -35,16 +35,16 @@ In short, import `cellpainting_claw` when you want the **broad toolkit layer**.
 
 ### `cellpainting_skills`
 
-`cellpainting_skills` is the **task-oriented package**.
+`cellpainting_skills` is the **agent- and automation-facing task package**.
 
 It is the package to use when you want:
 
 - stable skill names
-- automation-friendly task routing
-- a simpler way to run named tasks
-- a cleaner bridge between natural-language requests and concrete toolkit actions
+- a simple task layer above the lower-level toolkit
+- natural-language or scripted requests to resolve to validated toolkit actions
+- a narrower public surface for OpenClaw, MCP clients, and other agents
 
-In short, import `cellpainting_skills` when you want the **task layer** rather than the full lower-level toolkit surface.
+In short, import `cellpainting_skills` when you want the **named-task layer** of the project.
 
 ## Integrated Tool Families
 
