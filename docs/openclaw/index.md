@@ -107,10 +107,12 @@ A useful OpenClaw request should describe:
 For example:
 
 ```text
-Run the standard Cell Painting toolkit task with config X and write outputs to Y.
+Run segmentation with config X and write the outputs to Y.
 ```
 
-Under the hood, the agent should still be routing to the **same public toolkit interfaces** described in the rest of this documentation.
+A natural-language request like that should normally resolve to a stable task such as `run-segmentation-workflow`.
+
+Under the hood, the agent should still be routing to the **same public toolkit interfaces** described in the rest of this documentation. In practice, that usually means the request lands on a skill first and the skill then routes to the validated toolkit implementation underneath.
 
 ## Boundaries and Expectations
 

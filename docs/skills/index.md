@@ -28,6 +28,52 @@ The main Python helpers exposed by `cellpainting_skills` are:
 - `pipeline_skill_definition_to_dict`
 - `run_pipeline_skill`
 
+## Why Skills Exist
+
+The toolkit already has lower-level functions, suites, presets, and CLI command groups.
+
+`cellpainting_skills` exists to add one **stable named-task layer** on top of those lower-level interfaces.
+
+That matters most for agent and automation use, because an agent can reliably choose a task such as `run-segmentation-workflow` without having to reconstruct the underlying tool chain each time.
+
+## How A Natural-Language Request Reaches A Skill
+
+A typical agent path looks like this:
+
+1. the user writes a request such as "run segmentation and export single-cell crops"
+2. the agent maps that request to a stable skill such as `run-segmentation-workflow`
+3. `run_pipeline_skill(...)` resolves that skill to the validated preset underneath
+4. the preset calls the lower-level toolkit implementation
+5. the run produces the normal segmentation outputs for that task
+
+The important point is that the **skill name is stable**, while the lower-level implementation can stay organized inside the main toolkit.
+
+## The Same Skill For Agents And Human Users
+
+The same skill can be called in several ways.
+
+An agent can treat `run-segmentation-workflow` as a controlled task target.
+
+A human user can call the same task directly from the CLI:
+
+```bash
+cellpainting-skills run \
+  --config configs/project_config.demo.json \
+  --skill run-segmentation-workflow
+```
+
+A Python caller can use the same task name directly:
+
+```python
+import cellpainting_claw as cp
+import cellpainting_skills as cps
+
+config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
+result = cps.run_pipeline_skill(config, "run-segmentation-workflow")
+```
+
+This is why skills are useful even though they are especially valuable for agents: they define one **shared task vocabulary** across humans, scripts, MCP clients, and OpenClaw.
+
 ## Skill Catalog
 
 The current repository defines the following stable skills.
