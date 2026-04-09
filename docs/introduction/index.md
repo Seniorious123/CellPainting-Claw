@@ -57,7 +57,7 @@ CellPainting-Claw spans several layers of a practical Cell Painting stack. They 
 | Classical profiling | `pycytominer` | converts CellProfiler-derived single-cell tables into normalized and selected profile outputs |
 | Deep learning feature extraction | `DeepProfiler` | generates learned single-cell features from segmentation-guided crops |
 | Task interface | `cellpainting_skills`, MCP tools | exposes stable named tasks on top of the lower-level toolkit layers |
-| Agent runtime | `OpenClaw` | provides an optional natural-language runtime on top of the toolkit and task layers |
+| Agent interface | `OpenClaw` | provides an optional natural-language interface on top of the toolkit and task layers |
 
 ## Skills Matter In This Project
 

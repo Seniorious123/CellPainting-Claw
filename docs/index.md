@@ -14,7 +14,7 @@ CellPainting-Claw integrates packages across several distinct layers of the stac
 | Classical processing | `CellProfiler`, `pycytominer` | segmentation, measurement export, profile generation, normalization, and feature selection |
 | Deep learning feature extraction | `DeepProfiler` | learned single-cell feature extraction from segmentation-guided crops |
 | Task interface | `cellpainting_skills`, MCP tools | stable named tasks for automation, scripting, and controlled agent calls |
-| Agent runtime | `OpenClaw` | optional natural-language runtime on top of the task and MCP layers |
+| Agent interface | `OpenClaw` | optional natural-language interface on top of the task and MCP layers |
 
 ## Public Python Packages
 
