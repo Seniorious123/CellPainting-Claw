@@ -46,17 +46,18 @@ It is the package to use when you want:
 
 In short, import `cellpainting_skills` when you want the **named-task layer** of the project.
 
-## Integrated Tool Families
+## Integrated Layers In The Stack
 
-CellPainting-Claw works with the main package families needed for a practical Cell Painting stack.
+CellPainting-Claw spans several layers of a practical Cell Painting stack. They should be read in order from data access to execution surface.
 
-| Tool family | What CellPainting-Claw uses it for |
-| --- | --- |
-| `CellProfiler` | segmentation, masks, outlines, and object-level measurements |
-| `pycytominer` | classical profile generation from CellProfiler-derived tables |
-| `DeepProfiler` | learned single-cell feature extraction |
-| `boto3`, `quilt3`, `cpgdata` | dataset discovery, planning, and download preparation |
-| `OpenClaw` + MCP | optional natural-language and agent-facing execution |
+| Layer | Packages or tools | What this layer does |
+| --- | --- | --- |
+| Data access | `boto3`, `quilt3`, `cpgdata` | finds datasets, prepares access plans, and supports download steps |
+| Classical processing | `CellProfiler` | runs segmentation, mask generation, outlines, and measurement export |
+| Classical profiling | `pycytominer` | converts CellProfiler-derived single-cell tables into normalized and selected profile outputs |
+| Deep learning feature extraction | `DeepProfiler` | generates learned single-cell features from segmentation-guided crops |
+| Task interface | `cellpainting_skills`, MCP tools | exposes stable named tasks on top of the lower-level toolkit layers |
+| Agent runtime | `OpenClaw` | provides an optional natural-language runtime on top of the toolkit and task layers |
 
 ## Skills Matter In This Project
 

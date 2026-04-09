@@ -4,19 +4,17 @@ CellPainting-Claw is a **Cell Painting toolkit for both humans and agents**. It 
 
 It packages the main task families needed for practical Cell Painting work into one reusable interface.
 
-## Supported Packages
+## Supported Layers And Packages
 
-CellPainting-Claw integrates or wraps the following package and tool families.
+CellPainting-Claw integrates packages across several distinct layers of the stack.
 
-| Package or tool | Role in the toolkit |
-| --- | --- |
-| `CellProfiler` | segmentation, masks, outlines, object localization, and classical measurement export |
-| `pycytominer` | single-cell to well-level profile generation, normalization, and feature selection |
-| `DeepProfiler` | learned single-cell feature extraction from segmentation-guided crops |
-| `boto3` | direct Cell Painting Gallery and S3-style access |
-| `quilt3` | package-oriented dataset discovery for Cell Painting Gallery / JUMP-style sources |
-| `cpgdata` | inventory-style data browsing and sync helpers |
-| `OpenClaw` | optional natural-language and MCP-based agent front end |
+| Layer | Packages or tools | Role in the toolkit |
+| --- | --- | --- |
+| Data access | `boto3`, `quilt3`, `cpgdata` | dataset discovery, access planning, and download preparation |
+| Classical processing | `CellProfiler`, `pycytominer` | segmentation, measurement export, profile generation, normalization, and feature selection |
+| Deep learning feature extraction | `DeepProfiler` | learned single-cell feature extraction from segmentation-guided crops |
+| Task interface | `cellpainting_skills`, MCP tools | stable named tasks for automation, scripting, and controlled agent calls |
+| Agent runtime | `OpenClaw` | optional natural-language runtime on top of the task and MCP layers |
 
 ## Public Python Packages
 
