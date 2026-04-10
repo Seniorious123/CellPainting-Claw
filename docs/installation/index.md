@@ -2,7 +2,7 @@
 
 This page describes the recommended installation path for CellPainting-Claw.
 
-The goal of installation is to obtain a working runtime for the **toolkit itself**: the main Python package, the skills layer, the public CLI entrypoints, and the optional MCP-facing interface used by agent runtimes.
+The goal of installation is to obtain a working installation of the **toolkit itself**: the main Python package, the skills layer, the public CLI entrypoints, and the optional MCP-facing interface used by agent interfaces.
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ After installation, the repository exposes these main public interfaces.
 
 ### Optional agent-facing layer
 
-The main package can also expose an MCP server surface used by agent runtimes such as OpenClaw.
+The main package can also expose an MCP server surface used by agent interfaces such as OpenClaw.
 
 That layer is optional. The core toolkit does not require OpenClaw in order to be installed or used.
 
@@ -95,7 +95,6 @@ After installation, the shortest practical next page is:
 
 From there, you can continue into:
 
-- [API](../api/index.md) for the Python interfaces
 - [Skills](../skills/index.md) for the task-oriented layer
 - [CLI](../cli/index.md) for the shell-facing interfaces
 - [OpenClaw](../openclaw/index.md) if you want natural-language or agent-mediated execution

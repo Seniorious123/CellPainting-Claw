@@ -72,7 +72,7 @@ class McpToolsSmokeTests(unittest.TestCase):
             payload = run_mcp_tool_to_dict(
                 'run_pipeline_skill',
                 config=config,
-                skill_key='plan-gallery-data',
+                skill_key='plan-data-access',
                 output_dir=str(output_dir),
             )
             self.assertEqual(payload['tool'], 'run_pipeline_skill')

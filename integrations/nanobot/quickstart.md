@@ -57,7 +57,7 @@ For `nanobot 0.0.60`, a simple YAML file works for basic agent metadata, but ric
 
 - `List the available Cell Painting MCP tools and summarize what each one is for.`
 - `Use the Cell Painting MCP server to list pipeline skills.`
-- `Run the plan-gallery-data skill with the example project config.`
+- `Run the plan-data-access skill with the example project config.`
 - `Run the DeepProfiler branch from the standardized pipeline interface.`
 
 ## Ready-made local files

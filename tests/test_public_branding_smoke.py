@@ -40,7 +40,7 @@ class PublicBrandingSmokeTests(unittest.TestCase):
         rendered = ''.join(call.args[0] for call in write_mock.call_args_list)
         payload = json.loads(rendered)
         keys = {item['key'] for item in payload}
-        self.assertIn('run-full-workflow', keys)
+        self.assertIn('run-segmentation', keys)
 
 
 if __name__ == '__main__':

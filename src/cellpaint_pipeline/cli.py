@@ -453,10 +453,11 @@ def build_parser(
     run_preset_parser.add_argument('--dry-run', action='store_true', help='Mark the embedded data request as dry-run.')
 
     list_skills_parser = subparsers.add_parser('list-pipeline-skills', help='List the available task-oriented pipeline skills.')
+    list_skills_parser.add_argument('--include-legacy', action='store_true', help='Also show legacy compatibility skill names.')
 
     run_skill_parser = subparsers.add_parser('run-pipeline-skill', help='Run a named task-oriented pipeline skill.')
     run_skill_parser.add_argument('--config', required=True, help='Path to project config JSON.')
-    run_skill_parser.add_argument('--skill', required=True, choices=available_pipeline_skills(), help='Named pipeline skill.')
+    run_skill_parser.add_argument('--skill', required=True, help='Named pipeline skill.')
     run_skill_parser.add_argument('--output-dir', default=None, help='Optional output directory for the skill run.')
     run_skill_parser.add_argument('--plan-path', default=None, help='Optional path to a previously saved download plan JSON.')
     run_skill_parser.add_argument('--profiling-suite', default=None, choices=available_profiling_suites(), help='Optional profiling suite override.')
@@ -1127,7 +1128,7 @@ def main(
         if args.command == 'list-pipeline-skills':
             payload = [
                 pipeline_skill_definition_to_dict(get_pipeline_skill_definition(key))
-                for key in available_pipeline_skills()
+                for key in available_pipeline_skills(include_legacy=args.include_legacy)
             ]
             print(json.dumps(payload, indent=2, ensure_ascii=False))
             return 0

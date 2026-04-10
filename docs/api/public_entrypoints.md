@@ -2,19 +2,26 @@
 
 The main Python toolkit surface is exposed through `cellpainting_claw`.
 
-This page describes the most important public entrypoints and helper families, with an emphasis on **what each one is for**.
+This page is intentionally narrow. It is a lightweight internal reference for the small set of Python entrypoints that a user actually needs to choose between.
 
-## Configuration Layer
+## Start With The Right Level
 
-### `ProjectConfig`
+A practical rule is:
 
-`ProjectConfig` is the main configuration object used across the toolkit.
+1. use a **skill** first
+2. use a **preset** when you want a named bundle
+3. use a **direct helper family** when you want lower-level control
+4. use the **broad combined entry** only when you intentionally want that larger run shape
+
+## `ProjectConfig`
+
+`ProjectConfig` is the configuration object used across the toolkit.
 
 Use it when you need:
 
 - one resolved config object for Python calls
-- backend-root and output-root resolution
-- access to nested config blocks such as data access or CellProfiler selection
+- access to nested data-access and CellProfiler blocks
+- a stable starting point for Python-side execution
 
 Minimal example:
 
@@ -24,83 +31,15 @@ import cellpainting_claw as cp
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
 ```
 
-### `CellProfilerConfig`
+## Start Here: `run_pipeline_skill`
 
-`CellProfilerConfig` is the nested config object that controls the **public `.cppipe` selection layer**.
-
-The project config accepts a `cellprofiler` block such as:
-
-```json
-{
-  "cellprofiler": {
-    "profiling_template": "profiling-analysis",
-    "segmentation_template": "segmentation-base",
-    "custom_profiling_cppipe_path": null,
-    "custom_segmentation_cppipe_path": null
-  }
-}
-```
-
-This block gives users a public way to control CellProfiler pipeline selection through the toolkit interface.
-
-## `.cppipe` Helper Family
-
-The main package exposes a public helper family for CellProfiler `.cppipe` inspection and validation.
-
-The most important helpers are:
-
-- `available_cppipe_templates`
-- `get_cppipe_template`
-- `cppipe_template_definition_to_dict`
-- `resolve_cppipe_selection`
-- `resolved_cppipe_selection_to_dict`
-- `validate_cppipe_configuration`
-- `cppipe_validation_result_to_dict`
-
-Use this helper family when you want to:
-
-- inspect the bundled `.cppipe` catalog
-- resolve which `.cppipe` a config will actually use
-- validate a custom `.cppipe` path before a longer task starts
-
-Minimal example:
-
-```python
-import cellpainting_claw as cp
-
-config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-selection = cp.resolve_cppipe_selection(config, "segmentation")
-validation = cp.validate_cppipe_configuration(config)
-
-print(selection.cppipe_path)
-print(validation.ok)
-```
-
-Current phase-1 scope:
-
-- **segmentation** consumes the selected `.cppipe` at runtime
-- **profiling** exposes the same inspection and validation helpers, while the public profiling route remains post-CellProfiler-oriented
-
-## Task Entry Layer
-
-These are the most important task-oriented entrypoints exposed by the main package.
-
-| Function | When to use it |
-| --- | --- |
-| `run_pipeline_skill` | when you want a stable named task |
-| `run_pipeline_preset` | when you want a named parameter bundle |
-| `run_end_to_end_pipeline` | when you intentionally want one broad combined run |
-| `run_deepprofiler_pipeline` | when you want the dedicated DeepProfiler path directly |
-
-### `run_pipeline_skill`
-
-This is the most important bridge between the main package and the skills layer.
+`run_pipeline_skill` is the **default Python entrypoint** for most users.
 
 Use it when:
 
-- task names matter more than low-level option selection
-- you are building automation or agent-facing wrappers
-- you want one stable task entrypoint such as `run-segmentation-workflow`
+- you want one stable named task
+- you want Python code to match the public skill catalog
+- you want a cleaner interface than assembling lower-level options yourself
 
 Example:
 
@@ -108,64 +47,77 @@ Example:
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-segmentation-workflow")
+result = cp.run_pipeline_skill(config, "run-segmentation")
 print(result.ok)
-print(result.segmentation_output_dir)
 ```
 
-### `run_pipeline_preset`
+## `run_pipeline_preset`
 
-Use `run_pipeline_preset` when you already know the lower-level task shape you want, but you still want to call it through a named bundle.
+`run_pipeline_preset` is for **named bundles**, not for the primary task model.
 
-This is more explicit than a skill and less raw than hand-building all lower-level execution arguments yourself.
+Use it when:
 
-### `run_end_to_end_pipeline`
+- you already know you want a combined or pre-shaped run
+- a skill is too narrow but a fully manual call is unnecessary
+- you want a reusable bundle such as `full-pipeline`
 
-Use this function only when you intentionally want the broader combined toolkit run.
+## Lower-Level Helper Families
 
-It is most useful when you intentionally want the broad combined toolkit run. Most users should still start with skills or smaller helper families first.
+The main package also exposes helper families for users who want more direct control.
 
-### `run_deepprofiler_pipeline`
+### `.cppipe` helpers
 
-Use this function when the task is specifically about the DeepProfiler tool family.
+Use these when you want to inspect or validate the selected CellProfiler pipeline from Python.
 
-## Tool Execution Helpers
+Key helpers include:
 
-The main package also exposes lower-level execution helpers for users who do not want to start from skills.
+- `available_cppipe_templates`
+- `get_cppipe_template`
+- `resolve_cppipe_selection`
+- `validate_cppipe_configuration`
 
-Examples include:
+### Data-access helpers
 
-- `run_profiling_suite`
-- `run_segmentation_suite`
-- `run_segmentation_bundle`
-- `run_deepprofiler_full_stack`
+Use these when the main question is about **inputs**, not yet about profiling or segmentation outputs.
 
-Use these when you want one **tool-family runner** without moving all the way up to a combined task.
-
-## Data-Access Helpers
-
-The main package also exposes public data-access helpers such as:
+Key helpers include:
 
 - `build_data_request`
 - `build_download_plan`
 - `execute_download_plan`
 - `summarize_data_access`
 
-Use these when the main question is about **dataset discovery and planning**, not yet about profiling or segmentation execution.
+### Tool-family runners
 
-## Choosing The Right Python Entry Point
+Use these when you intentionally want direct access to one toolkit family rather than the skill layer.
 
-A practical rule is:
+Examples include:
+
+- `run_profiling_suite`
+- `run_segmentation_suite`
+- `run_deepprofiler_full_stack`
+
+## `run_end_to_end_pipeline`
+
+`run_end_to_end_pipeline` is the broad combined Python entry.
+
+Use it only when:
+
+- you intentionally want one larger combined run
+- you are building a higher-level compatibility layer
+- you know you do not want to start from modular skills or smaller helper families
+
+## Choosing Correctly
+
+A practical summary is:
 
 - use `run_pipeline_skill` first
-- use `run_pipeline_preset` when you want a named bundle with more explicit task shape
-- use `run_end_to_end_pipeline` only when you intentionally want the broad combined run
-- use lower-level helper families when you want direct control over data access, suites, or `.cppipe` selection
+- use `run_pipeline_preset` for named bundles
+- use helper families for direct control
+- use `run_end_to_end_pipeline` only for intentional broad combined runs
 
-## Relationship To Other Public Layers
+## Related Pages
 
-If you want:
-
-- the task catalog, continue to [Skills](../skills/index.md)
-- shell-facing command groups, continue to [CLI](../cli/index.md)
-- natural-language or agent-mediated execution, continue to [OpenClaw](../openclaw/index.md)
+- [Skills](../skills/index.md)
+- [CLI](../cli/index.md)
+- [OpenClaw](../openclaw/index.md)

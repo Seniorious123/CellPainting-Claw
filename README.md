@@ -22,8 +22,8 @@ The repository exposes **two main public Python packages**.
 
 | Package | Role | When to use it |
 | --- | --- | --- |
-| `cellpainting_claw` | main toolkit package | use this when you want one Python package across the data-access, processing, and deep-feature layers, with `.cppipe` inspection and MCP support |
-| `cellpainting_skills` | agent- and automation-facing task package | use this when you want the task-interface layer: stable named tasks that map scripts or natural-language requests onto validated toolkit actions |
+| `cellpainting_claw` | main toolkit package | use this when you want the full Python toolkit surface: config loading, `.cppipe` inspection, data access, profiling, segmentation, DeepProfiler helpers, and MCP support |
+| `cellpainting_skills` | task package | use this when you want stable named tasks such as `run-segmentation` or `run-deepprofiler` |
 
 ## What The Repository Includes
 
@@ -42,13 +42,12 @@ Skills are the **core task interface** of the project.
 
 | Skill key | Main purpose | Typical outputs |
 | --- | --- | --- |
-| `plan-gallery-data` | inspect data access and build a reusable plan | data-access summary and plan JSON |
-| `run-profiling-workflow` | run the classical profiling tool family | single-cell tables and pycytominer outputs |
-| `run-segmentation-workflow` | run the segmentation tool family | masks, previews, and single-cell crops |
-| `run-deepprofiler-export` | prepare DeepProfiler-ready inputs | export metadata and DeepProfiler inputs |
-| `run-deepprofiler-full` | run the DeepProfiler-oriented task path | project files and collected deep features |
-| `run-full-workflow` | run the standard combined toolkit task | profiling plus segmentation outputs |
-| `run-full-workflow-with-data-plan` | build a data plan first, then run the standard combined task | plan artifacts plus combined outputs |
+| `plan-data-access` | inspect the dataset and build a reusable plan | data-access summary and plan JSON |
+| `download-data` | execute the local download step | download plan and download execution JSON |
+| `run-classical-profiling` | run the classical profiling tool family | single-cell tables and pycytominer outputs |
+| `run-segmentation` | run the segmentation tool family | masks, previews, and single-cell crops |
+| `prepare-deepprofiler-inputs` | prepare DeepProfiler-ready export artifacts | export metadata and DeepProfiler inputs |
+| `run-deepprofiler` | run the DeepProfiler-oriented task path | project files and collected deep features |
 
 ## CellProfiler `.cppipe` Support
 
@@ -109,7 +108,7 @@ Look at the skill catalog and inspect one task:
 
 ```bash
 cellpainting-skills list
-cellpainting-skills describe --skill run-segmentation-workflow
+cellpainting-skills describe --skill run-segmentation
 ```
 
 Optionally inspect the effective `.cppipe` selection:
@@ -124,7 +123,7 @@ Run one skill:
 ```bash
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill run-segmentation-workflow
+  --skill run-segmentation
 ```
 
 ## Python API Example
@@ -133,14 +132,14 @@ cellpainting-skills run \
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-segmentation-workflow")
+result = cp.run_pipeline_skill(config, "run-segmentation")
 print(result.ok)
 print(result.segmentation_output_dir)
 ```
 
 ## Agent And OpenClaw Integration
 
-OpenClaw is an **optional natural-language front end** for the same toolkit.
+OpenClaw is an **optional agent interface** for the same toolkit.
 
 The relationship is:
 
@@ -158,7 +157,6 @@ Start here:
 - [Read the Docs](https://cellpainting-claw.readthedocs.io/en/latest/)
 - `docs/index.md`
 - `docs/skills/index.md`
-- `docs/api/index.md`
 - `docs/cli/index.md`
 - `docs/openclaw/index.md`
 

@@ -30,7 +30,7 @@ $PYTHON_BIN -m cellpainting_claw list-pipeline-skills
 2. Task-oriented execution
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-segmentation
 ```
 
 3. Stable public API dispatch
@@ -41,13 +41,12 @@ $PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config $REPO_ROOT/c
 
 ## Useful skill keys
 
-- `plan-gallery-data`
-- `run-profiling-workflow`
-- `run-segmentation-workflow`
-- `run-deepprofiler-export`
-- `run-deepprofiler-full`
-- `run-full-workflow`
-- `run-full-workflow-with-data-plan`
+- `plan-data-access`
+- `download-data`
+- `run-classical-profiling`
+- `run-segmentation`
+- `prepare-deepprofiler-inputs`
+- `run-deepprofiler`
 
 ## Reporting expectations
 

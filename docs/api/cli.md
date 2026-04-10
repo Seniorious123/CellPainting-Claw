@@ -1,3 +1,7 @@
+---
+orphan: true
+---
+
 # Command-Line Interface
 
 This content now lives in the top-level [CLI](../cli/index.md) section.

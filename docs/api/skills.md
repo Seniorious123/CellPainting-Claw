@@ -1,3 +1,7 @@
+---
+orphan: true
+---
+
 # CellPainting-Skills
 
 This content now lives in the top-level [Skills](../skills/index.md) section.

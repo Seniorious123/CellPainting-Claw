@@ -1,28 +1,84 @@
 # Command-Line Interface
 
-CellPainting-Claw provides **two main public CLI surfaces**:
+CellPainting-Claw exposes **two public CLI surfaces**:
 
-- `cellpainting-claw`
 - `cellpainting-skills`
+- `cellpainting-claw`
 
-These two CLIs have different jobs.
+These two CLIs are meant for different levels of use.
 
-## Which CLI To Use
+## Start With The Right CLI
 
-### Use `cellpainting-skills` when:
+### Start with `cellpainting-skills`
 
-- you want stable named tasks
-- you want the simplest automation surface
-- you are testing or using the skill catalog directly
+Use `cellpainting-skills` when you want:
 
-### Use `cellpainting-claw` when:
+- the **main public task interface**
+- stable named tasks
+- the shortest path from a user goal to a validated run
+- the best first CLI for humans and agents
 
-- you want lower-level tool access
-- you need configuration, data-access, or `.cppipe` inspection commands
-- you want profiling, segmentation, or DeepProfiler command families directly
-- you want to serve the toolkit through MCP
+In most cases, this should be the **first CLI** a new user sees.
 
-## `cellpainting-claw`: Main Command Groups
+### Use `cellpainting-claw` when needed
+
+Use `cellpainting-claw` when you want:
+
+- lower-level toolkit commands
+- `.cppipe` inspection and validation
+- direct access to data-access helpers
+- direct access to profiling, segmentation, or DeepProfiler tool families
+- MCP serving and MCP tool inspection
+
+In other words:
+
+- `cellpainting-skills` is the **task CLI**
+- `cellpainting-claw` is the **toolkit CLI**
+
+## `cellpainting-skills`: The Main Task CLI
+
+The task-oriented CLI is `cellpainting-skills`.
+
+Its main commands are:
+
+- `list`
+- `describe`
+- `run`
+
+### What each command is for
+
+| Command | What it does |
+| --- | --- |
+| `list` | show the public skill catalog |
+| `describe` | show what one skill does |
+| `run` | execute one named skill |
+
+### Minimal first session
+
+```bash
+CONFIG=configs/project_config.demo.json
+
+cellpainting-skills list
+cellpainting-skills describe --skill run-segmentation
+cellpainting-skills run   --config "$CONFIG"   --skill run-segmentation
+```
+
+This already demonstrates the main task story of the project:
+
+- inspect the public skill catalog
+- inspect one skill
+- run one named task
+
+### What the task CLI gives you
+
+The task CLI gives you:
+
+- stable task names
+- a cleaner public interface than lower-level command groups
+- a direct match to the [Skills](../skills/index.md) page
+- a natural bridge for automation and agent routing
+
+## `cellpainting-claw`: The Toolkit CLI
 
 The main CLI is easier to understand as **tool groups**.
 
@@ -33,29 +89,29 @@ The main CLI is easier to understand as **tool groups**.
 | profiling tools | run profiling-side toolkit commands | `run-profiling`, `run-profiling-suite`, `run-evaluation` |
 | segmentation tools | run segmentation-side toolkit commands | `run-segmentation`, `run-segmentation-suite`, `summarize-segmentation` |
 | DeepProfiler tools | run DeepProfiler preparation and collection commands | `run-deepprofiler-pipeline`, `run-deepprofiler-full-stack` |
-| high-level bundles | run named combined tasks from the main CLI | `run-pipeline-preset`, `run-end-to-end-pipeline` |
+| named bundles | run named combined task bundles | `run-pipeline-preset`, `run-end-to-end-pipeline` |
 | agent-facing tools | expose or inspect the MCP layer | `serve-mcp`, `list-mcp-tools`, `run-mcp-tool` |
 | advanced internal helpers | inspect lower-level workflow aliases directly | `run-workflow` |
 
-## Configuration And `.cppipe` Commands
+## The `.cppipe` Commands
 
 The main CLI includes a public `.cppipe` inspection and validation layer.
 
-These commands are useful when you want to customize CellProfiler selection without editing backend files blindly.
+These commands are useful when you want to inspect the CellProfiler pipeline selection before a longer run.
+
+Key commands:
 
 - `list-cppipe-templates`
 - `describe-cppipe-template`
 - `show-cppipe-selection`
 - `validate-cppipe-config`
 
-Minimal examples:
+Minimal example:
 
 ```bash
 CONFIG=configs/project_config.demo.json
 
-cellpainting-claw list-cppipe-templates --config "$CONFIG"
-cellpainting-claw describe-cppipe-template --template segmentation-base --config "$CONFIG"
-cellpainting-claw show-cppipe-selection --config "$CONFIG" --kind all
+cellpainting-claw show-cppipe-selection --config "$CONFIG" --kind segmentation
 cellpainting-claw validate-cppipe-config --config "$CONFIG"
 ```
 
@@ -65,49 +121,28 @@ Current phase-1 behavior:
 - **profiling** exposes the same selection and validation commands for inspection
 - custom segmentation overrides are treated as ready-to-run mask-export pipelines
 
-## `cellpainting-skills`: The Task CLI
+## Presets And Internal Commands
 
-The task-oriented CLI is `cellpainting-skills`.
+### `run-pipeline-preset`
 
-Its main commands are:
+Use `run-pipeline-preset` when you intentionally want a **named bundle**, not one modular skill.
 
-- `list`
-- `describe`
-- `run`
+Examples include:
 
-This is the recommended first CLI for users who want to start from **tasks**.
+- `full-pipeline`
+- `full-pipeline-with-data-plan`
 
-Minimal examples:
+### `run-workflow`
 
-```bash
-cellpainting-skills list
-cellpainting-skills describe --skill run-segmentation-workflow
-cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill run-segmentation-workflow
-```
-
-## What The Skills CLI Gives You
-
-The skills CLI gives you:
-
-- stable task names
-- a cleaner interface than the lower-level command families
-- a better fit for automation and agent use
-
-This is why it is often the best first CLI to show to a new user.
-
-## What `run-workflow` Means
-
-`run-workflow` is an **advanced internal-style command** exposed by the main CLI.
+`run-workflow` is an **advanced internal-style command**.
 
 It exists for cases where you want to call a lower-level workflow alias directly.
 
 For normal use:
 
 - prefer `cellpainting-skills run` when you want a named task
-- prefer suite commands when you want one tool family
-- prefer `run-pipeline-preset` when you want a named bundle from the main CLI
+- prefer toolkit command groups when you want one tool family
+- prefer `run-pipeline-preset` when you want a named bundle
 
 ## MCP And Agent-Facing CLI
 
@@ -122,27 +157,8 @@ The main MCP-related commands are:
 
 This is the bridge layer used by OpenClaw and other MCP-capable clients.
 
-## Minimal First Session
-
-A simple first CLI session can look like this:
-
-```bash
-CONFIG=configs/project_config.demo.json
-
-cellpainting-skills list
-cellpainting-skills describe --skill run-segmentation-workflow
-cellpainting-claw show-cppipe-selection --config "$CONFIG" --kind segmentation
-cellpainting-skills run --config "$CONFIG" --skill run-segmentation-workflow
-```
-
-This already demonstrates the core CLI story of the project:
-
-- inspect the task catalog
-- inspect the relevant `.cppipe` selection
-- run one named task
-
 ## Related Pages
 
 - [Skills](../skills/index.md)
-- [API](../api/index.md)
 - [OpenClaw](../openclaw/index.md)
+- [Quick Start](../quick_start/index.md)

@@ -2,19 +2,19 @@
 
 This section documents the **OpenClaw integration surface** for CellPainting-Claw.
 
-OpenClaw is the **agent interface** for this stack. It is an optional natural-language front end built on top of the integration, execution, and skills layers. It does **not replace the core library implementation**.
+OpenClaw is the **agent interface** for this stack. It is an optional natural-language front end built on top of the toolkit, task, and MCP layers. It does **not replace the core library implementation**.
 
-## Role in the Stack
+## Role In The Stack
 
 The relationship between the components is:
 
-1. `cellpainting_claw` provides the **core integration and execution layer**
-2. `cellpainting_skills` provides the **stable skills layer** on top of that integration and execution layer
+1. `cellpainting_claw` provides the **main toolkit layer**
+2. `cellpainting_skills` provides the **stable skill layer** on top of the toolkit layer
 3. `cellpainting-claw serve-mcp` exposes those callable surfaces as **MCP tools**
 4. OpenClaw connects to that MCP surface and provides an **agent interface**
-5. the agent can then trigger the same toolkit capabilities through **natural-language requests**
+5. the agent then triggers the same toolkit capabilities through **natural-language requests**
 
-In practical terms, OpenClaw sits on top of the integration, execution, and skills layers. It is **not a separate backend**.
+In practical terms, OpenClaw sits on top of the toolkit and task layers. It is **not a separate backend**.
 
 ## Before You Use OpenClaw
 
@@ -24,9 +24,65 @@ A reliable order is:
 
 1. confirm that the core `cellpainting-claw` CLI works
 2. confirm that the MCP server starts cleanly
-3. only then add the OpenClaw runtime on top
+3. only then add the OpenClaw layer on top
 
-That order separates toolkit failures from agent-runtime failures.
+That order separates toolkit failures from agent-interface failures.
+
+## What OpenClaw Should Actually Do
+
+OpenClaw should not invent a new workflow model.
+
+Its job is to:
+
+- receive a natural-language request
+- map that request onto one of the public skills
+- call the same validated toolkit surface underneath
+- return the result as an agent-mediated interaction
+
+So the OpenClaw path is an **agent interface over the existing task model**, not a separate execution implementation.
+
+## A Concrete Interaction Pattern
+
+A useful OpenClaw request should describe:
+
+- the task objective
+- the config file
+- the output location
+
+For example:
+
+```text
+Run segmentation with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
+```
+
+That request should normally resolve to:
+
+- skill: `run-segmentation`
+- implementation path: the standard segmentation task surface underneath
+- typical outputs: masks, previews, masked crops, and unmasked crops
+
+Another example:
+
+```text
+Prepare the DeepProfiler inputs for this config, but do not run DeepProfiler yet.
+```
+
+That request should normally resolve to:
+
+- skill: `prepare-deepprofiler-inputs`
+- implementation path: the DeepProfiler preparation task underneath
+- typical outputs: export metadata, image inputs, and location inputs
+
+## What OpenClaw Can Trigger
+
+Through the MCP surface, OpenClaw can reach the same public library surfaces documented elsewhere in this site, including:
+
+- public toolkit entrypoints
+- task-oriented skills
+- preset-oriented runs
+- MCP tool wrappers around the public API
+
+In normal use, the most important of those are the **skills**.
 
 ## When To Use OpenClaw
 
@@ -34,35 +90,24 @@ Use OpenClaw when you want:
 
 - **natural-language task execution**
 - an **agent-facing interface** for the toolkit
-- **MCP-based integration** with a controlled runtime
+- **MCP-based integration** with a controlled agent layer
 
-Use the Python API or the main CLI when you want:
+Use the Python API or the CLI directly when you want:
 
 - the most explicit and reproducible interface
 - shell scripts, notebooks, or direct library calls
 - easier debugging of configuration and toolkit errors
 
-## What OpenClaw Can Trigger
+## OpenClaw Setups
 
-Through the MCP surface, OpenClaw can reach the same public library surfaces that are documented elsewhere in this site, including:
-
-- public toolkit entrypoints
-- task-oriented skills
-- preset-oriented runs
-- MCP tool wrappers around the public API
-
-This means the OpenClaw path is an **automation layer over the validated toolkit**, not a separate execution implementation.
-
-## Runtime Choices
-
-The repository maintains **two main OpenClaw runtime tracks**:
+The repository maintains **two main OpenClaw setup tracks**:
 
 - `integrations/openclaw/autodl/` for AutoDL-like hosts without nested Docker
 - `integrations/openclaw/docker/` for standard Linux hosts with Docker support
 
 For current OpenClaw releases, prefer the **TUI path** rather than the ACP client path.
 
-Both runtime tracks keep provider credentials out of repository-managed templates and expose the same library-facing toolkit surface underneath.
+Both setup tracks keep provider credentials out of repository-managed templates and expose the same library-facing toolkit surface underneath.
 
 ## Shortest AutoDL Path
 
@@ -97,25 +142,7 @@ cd integrations/openclaw/docker
 ./compose_acp_client.sh
 ```
 
-## What Natural-Language Use Should Look Like
-
-A useful OpenClaw request should describe:
-
-- the task objective
-- the config file
-- the output location
-
-For example:
-
-```text
-Run segmentation with config X and write the outputs to Y.
-```
-
-A natural-language request like that should normally resolve to a stable task such as `run-segmentation-workflow`.
-
-Under the hood, the agent should still be routing to the **same public toolkit interfaces** described in the rest of this documentation. In practice, that usually means the request lands on a skill first and the skill then routes to the validated toolkit implementation underneath.
-
-## Boundaries and Expectations
+## Boundaries And Expectations
 
 OpenClaw is useful, but it does **not remove the need to understand the core toolkit interfaces**.
 
@@ -123,7 +150,7 @@ Important boundaries are:
 
 - the CLI and Python API remain the **canonical interfaces**
 - MCP is the **bridge layer**, not the toolkit implementation itself
-- provider configuration, gateway state, and model access remain runtime concerns outside the core pipeline library
+- provider configuration, gateway state, and model access remain deployment concerns outside the core pipeline library
 - toolkit correctness still depends on the underlying config, data paths, and installed backends
 
 ## Troubleshooting Logic
@@ -135,17 +162,15 @@ When OpenClaw fails, the main failure classes are usually:
 - MCP server not reachable
 - valid agent connection but invalid toolkit config or missing backend dependencies
 
-A useful **debugging order** is:
+A useful debugging order is:
 
 1. run the core CLI directly
 2. start the MCP server and confirm it stays healthy
-3. start the OpenClaw runtime
+3. start the OpenClaw layer
 4. only then debug provider configuration or prompt-level behavior
 
 ## Related Pages
 
-For the core toolkit interfaces, continue to:
-
-- [Quick Start](../quick_start/index.md)
-- [CLI](../cli/index.md)
 - [Skills](../skills/index.md)
+- [CLI](../cli/index.md)
+- [Quick Start](../quick_start/index.md)

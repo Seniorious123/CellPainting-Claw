@@ -125,7 +125,7 @@ Example:
 ```bash
 $PYTHON_BIN -m cellpainting_claw run-pipeline-skill \
   --config /opt/CellPainting-Claw/integrations/openclaw/docker/project_config.docker.json \
-  --skill run-full-workflow
+  --skill run-segmentation
 ```
 
 ## Hardening Options

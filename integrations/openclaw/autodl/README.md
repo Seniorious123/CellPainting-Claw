@@ -104,7 +104,7 @@ If you want to run the same controlled project config without natural-language r
 cd $REPO_ROOT
 PYTHONPATH=src $PYTHON_BIN -m cellpainting_claw run-pipeline-skill \
   --config $REPO_ROOT/integrations/openclaw/autodl/project_config.autodl.json \
-  --skill run-full-workflow
+  --skill run-segmentation
 ```
 
 ## Release Guidance

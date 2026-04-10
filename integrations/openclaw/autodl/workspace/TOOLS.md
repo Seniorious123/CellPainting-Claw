@@ -23,7 +23,7 @@ $PYTHON_BIN -m cellpainting_claw list-pipeline-skills
 Preferred execution commands:
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-full-workflow
+$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-segmentation
 $PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config $REPO_ROOT/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
 ```
 

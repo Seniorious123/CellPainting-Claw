@@ -1,8 +1,12 @@
 # CellPainting-Claw
 
-CellPainting-Claw is a **Cell Painting toolkit for both humans and agents**. It turns a stack that is usually spread across backend scripts, package-specific conventions, and separate runtimes into a cleaner public interface.
+CellPainting-Claw is a **toolkit interface for practical Cell Painting work**. It brings together **data access**, **classical processing**, **deep feature extraction**, **task-level execution**, and **agent-facing use** into one public surface.
 
-It packages the main task families needed for practical Cell Painting work into one reusable interface.
+The project is designed so that the same validated backend work can be reached in three different ways:
+
+- through the **main toolkit package**
+- through the **skills layer**
+- through the **OpenClaw agent interface**
 
 ## Supported Layers And Packages
 
@@ -16,70 +20,28 @@ CellPainting-Claw integrates packages across several distinct layers of the stac
 | Task interface | `cellpainting_skills`, MCP tools | stable named tasks for automation, scripting, and controlled agent calls |
 | Agent interface | `OpenClaw` | optional natural-language interface on top of the task and MCP layers |
 
-## Public Python Packages
+## Public Interfaces
 
-The repository exposes **two main public Python packages**.
+The public surface is organized around **three interface levels**.
 
-### `cellpainting_claw`
-
-`cellpainting_claw` is the **core integration and execution package**.
-
-Use it when you want to:
-
-- coordinate the data-access, processing, and deep-feature layers from one Python API
-- load a project config and inspect what a run will do
-- plan data access or prepare dataset downloads
-- run profiling, segmentation, or DeepProfiler helper steps from Python
-- inspect which CellProfiler `.cppipe` template a config will use
-- expose the toolkit through MCP
-
-In practical terms, import `cellpainting_claw` when you want the **execution and integration layer** behind the toolkit.
-
-### `cellpainting_skills`
-
-`cellpainting_skills` is the **skills package**.
-
-Use it when you want to:
-
-- work at the task-interface layer instead of the lower-level toolkit layers
-- browse the skill catalog
-- inspect what each named skill will do before running it
-- run stable skills such as profiling, segmentation, or DeepProfiler export
-- map scripted or natural-language requests onto validated toolkit actions
-
-In practical terms, import `cellpainting_skills` when you want a **stable named-skill layer** on top of the integration and execution package.
-
-## What The Toolkit Contains
-
-At the release surface, CellPainting-Claw provides:
-
-- the `cellpainting_claw` Python API
-- the `cellpainting_skills` Python API
-- the `cellpainting-claw` command-line interface
-- the `cellpainting-skills` command-line interface
-- an MCP server surface for agent-facing integrations
-- an OpenClaw integration path
-
-This means the same repository can be used as:
-
-- a Python toolkit
-- a shell toolkit
-- a skills-oriented automation layer
-- an agent-facing tool surface
+| Interface | What it is | Use it when |
+| --- | --- | --- |
+| `cellpainting_claw` | the main toolkit package | you want the full Python toolkit surface, `.cppipe` inspection, lower-level helpers, or MCP support |
+| `cellpainting_skills` | the task package | you want stable named tasks such as `run-segmentation` or `run-deepprofiler` |
+| `OpenClaw` | the agent interface | you want natural-language interaction on top of the same validated task layer |
 
 ## Current Skill Catalog
 
-Skills are the **core task interface** of the project.
+Skills are the **core public task interface** of the project.
 
 | Skill key | Main purpose | Typical result |
 | --- | --- | --- |
-| `plan-gallery-data` | prepare a data summary and reusable download plan | data-access summary and plan JSON |
-| `run-profiling-workflow` | run the classical profiling tool path | single-cell tables and pycytominer outputs |
-| `run-segmentation-workflow` | run the segmentation tool path | masks, previews, and single-cell crops |
-| `run-deepprofiler-export` | prepare DeepProfiler-ready inputs | DeepProfiler export metadata and inputs |
-| `run-deepprofiler-full` | run the DeepProfiler-oriented tool path | project files and collected deep features |
-| `run-full-workflow` | run the standard profiling and segmentation tool set together | combined profiling and segmentation outputs |
-| `run-full-workflow-with-data-plan` | plan data access first, then run the standard combined tool set | plan artifacts plus combined outputs |
+| `plan-data-access` | inspect a dataset and write a reusable plan | data-access summary and plan JSON |
+| `download-data` | execute the local download step | download plan and download execution JSON |
+| `run-classical-profiling` | run the classical profiling tool path | single-cell tables and pycytominer outputs |
+| `run-segmentation` | run the segmentation tool path | masks, previews, and single-cell crops |
+| `prepare-deepprofiler-inputs` | prepare DeepProfiler-ready inputs | DeepProfiler export metadata and inputs |
+| `run-deepprofiler` | run the DeepProfiler-oriented tool path | project files and collected deep features |
 
 ## Why This Project Exists
 
@@ -99,7 +61,6 @@ Start with these pages:
 - [Introduction](introduction/index.md)
 - [Quick Start](quick_start/index.md)
 - [Skills](skills/index.md)
-- [API](api/index.md)
 - [CLI](cli/index.md)
 - [OpenClaw](openclaw/index.md)
 
@@ -125,14 +86,6 @@ installation/index
 :hidden:
 
 quick_start/index
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: API
-:hidden:
-
-api/index
 ```
 
 ```{toctree}

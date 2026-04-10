@@ -30,6 +30,19 @@ PIPELINE_PRESETS: dict[str, PipelinePresetDefinition] = {
             'deepprofiler_mode': 'off',
         },
     ),
+    'data-access-download': PipelinePresetDefinition(
+        key='data-access-download',
+        description='Build and execute the data download path without running profiling or segmentation.',
+        options={
+            'include_data_access_summary': False,
+            'plan_data_download': True,
+            'execute_data_download_step': True,
+            'run_profiling': False,
+            'run_segmentation': False,
+            'include_validation_report': False,
+            'deepprofiler_mode': 'off',
+        },
+    ),
     'profiling-only': PipelinePresetDefinition(
         key='profiling-only',
         description='Run the profiling suite with validation reporting, without the segmentation branch.',

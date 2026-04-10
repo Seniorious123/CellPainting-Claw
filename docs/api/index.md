@@ -1,68 +1,85 @@
+---
+orphan: true
+---
+
 # API
 
-This section documents the **Python-side toolkit surface** exposed by CellPainting-Claw.
+```{note}
+This page is currently kept as a lightweight internal reference.
+The main public documentation path for CellPainting-Claw is centered on
+[Introduction](../introduction/index.md),
+[Skills](../skills/index.md),
+[CLI](../cli/index.md), and
+[OpenClaw](../openclaw/index.md).
+```
 
-The main API package is `cellpainting_claw`. The agent- and automation-facing task package `cellpainting_skills` is documented separately under [Skills](../skills/index.md).
+This section documents the **Python toolkit surface** of CellPainting-Claw.
 
-## What The Python API Covers
+The goal of this section is **not** to duplicate the Skills or CLI pages. Instead, it explains the small set of Python entrypoints that matter when you want to call the toolkit directly from code.
 
-The Python API is easier to understand as **five helper families**.
+## What This Section Is For
 
-| API family | What it covers |
-| --- | --- |
-| configuration | `ProjectConfig`, `CellProfilerConfig`, and config-contract helpers |
-| task entrypoints | `run_pipeline_skill`, `run_pipeline_preset`, `run_end_to_end_pipeline` |
-| tool execution | profiling suites, segmentation suites, DeepProfiler helpers |
-| data access | request building, download planning, download execution |
-| CellProfiler `.cppipe` helpers | template listing, selection resolution, and validation |
+Use the API section when you want to answer questions such as:
 
-## Which Package To Use
+- which Python entrypoint should I call first?
+- when should I use a skill instead of a lower-level helper?
+- how do I inspect the selected CellProfiler `.cppipe` from Python?
+- when do I need a preset or a broader combined entrypoint?
+
+## Keep The Main Distinction Clear
+
+CellPainting-Claw exposes two public Python packages.
 
 ### `cellpainting_claw`
 
 Use `cellpainting_claw` when you want:
 
-- the main Python toolkit surface
-- direct access to configuration, data access, profiling, segmentation, and DeepProfiler helpers
-- direct control over configuration and tool selection
-- public `.cppipe` inspection and validation helpers
+- the **main Python toolkit surface**
+- config loading
+- `.cppipe` inspection and validation
+- direct access to data-access, profiling, segmentation, and DeepProfiler helpers
+- direct Python control over toolkit behavior
 
 ### `cellpainting_skills`
 
 Use `cellpainting_skills` when you want:
 
-- stable named tasks
-- one layer above the lower-level API
-- a simpler task surface for automation and agent callers
+- the **task layer**
+- stable skill names
+- simple Python calls such as `run-segmentation`
+- a cleaner bridge from automation or agent requests into validated toolkit actions
 
-## What This API Section Focuses On
+In most cases, users should understand the [Skills](../skills/index.md) page first and then come here only when they need direct Python entrypoints.
 
-This section focuses on:
+## The Small Python Entry Model
 
-- the main config objects
-- the most important public entrypoints
-- the public helper families exposed by the main package
-- the `.cppipe` configuration and validation layer
+For most users, the Python-side entry model is small.
+
+| Entry style | Use it when | Typical example |
+| --- | --- | --- |
+| skill | you want a stable named task | `run_pipeline_skill(config, "run-segmentation")` |
+| preset | you want a named bundle of options | `run_pipeline_preset(config, "full-pipeline")` |
+| direct helper family | you want lower-level control | `.cppipe` helpers, data-access helpers, suite runners |
+| broad combined entry | you intentionally want one larger combined run | `run_end_to_end_pipeline(...)` |
+
+## What This API Section Covers
+
+This section stays intentionally short.
+
+It focuses on:
+
+- `ProjectConfig`
+- the main `.cppipe` helper family
+- the main Python entrypoints
+- how to choose between skill, preset, and lower-level helper calls
 
 ## Relationship To Other Sections
 
 If you want:
 
-- the full skill catalog, continue to [Skills](../skills/index.md)
+- the full task catalog, continue to [Skills](../skills/index.md)
 - shell-facing command groups, continue to [CLI](../cli/index.md)
-- agent-mediated use, continue to [OpenClaw](../openclaw/index.md)
-
-## Page Guide
-
-### Public Entrypoints
-
-This page documents the main top-level functions and helper families exposed by `cellpainting_claw`.
-
-Use it when you want to answer questions such as:
-
-- which Python entrypoint should I call first?
-- which helper family is responsible for `.cppipe` selection?
-- when should I use skills instead of the lower-level API?
+- natural-language and agent-mediated use, continue to [OpenClaw](../openclaw/index.md)
 
 ```{toctree}
 :maxdepth: 1

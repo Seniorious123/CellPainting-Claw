@@ -1,250 +1,310 @@
 # CellPainting-Skills
 
-`cellpainting_skills` is the **agent- and automation-facing task package** of CellPainting-Claw.
+`cellpainting_skills` is the **task package** of CellPainting-Claw.
 
-This package exposes the toolkit through **stable named tasks** that map user requests, scripts, and agent calls onto validated toolkit actions.
+Its job is simple: it exposes a small set of **stable named skills** on top of the toolkit. Those skills are the main public task model of the project.
+
+This page is therefore the main place to understand:
+
+- what skills exist
+- what each skill does
+- how a human user calls a skill
+- how an agent should route a request to the right skill
 
 ## What A Skill Is
 
-In this project, a skill is a **named task interface**.
+In this project, a skill is a **stable named task**.
 
-A skill does not define a separate backend. It maps a stable task name onto the validated toolkit implementation underneath.
+A skill is not a separate backend. It is a public task name that maps onto a validated implementation underneath.
 
-This makes the project easier to use from:
+That design gives the project three useful properties:
 
-- Python automation
-- shell automation
-- MCP-compatible systems
-- OpenClaw and other agent runtimes
-- any caller that should choose a named task instead of assembling lower-level options
+- the public task names stay stable
+- users do not need to learn the lower-level workflow layout first
+- agents can route natural-language requests onto a controlled task catalog
 
-## Public Python Surface
+## Where Skills Sit In The Stack
 
-The main Python helpers exposed by `cellpainting_skills` are:
+The stack should be read in this order:
 
-- `PipelineSkillDefinition`
-- `available_pipeline_skills`
-- `get_pipeline_skill_definition`
-- `pipeline_skill_definition_to_dict`
-- `run_pipeline_skill`
+| Layer | Main tools | What happens here |
+| --- | --- | --- |
+| data access | `boto3`, `quilt3`, `cpgdata` | inspect datasets, build plans, and download inputs |
+| classical processing | `CellProfiler`, `pycytominer` | produce measurement tables, profiles, masks, previews, and crops |
+| deep learning | `DeepProfiler` | generate learned features from segmentation-guided single-cell inputs |
+| task layer | `cellpainting_skills` | expose stable named tasks across those lower layers |
+| agent interface | `OpenClaw` | trigger the same task layer through natural-language requests |
 
-## Why Skills Exist
+Skills belong to the **task layer**. They are the public task interface across the lower toolkit layers.
 
-The toolkit already has lower-level functions, suites, presets, and CLI command groups.
+## The Six Primary Skills
 
-`cellpainting_skills` exists to add one **stable named-task layer** on top of those lower-level interfaces.
+The public skill catalog is intentionally small.
 
-That matters most for agent and automation use, because an agent can reliably choose a task such as `run-segmentation-workflow` without having to reconstruct the underlying tool chain each time.
+These are the **six primary skills** that define the current public task surface:
 
-## How A Natural-Language Request Reaches A Skill
-
-A typical agent path looks like this:
-
-1. the user writes a request such as "run segmentation and export single-cell crops"
-2. the agent maps that request to a stable skill such as `run-segmentation-workflow`
-3. `run_pipeline_skill(...)` resolves that skill to the validated preset underneath
-4. the preset calls the lower-level toolkit implementation
-5. the run produces the normal segmentation outputs for that task
-
-The important point is that the **skill name is stable**, while the lower-level implementation can stay organized inside the main toolkit.
-
-## The Same Skill For Agents And Human Users
-
-The same skill can be called in several ways.
-
-An agent can treat `run-segmentation-workflow` as a controlled task target.
-
-A human user can call the same task directly from the CLI:
-
-```bash
-cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill run-segmentation-workflow
-```
-
-A Python caller can use the same task name directly:
-
-```python
-import cellpainting_claw as cp
-import cellpainting_skills as cps
-
-config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cps.run_pipeline_skill(config, "run-segmentation-workflow")
-```
-
-This is why skills are useful even though they are especially valuable for agents: they define one **shared task vocabulary** across humans, scripts, MCP clients, and OpenClaw.
-
-## Skill Catalog
-
-The current repository defines the following stable skills.
-
-| Skill key | Main tool families | What it is for | Typical outputs |
+| Skill key | Layer | Main job | Typical outputs |
 | --- | --- | --- | --- |
-| `plan-gallery-data` | data access | inspect a dataset and build a reusable download plan | data-access summary and plan JSON |
-| `run-profiling-workflow` | classical profiling | run the pycytominer-oriented profiling path | single-cell tables, pycytominer outputs, validation report |
-| `run-segmentation-workflow` | segmentation | run the segmentation tool family | masks, previews, masked crops, unmasked crops |
-| `run-deepprofiler-export` | segmentation + DeepProfiler preparation | prepare the export artifacts needed before DeepProfiler profiling | DeepProfiler-ready export inputs and manifests |
-| `run-deepprofiler-full` | segmentation + DeepProfiler | run the DeepProfiler-oriented task path | project files, profile outputs, collected deep features |
-| `run-full-workflow` | profiling + segmentation | run the standard combined tool set | profiling outputs plus segmentation outputs |
-| `run-full-workflow-with-data-plan` | data access + profiling + segmentation | build a data plan first, then run the standard combined tool set | plan artifacts plus combined toolkit outputs |
+| `plan-data-access` | data access | inspect inputs and write a reusable access plan | `data_access_summary.json`, `download_plan.json` |
+| `download-data` | data access | execute the local download step | `download_plan.json`, `download_execution.json` |
+| `run-classical-profiling` | classical profiling | produce single-cell tables and pycytominer-facing outputs | `single_cell.csv.gz`, `pycytominer/`, `evaluation/` |
+| `run-segmentation` | segmentation | produce masks, previews, and single-cell crops | masks, previews, masked crops, unmasked crops |
+| `prepare-deepprofiler-inputs` | DeepProfiler preparation | stop after writing the DeepProfiler-ready export artifacts | export metadata, image inputs, location inputs |
+| `run-deepprofiler` | DeepProfiler | run the DeepProfiler-oriented path through export, project assembly, profiling, and feature collection | project files, profile outputs, collected deep features |
 
-## Each Skill In Plain Terms
+## Why The Catalog Stays Small
 
-### `plan-gallery-data`
+The skill catalog is designed around **modular public tasks**, not around every possible combined run.
 
-Use this skill when the main question is **what data should be downloaded**.
+That means:
 
-Typical result:
+- each primary skill should cover one clear capability area
+- overlapping combined aliases should not be presented as first-class skills
+- larger combined runs still exist, but they belong under presets or compatibility layers
 
-- a dataset summary
-- a reusable download plan
-- no profiling or segmentation run
+This is why names such as `run-full-workflow` are not part of the primary skill catalog.
 
-### `run-profiling-workflow`
+## Skills For Humans And Agents
 
-Use this skill when the main goal is **classical Cell Painting profiling**.
+The same skills are meant to work for both people and agents.
 
-Typical result:
+### Human use
 
-- single-cell measurement tables
-- pycytominer-oriented outputs
-- validation reporting for the profiling-side task
+A human user typically reaches a skill through:
 
-### `run-segmentation-workflow`
+- the `cellpainting-skills` CLI
+- Python calls through `cellpainting_skills` or `cellpainting_claw`
 
-Use this skill when the main goal is **segmentation-derived artifacts**.
-
-Typical result:
-
-- CellProfiler-style masks and related outputs
-- preview images
-- single-cell crop artifacts
-
-This skill is also the clearest place where the current `.cppipe` selection layer matters at runtime.
-
-### `run-deepprofiler-export`
-
-Use this skill when you want to **stop after preparing DeepProfiler-ready inputs**.
-
-Typical result:
-
-- export metadata
-- DeepProfiler-ready image and location inputs
-- no full DeepProfiler project or profile run yet
-
-### `run-deepprofiler-full`
-
-Use this skill when you want the **DeepProfiler-oriented tool path itself**.
-
-Typical result:
-
-- export artifacts
-- project assembly
-- profiling outputs
-- collected deep feature tables
-
-### `run-full-workflow`
-
-Use this skill when you want the **standard combined toolkit task**.
-
-Typical result:
-
-- profiling outputs
-- segmentation outputs
-- validation reporting
-
-### `run-full-workflow-with-data-plan`
-
-Use this skill when you want the same combined toolkit task, but with the **data-planning step made explicit** as part of the same task.
-
-Typical result:
-
-- data-access summary and plan
-- profiling outputs
-- segmentation outputs
-- validation reporting
-
-## How Skills Relate To The Toolkit
-
-The skills layer is intentionally one step above the lower-level toolkit surface.
-
-In the current implementation, each skill maps to:
-
-- a stable skill `key`
-- a task `description`
-- a lower-level `preset_key`
-- optional default options
-
-That design is intentional:
-
-- the **skill name** is the stable public handle
-- the **preset mapping** remains an implementation detail
-
-## Skills And `.cppipe` Configuration
-
-Skills do **not** expose raw CellProfiler `.cppipe` complexity directly.
-
-Instead:
-
-- the skill chooses the task
-- the project config chooses the effective `.cppipe`
-- the toolkit validates the selection before a longer run
-
-This keeps skills stable while still allowing advanced CellProfiler customization underneath.
-
-## CLI Usage
-
-The skills layer has its own CLI.
-
-### List all skills
+Minimal CLI pattern:
 
 ```bash
-cellpainting-skills list
+cellpainting-skills run   --config configs/project_config.demo.json   --skill run-segmentation
 ```
 
-### Describe one skill
-
-```bash
-cellpainting-skills describe --skill run-segmentation-workflow
-```
-
-### Run one skill
-
-```bash
-cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill run-segmentation-workflow
-```
-
-## Python Usage
+Minimal Python pattern:
 
 ```python
 import cellpainting_claw as cp
-import cellpainting_skills as cps
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-print(cps.available_pipeline_skills())
-result = cps.run_pipeline_skill(config, "run-segmentation-workflow")
+result = cp.run_pipeline_skill(config, "run-segmentation")
 print(result.ok)
 ```
 
-## When To Use Skills
+### Agent use
 
-Use `cellpainting_skills` when:
+An agent should not invent new task names. It should map a request onto one of the six primary skills.
 
-- you want one stable named task such as `run-segmentation-workflow`
-- you are building automation on top of the toolkit
-- you want the most agent-friendly public surface
-- you want natural-language requests to land on a controlled task interface
+Examples:
 
-Use `cellpainting_claw` instead when:
+- `Inspect the dataset and prepare a reusable plan.` -> `plan-data-access`
+- `Download the selected data locally.` -> `download-data`
+- `Generate the classical profiling outputs.` -> `run-classical-profiling`
+- `Run segmentation and export single-cell crops.` -> `run-segmentation`
+- `Prepare the DeepProfiler inputs but do not run it yet.` -> `prepare-deepprofiler-inputs`
+- `Run the DeepProfiler branch and collect deep features.` -> `run-deepprofiler`
 
-- you want lower-level tool access directly
-- you need data-access helpers, suite runners, or configuration helpers
-- you want the canonical Python package and main CLI
+## Skill Reference
+
+### `plan-data-access`
+
+**What it does**
+
+This skill inspects the configured data source and writes a reusable access plan without running profiling or segmentation.
+
+**Use it when**
+
+- you need to understand what data is available
+- you want to prepare a reproducible download plan before processing
+- the first question is about inputs rather than outputs
+
+**Human use**
+
+```bash
+cellpainting-skills run   --config configs/project_config.demo.json   --skill plan-data-access
+```
+
+**Agent use**
+
+A request such as `Inspect the dataset and prepare a reusable data-access plan.` should usually land on `plan-data-access`.
+
+**Typical outputs**
+
+- `data_access_summary.json`
+- `download_plan.json`
+
+### `download-data`
+
+**What it does**
+
+This skill executes the download step for the current request or plan.
+
+**Use it when**
+
+- the data scope is already known
+- you want local files, not just a plan
+- the next processing step depends on materialized inputs
+
+**Human use**
+
+```bash
+cellpainting-skills run   --config configs/project_config.demo.json   --skill download-data
+```
+
+**Agent use**
+
+A request such as `Download the selected dataset locally before processing.` should usually land on `download-data`.
+
+**Typical outputs**
+
+- `download_plan.json`
+- `download_execution.json`
+
+### `run-classical-profiling`
+
+**What it does**
+
+This skill runs the classical profiling path and produces pycytominer-facing outputs.
+
+**Use it when**
+
+- the main goal is classical Cell Painting profiling
+- you need single-cell tables or pycytominer outputs
+- segmentation artifacts are not the primary target
+
+**Human use**
+
+```bash
+cellpainting-skills run   --config configs/project_config.demo.json   --skill run-classical-profiling
+```
+
+**Agent use**
+
+A request such as `Generate the classical profiling outputs for this dataset.` should usually land on `run-classical-profiling`.
+
+**Typical outputs**
+
+- `single_cell.csv.gz`
+- `pycytominer/`
+- `evaluation/`
+
+### `run-segmentation`
+
+**What it does**
+
+This skill runs the segmentation path and produces masks, previews, and single-cell crops.
+
+**Use it when**
+
+- the main goal is segmentation artifacts
+- you need masks or preview images
+- you need masked or unmasked single-cell crops
+
+**Human use**
+
+```bash
+cellpainting-skills run   --config configs/project_config.demo.json   --skill run-segmentation
+```
+
+**Agent use**
+
+A request such as `Run segmentation and export single-cell crops.` should usually land on `run-segmentation`.
+
+**Typical outputs**
+
+- masks
+- sample previews
+- masked crops
+- unmasked crops
+
+**CellProfiler note**
+
+This skill uses the configured CellProfiler `.cppipe` selection underneath.
+
+### `prepare-deepprofiler-inputs`
+
+**What it does**
+
+This skill stops after preparing the export artifacts needed by DeepProfiler.
+
+**Use it when**
+
+- you want DeepProfiler-ready images and locations
+- you are preparing inputs for a later DeepProfiler run
+- you do not want the full DeepProfiler branch yet
+
+**Human use**
+
+```bash
+cellpainting-skills run   --config configs/project_config.demo.json   --skill prepare-deepprofiler-inputs
+```
+
+**Agent use**
+
+A request such as `Prepare the DeepProfiler inputs but do not run DeepProfiler yet.` should usually land on `prepare-deepprofiler-inputs`.
+
+**Typical outputs**
+
+- export metadata
+- DeepProfiler-ready image inputs
+- DeepProfiler-ready location inputs
+
+### `run-deepprofiler`
+
+**What it does**
+
+This skill runs the full DeepProfiler-oriented branch through export, project assembly, profiling, and feature collection.
+
+**Use it when**
+
+- you want deep feature extraction, not only export preparation
+- you want the standardized DeepProfiler branch end to end
+
+**Human use**
+
+```bash
+cellpainting-skills run   --config configs/project_config.demo.json   --skill run-deepprofiler
+```
+
+**Agent use**
+
+A request such as `Run the DeepProfiler branch and collect the deep features.` should usually land on `run-deepprofiler`.
+
+**Typical outputs**
+
+- DeepProfiler project files
+- profile outputs
+- collected deep feature tables
+
+## Legacy Skill Names
+
+Older skill names are still recognized in the Python layer for compatibility, but they are **legacy aliases**, not the recommended public starting point.
+
+Examples include:
+
+- `plan-gallery-data`
+- `run-profiling-workflow`
+- `run-segmentation-workflow`
+- `run-deepprofiler-export`
+- `run-deepprofiler-full`
+- `run-full-workflow`
+- `run-full-workflow-with-data-plan`
+
+Users and agents should prefer the six primary skills listed above.
+
+## Presets Are Not Skills
+
+The library still supports combined runs such as full profiling plus segmentation, but those should be understood as **presets or examples**, not as the main modular skills.
+
+Examples include:
+
+- `full-pipeline`
+- `full-pipeline-with-data-plan`
+
+Those are useful convenience bundles, but they should not replace the six primary skills as the public task model.
 
 ## Related Pages
 
-- [API](../api/index.md)
 - [CLI](../cli/index.md)
 - [OpenClaw](../openclaw/index.md)
+- [Quick Start](../quick_start/index.md)

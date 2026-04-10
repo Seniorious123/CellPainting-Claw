@@ -35,14 +35,14 @@ class SkillSmokeTests(unittest.TestCase):
 
     def test_available_pipeline_skills_contains_core_skills(self) -> None:
         skills = available_pipeline_skills()
-        self.assertIn('plan-gallery-data', skills)
-        self.assertIn('run-full-workflow', skills)
-        self.assertIn('run-deepprofiler-full', skills)
+        self.assertIn('plan-data-access', skills)
+        self.assertIn('run-segmentation', skills)
+        self.assertIn('run-deepprofiler', skills)
 
     def test_get_pipeline_skill_definition_roundtrip(self) -> None:
-        definition = get_pipeline_skill_definition('plan-gallery-data')
+        definition = get_pipeline_skill_definition('plan-data-access')
         payload = pipeline_skill_definition_to_dict(definition)
-        self.assertEqual(payload['key'], 'plan-gallery-data')
+        self.assertEqual(payload['key'], 'plan-data-access')
         self.assertEqual(payload['preset_key'], 'data-access-plan')
         self.assertEqual(payload['defaults'], {})
 
@@ -69,7 +69,7 @@ class SkillSmokeTests(unittest.TestCase):
                 stage_count=2,
                 ok=True,
             )
-            result = run_pipeline_skill(config, 'plan-gallery-data', output_dir=output_dir)
+            result = run_pipeline_skill(config, 'plan-data-access', output_dir=output_dir)
             self.assertTrue(result.ok)
             run_pipeline_preset_mock.assert_called_once()
             args, kwargs = run_pipeline_preset_mock.call_args
@@ -85,7 +85,7 @@ class SkillSmokeTests(unittest.TestCase):
 
             result = run_pipeline_skill(
                 config,
-                'plan-gallery-data',
+                'plan-data-access',
                 output_dir=output_dir,
                 download_plan=plan,
                 include_data_access_summary=False,
@@ -109,7 +109,7 @@ class SkillSmokeTests(unittest.TestCase):
         rendered = ''.join(call.args[0] for call in write_mock.call_args_list)
         payload = json.loads(rendered)
         keys = {item['key'] for item in payload}
-        self.assertIn('run-full-workflow', keys)
+        self.assertIn('run-segmentation', keys)
 
     @patch('cellpaint_pipeline.cli.run_pipeline_skill')
     def test_cli_run_pipeline_skill_with_plan_path(self, run_pipeline_skill_mock) -> None:
@@ -143,7 +143,7 @@ class SkillSmokeTests(unittest.TestCase):
                 '--config',
                 str(CONFIG_PATH),
                 '--skill',
-                'plan-gallery-data',
+                'plan-data-access',
                 '--plan-path',
                 str(plan_path),
             ])

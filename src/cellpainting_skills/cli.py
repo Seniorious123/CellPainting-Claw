@@ -26,14 +26,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    subparsers.add_parser("list", help="List available Cell Painting skills.")
+    list_parser = subparsers.add_parser("list", help="List available Cell Painting skills.")
+    list_parser.add_argument("--include-legacy", action="store_true", help="Also show legacy compatibility skill names.")
 
     describe_parser = subparsers.add_parser("describe", help="Describe one named Cell Painting skill.")
-    describe_parser.add_argument("--skill", required=True, choices=available_pipeline_skills(), help="Named pipeline skill.")
+    describe_parser.add_argument("--skill", required=True, help="Named pipeline skill.")
 
     run_parser = subparsers.add_parser("run", help="Run one named Cell Painting skill.")
     run_parser.add_argument("--config", required=True, help="Path to project config JSON.")
-    run_parser.add_argument("--skill", required=True, choices=available_pipeline_skills(), help="Named pipeline skill.")
+    run_parser.add_argument("--skill", required=True, help="Named pipeline skill.")
     run_parser.add_argument("--output-dir", default=None, help="Optional output directory for the skill run.")
     run_parser.add_argument("--plan-path", default=None, help="Optional path to a previously saved download plan JSON.")
     run_parser.add_argument("--profiling-suite", default=None, choices=available_profiling_suites(), help="Optional profiling suite override.")
@@ -61,7 +62,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "list":
         payload = [
             pipeline_skill_definition_to_dict(get_pipeline_skill_definition(skill_key))
-            for skill_key in available_pipeline_skills()
+            for skill_key in available_pipeline_skills(include_legacy=args.include_legacy)
         ]
         print(json.dumps(payload, indent=2, ensure_ascii=False))
         return 0

@@ -1,8 +1,8 @@
 # Introduction
 
-CellPainting-Claw is a **toolkit interface for practical Cell Painting work**. It is built for the situation where the real work is spread across CellProfiler, pycytominer, DeepProfiler, data-access helpers, backend scripts, and agent runtimes, but the user still needs one understandable interface.
+CellPainting-Claw is a **toolkit interface for practical Cell Painting work**. It is built for the situation where the real work is spread across CellProfiler, pycytominer, DeepProfiler, data-access helpers, backend scripts, and agent interfaces, but the user still needs one understandable public surface.
 
-The main idea is simple: **the same toolkit should be usable by both people and agents**.
+The main idea is simple: **the same validated toolkit should be usable by both people and agents**.
 
 ## Why Cell Painting Tooling Is Hard To Use
 
@@ -11,44 +11,57 @@ In practice, Cell Painting work is often difficult to standardize because:
 - data access, segmentation, profiling, and deep-feature extraction live in different packages
 - many working implementations are script collections rather than clean public APIs
 - one user may want direct low-level tools, while another may want named tasks
-- agent runtimes need stable entrypoints instead of ad hoc shell procedures
+- agent interfaces need stable entrypoints instead of ad hoc shell procedures
 
 CellPainting-Claw provides a stable interface layer across those tool families.
 
-## Public Entry Packages
+## Three Public Interfaces
+
+The project is organized around **three public interfaces**.
 
 ### `cellpainting_claw`
 
-`cellpainting_claw` is the **core integration and execution package**.
+`cellpainting_claw` is the **main toolkit package**.
 
-It is the package to use when you want:
+Use it when you want:
 
-- one Python API across the data-access, processing, and deep-feature layers
+- one Python package across data access, processing, and deep-feature extraction
 - the main CLI and config contract
-- data-access helpers
-- profiling and segmentation tools
-- DeepProfiler preparation helpers
+- direct access to data-access helpers
+- direct access to profiling, segmentation, and DeepProfiler helpers
 - public CellProfiler `.cppipe` inspection and validation helpers
 - MCP serving for agent-facing integrations
 
-In short, import `cellpainting_claw` when you want the **execution and integration layer** of the project.
+In short, use `cellpainting_claw` when you want the **full toolkit surface**.
 
 ### `cellpainting_skills`
 
-`cellpainting_skills` is the **skills package**.
+`cellpainting_skills` is the **task package**.
 
-It is the package to use when you want:
+Use it when you want:
 
 - stable skill names
-- a simple task-interface layer above the lower-level toolkit
+- a simpler task layer above the lower-level toolkit
 - natural-language or scripted requests to resolve to validated toolkit actions
-- a narrower public surface for OpenClaw, MCP clients, and other agents
+- a narrower public surface for automation and agent routing
 
-In short, import `cellpainting_skills` when you want the **named-skill layer** of the project.
+In short, use `cellpainting_skills` when you want the **named-task layer**.
+
+### OpenClaw
+
+OpenClaw is the **agent interface**.
+
+Use it when you want:
+
+- natural-language interaction
+- an MCP-connected agent that can trigger toolkit tasks
+- a controlled agent layer on top of the same validated toolkit
+
+OpenClaw is optional. It sits on top of `cellpainting_claw`, `cellpainting_skills`, and the MCP layer.
 
 ## Integrated Layers In The Stack
 
-CellPainting-Claw spans several layers of a practical Cell Painting stack. They should be read in order from data access to execution surface.
+CellPainting-Claw spans several layers of a practical Cell Painting stack. They should be read in order from data access to agent interface.
 
 | Layer | Packages or tools | What this layer does |
 | --- | --- | --- |
@@ -59,22 +72,22 @@ CellPainting-Claw spans several layers of a practical Cell Painting stack. They 
 | Task interface | `cellpainting_skills`, MCP tools | exposes stable named tasks on top of the lower-level toolkit layers |
 | Agent interface | `OpenClaw` | provides an optional natural-language interface on top of the toolkit and task layers |
 
-## Skills Matter In This Project
+## Why Skills Matter
 
 The central public idea of the repository is a **toolkit plus a stable skill layer**.
 
 Skills matter because they provide:
 
 - stable task names for users and agents
-- a simpler surface than raw command families
+- a simpler public surface than raw command families
 - a reproducible interface that still maps to the validated backend work
 
-This is why the project keeps both the main package and the skills package:
+This is why the project keeps both the main package and the task package:
 
-- `cellpainting_claw` exposes the broad tool surface
-- `cellpainting_skills` exposes the task surface
+- `cellpainting_claw` exposes the broad toolkit surface
+- `cellpainting_skills` exposes the public task surface
 
-## Tool Families Instead Of One Fixed Route
+## Tool Families In The Repository
 
 CellPainting-Claw exposes several major capability groups:
 
@@ -120,6 +133,5 @@ After this page, the most useful next pages are:
 
 - [Quick Start](../quick_start/index.md)
 - [Skills](../skills/index.md)
-- [API](../api/index.md)
 - [CLI](../cli/index.md)
 - [OpenClaw](../openclaw/index.md)
