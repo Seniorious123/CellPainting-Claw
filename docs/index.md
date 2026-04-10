@@ -26,11 +26,12 @@ The repository exposes **two main public Python packages**.
 
 Use it when you want to:
 
+- work across the data-access, processing, and deep-feature layers from one Python API
 - load a project config and inspect what a run will do
 - plan data access or prepare dataset downloads
 - run profiling, segmentation, or DeepProfiler helper steps from Python
 - inspect which CellProfiler `.cppipe` template a config will use
-- expose the toolkit to an MCP-compatible agent runtime
+- expose the toolkit through MCP
 
 In practical terms, this is the package to import when you want the **full toolkit surface** in Python.
 
@@ -40,11 +41,11 @@ In practical terms, this is the package to import when you want the **full toolk
 
 Use it when you want to:
 
+- work at the task-interface layer instead of the lower-level toolkit layers
 - browse the skill catalog
 - inspect what each named task will do before running it
 - run stable tasks such as profiling, segmentation, or DeepProfiler export
 - map scripted or natural-language requests onto validated toolkit actions
-- give agents a narrower and more stable execution surface
 
 In practical terms, import `cellpainting_skills` when you want to say **"run this named task"** and let the toolkit route that request to the right validated implementation.
 
@@ -56,7 +57,7 @@ At the release surface, CellPainting-Claw provides:
 - the `cellpainting_skills` Python API
 - the `cellpainting-claw` command-line interface
 - the `cellpainting-skills` command-line interface
-- an MCP server surface for agent runtimes
+- an MCP server surface for agent-facing integrations
 - an OpenClaw integration path
 
 This means the same repository can be used as:

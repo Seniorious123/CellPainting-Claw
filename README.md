@@ -22,8 +22,8 @@ The repository exposes **two main public Python packages**.
 
 | Package | Role | When to use it |
 | --- | --- | --- |
-| `cellpainting_claw` | main toolkit package | use this when you want one Python package for config loading, data access, profiling, segmentation, DeepProfiler helpers, `.cppipe` inspection, and MCP serving |
-| `cellpainting_skills` | agent- and automation-facing task package | use this when you want stable named tasks that map scripts or natural-language requests onto validated toolkit actions |
+| `cellpainting_claw` | main toolkit package | use this when you want one Python package across the data-access, processing, and deep-feature layers, with `.cppipe` inspection and MCP support |
+| `cellpainting_skills` | agent- and automation-facing task package | use this when you want the task-interface layer: stable named tasks that map scripts or natural-language requests onto validated toolkit actions |
 
 ## What The Repository Includes
 
@@ -33,7 +33,7 @@ At the public interface level, the repository includes:
 - the `cellpainting_skills` Python API
 - the `cellpainting-claw` CLI
 - the `cellpainting-skills` CLI
-- an MCP server surface
+- an MCP server surface for agent-facing integrations
 - an OpenClaw integration path
 
 ## Skill Catalog

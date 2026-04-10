@@ -23,13 +23,13 @@ CellPainting-Claw provides a stable interface layer across those tool families.
 
 It is the package to use when you want:
 
-- one Python API for the main Cell Painting tasks
+- one Python API across the data-access, processing, and deep-feature layers
 - the main CLI and config contract
 - data-access helpers
 - profiling and segmentation tools
 - DeepProfiler preparation helpers
 - public CellProfiler `.cppipe` inspection and validation helpers
-- MCP serving for agent runtimes
+- MCP serving for agent-facing integrations
 
 In short, import `cellpainting_claw` when you want the **broad toolkit layer**.
 
@@ -40,7 +40,7 @@ In short, import `cellpainting_claw` when you want the **broad toolkit layer**.
 It is the package to use when you want:
 
 - stable skill names
-- a simple task layer above the lower-level toolkit
+- a simple task-interface layer above the lower-level toolkit
 - natural-language or scripted requests to resolve to validated toolkit actions
 - a narrower public surface for OpenClaw, MCP clients, and other agents
 
