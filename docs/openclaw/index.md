@@ -2,18 +2,19 @@
 
 This section documents the **OpenClaw integration surface** for CellPainting-Claw.
 
-OpenClaw is an **optional natural-language front end** for the same toolkit. It does **not replace the core library implementation**.
+OpenClaw is the **agent interface** for this stack. It is an optional natural-language front end built on top of the orchestration and skills layers. It does **not replace the core library implementation**.
 
 ## Role in the Stack
 
 The relationship between the components is:
 
-1. `cellpainting-claw` provides the **canonical toolkit library and CLI**
-2. `cellpainting-claw serve-mcp` exposes that library as **MCP tools**
-3. OpenClaw connects to that MCP surface and provides an agent-driven interface
-4. the agent can then trigger the same toolkit capabilities through **natural-language requests**
+1. `cellpainting_claw` provides the **core orchestration and integration layer**
+2. `cellpainting_skills` provides the **stable skills layer** on top of that orchestration layer
+3. `cellpainting-claw serve-mcp` exposes those callable surfaces as **MCP tools**
+4. OpenClaw connects to that MCP surface and provides an **agent interface**
+5. the agent can then trigger the same toolkit capabilities through **natural-language requests**
 
-In practical terms, OpenClaw sits on top of the library. It is **not a separate backend**.
+In practical terms, OpenClaw sits on top of the orchestration and skills layers. It is **not a separate backend**.
 
 ## Before You Use OpenClaw
 

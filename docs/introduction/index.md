@@ -15,11 +15,11 @@ In practice, Cell Painting work is often difficult to standardize because:
 
 CellPainting-Claw provides a stable interface layer across those tool families.
 
-## Two Public Packages
+## Public Entry Packages
 
 ### `cellpainting_claw`
 
-`cellpainting_claw` is the **main toolkit package**.
+`cellpainting_claw` is the **core orchestration and integration package**.
 
 It is the package to use when you want:
 
@@ -31,11 +31,11 @@ It is the package to use when you want:
 - public CellProfiler `.cppipe` inspection and validation helpers
 - MCP serving for agent-facing integrations
 
-In short, import `cellpainting_claw` when you want the **broad toolkit layer**.
+In short, import `cellpainting_claw` when you want the **execution and integration layer** of the project.
 
 ### `cellpainting_skills`
 
-`cellpainting_skills` is the **agent- and automation-facing task package**.
+`cellpainting_skills` is the **skills package**.
 
 It is the package to use when you want:
 
@@ -44,7 +44,7 @@ It is the package to use when you want:
 - natural-language or scripted requests to resolve to validated toolkit actions
 - a narrower public surface for OpenClaw, MCP clients, and other agents
 
-In short, import `cellpainting_skills` when you want the **named-task layer** of the project.
+In short, import `cellpainting_skills` when you want the **named-skill layer** of the project.
 
 ## Integrated Layers In The Stack
 
