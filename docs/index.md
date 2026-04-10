@@ -22,7 +22,7 @@ The repository exposes **two main public Python packages**.
 
 ### `cellpainting_claw`
 
-`cellpainting_claw` is the **core orchestration and integration package**.
+`cellpainting_claw` is the **core integration and execution package**.
 
 Use it when you want to:
 
@@ -47,7 +47,7 @@ Use it when you want to:
 - run stable skills such as profiling, segmentation, or DeepProfiler export
 - map scripted or natural-language requests onto validated toolkit actions
 
-In practical terms, import `cellpainting_skills` when you want a **stable named-skill layer** on top of the orchestration package.
+In practical terms, import `cellpainting_skills` when you want a **stable named-skill layer** on top of the integration and execution package.
 
 ## What The Toolkit Contains
 

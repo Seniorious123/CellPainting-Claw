@@ -117,7 +117,7 @@ print(result.segmentation_output_dir)
 
 Use `run_pipeline_preset` when you already know the lower-level task shape you want, but you still want to call it through a named bundle.
 
-This is more explicit than a skill and less raw than hand-building all orchestration arguments yourself.
+This is more explicit than a skill and less raw than hand-building all lower-level execution arguments yourself.
 
 ### `run_end_to_end_pipeline`
 

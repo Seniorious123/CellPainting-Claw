@@ -19,7 +19,7 @@ CellPainting-Claw provides a stable interface layer across those tool families.
 
 ### `cellpainting_claw`
 
-`cellpainting_claw` is the **core orchestration and integration package**.
+`cellpainting_claw` is the **core integration and execution package**.
 
 It is the package to use when you want:
 
