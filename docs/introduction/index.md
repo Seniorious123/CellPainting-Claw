@@ -62,21 +62,22 @@ Use it when you want to:
 
 OpenClaw is optional. It sits on top of the same validated toolkit and task interfaces rather than replacing them.
 
-## Why Skills Matter
+## What Skills Are For
 
-The project is not only a collection of backend wrappers. It also defines a **small public skill catalog** so that common work can be described in a consistent way.
+Skills give users and agents a **small set of named tasks** for common work.
 
-Skills matter because they provide:
+Instead of choosing from many lower-level helpers, users can start from task names such as `plan-data-access`, `run-segmentation`, or `run-deepprofiler`.
 
-- stable task names for users, scripts, and agents
-- a clearer public interface than a large collection of lower-level functions
-- reusable task units that can be combined in different ways
-- a bridge between natural-language requests and concrete toolkit actions
+This makes the project easier to use in practice:
 
-This is why the project keeps both main packages:
+- a user can choose a task by name
+- a script can call the same task repeatedly
+- an agent can map a natural-language request onto a stable task name
 
-- `cellpainting_claw` exposes the broader toolkit
-- `cellpainting_skills` exposes the smaller task catalog
+The relationship between the two main packages is simple:
+
+- `cellpainting_claw` is the broader toolkit for direct use
+- `cellpainting_skills` is the smaller task catalog for named-task use
 
 ## CellProfiler `.cppipe` Support
 
