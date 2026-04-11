@@ -41,6 +41,73 @@ Its job is to:
 
 So the OpenClaw path is an **agent interface over the existing task model**, not a separate execution implementation.
 
+## Agent Demo
+
+This is the simplest way to think about OpenClaw as a working agent demo.
+
+### 1. Start the gateway and the TUI
+
+On an AutoDL-like host:
+
+```bash
+cd integrations/openclaw/autodl
+cp provider.env.example provider.env
+# edit provider.env
+./configure_openai_compatible_provider.sh
+./run_openclaw_gateway.sh
+./run_openclaw_tui.sh
+```
+
+The gateway wrapper starts:
+
+- the OpenClaw gateway
+- the local CellPainting-Claw MCP server
+
+### 2. Give the agent a natural-language request
+
+For example:
+
+```text
+Run segmentation with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
+```
+
+What should happen:
+
+- the agent identifies the request as a **segmentation task**
+- the request maps to the skill `run-segmentation`
+- the underlying toolkit runs the same validated segmentation path used by the CLI and Python API
+- the result is returned through the agent session
+
+Typical outputs for that request:
+
+- masks
+- previews
+- masked crops
+- unmasked crops
+
+### 3. Another example: prepare DeepProfiler inputs
+
+Prompt:
+
+```text
+Prepare the DeepProfiler inputs for this config, but do not run DeepProfiler yet.
+```
+
+Expected routing:
+
+- skill: `prepare-deepprofiler-inputs`
+- task type: DeepProfiler preparation
+- typical outputs: export metadata, image inputs, and location inputs
+
+### 4. What this demo proves
+
+This kind of interaction demonstrates that OpenClaw can:
+
+- understand the task request in natural language
+- route to the correct public skill
+- call the same toolkit capabilities exposed elsewhere in the project
+- return an agent-mediated result without introducing a separate workflow model
+
 ## A Concrete Interaction Pattern
 
 A useful OpenClaw request should describe:
