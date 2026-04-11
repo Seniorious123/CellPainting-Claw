@@ -1,8 +1,8 @@
 # Introduction
 
-CellPainting-Claw helps users work with **Cell Painting data and analysis tools through one documented interface**. Instead of asking users to piece together data-access code, CellProfiler steps, pycytominer profiling, DeepProfiler preparation, and agent tooling by hand, the project packages those capabilities into one public toolkit.
+CellPainting-Claw brings together the main tools used in **Cell Painting work** into one public toolkit. Instead of asking users to piece together data access, CellProfiler workflows, pycytominer profiling, DeepProfiler preparation, and agent tooling by hand, the project provides a clearer way to work across those capabilities.
 
-The main idea is simple: **the same validated work should be usable both directly and through task-oriented or agent-oriented entry points**.
+The main idea is simple: **the same validated work should be usable in three ways, through the main toolkit, through named tasks, and through an agent interface**.
 
 ## What The Project Brings Together
 

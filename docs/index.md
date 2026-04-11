@@ -1,8 +1,8 @@
 # CellPainting-Claw
 
-CellPainting-Claw is a **toolkit interface for practical Cell Painting work**. It brings together **data access**, **classical processing**, **deep feature extraction**, **task-level execution**, and **agent-facing use** into one public surface.
+CellPainting-Claw brings together the main tools used in **Cell Painting work** into one public toolkit. It covers **data access**, **classical processing**, **deep feature extraction**, **named tasks**, and **agent-facing use** in one place.
 
-The project is designed so that the same validated backend work can be reached in three different ways:
+The same validated work can be reached in three different ways:
 
 - through the **main toolkit package**
 - through the **skills interface**
