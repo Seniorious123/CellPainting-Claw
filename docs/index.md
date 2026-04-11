@@ -5,30 +5,30 @@ CellPainting-Claw is a **toolkit interface for practical Cell Painting work**. I
 The project is designed so that the same validated backend work can be reached in three different ways:
 
 - through the **main toolkit package**
-- through the **skills layer**
+- through the **skills interface**
 - through the **OpenClaw agent interface**
 
-## Supported Layers And Packages
+## Supported Capabilities And Packages
 
-CellPainting-Claw integrates packages across several distinct layers of the stack.
+CellPainting-Claw brings together several core capabilities and the packages that support them.
 
-| Layer | Packages or tools | Role in the toolkit |
+| Capability | Packages or tools | Role in the toolkit |
 | --- | --- | --- |
 | Data access | `boto3`, `quilt3`, `cpgdata` | dataset discovery, access planning, and download preparation |
 | Classical processing | `CellProfiler`, `pycytominer` | segmentation, measurement export, profile generation, normalization, and feature selection |
 | Deep learning feature extraction | `DeepProfiler` | learned single-cell feature extraction from segmentation-guided crops |
 | Task interface | `cellpainting_skills`, MCP tools | stable named tasks for automation, scripting, and controlled agent calls |
-| Agent interface | `OpenClaw` | optional natural-language interface on top of the task and MCP layers |
+| Agent interface | `OpenClaw` | optional natural-language interface on top of the task and MCP interfaces |
 
 ## Public Interfaces
 
-The public surface is organized around **three interface levels**.
+The public surface is organized around **three public interfaces**.
 
 | Interface | What it is | Use it when |
 | --- | --- | --- |
 | `cellpainting_claw` | the main toolkit package | you want the full Python toolkit surface, `.cppipe` inspection, lower-level helpers, or MCP support |
 | `cellpainting_skills` | the task package | you want stable named tasks such as `run-segmentation` or `run-deepprofiler` |
-| `OpenClaw` | the agent interface | you want natural-language interaction on top of the same validated task layer |
+| `OpenClaw` | the agent interface | you want natural-language interaction on top of the same validated task interface |
 
 ## Current Skill Catalog
 

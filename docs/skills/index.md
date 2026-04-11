@@ -23,19 +23,19 @@ That design gives the project three useful properties:
 - users do not need to learn the lower-level workflow layout first
 - agents can route natural-language requests onto a controlled task catalog
 
-## Where Skills Sit In The Stack
+## Where Skills Fit In The Toolkit
 
-The stack should be read in this order:
+These capabilities can be understood in this order:
 
-| Layer | Main tools | What happens here |
+| Capability | Main tools | What this part does |
 | --- | --- | --- |
 | data access | `boto3`, `quilt3`, `cpgdata` | inspect datasets, build plans, and download inputs |
 | classical processing | `CellProfiler`, `pycytominer` | produce measurement tables, profiles, masks, previews, and crops |
 | deep learning | `DeepProfiler` | generate learned features from segmentation-guided single-cell inputs |
-| task layer | `cellpainting_skills` | expose stable named tasks across those lower layers |
-| agent interface | `OpenClaw` | trigger the same task layer through natural-language requests |
+| task interface | `cellpainting_skills` | expose stable named tasks across the lower-level toolkit |
+| agent interface | `OpenClaw` | trigger the same task interface through natural-language requests |
 
-Skills belong to the **task layer**. They are the public task interface across the lower toolkit layers.
+Skills belong to the **task interface**. They are the public task interface across the lower-level toolkit.
 
 ## The Six Primary Skills
 
@@ -43,7 +43,7 @@ The public skill catalog is intentionally small.
 
 These are the **six primary skills** that define the current public task surface:
 
-| Skill key | Layer | Main job | Typical outputs |
+| Skill key | Capability area | Main job | Typical outputs |
 | --- | --- | --- | --- |
 | `plan-data-access` | data access | inspect inputs and write a reusable access plan | `data_access_summary.json`, `download_plan.json` |
 | `download-data` | data access | execute the local download step | `download_plan.json`, `download_execution.json` |
@@ -60,7 +60,7 @@ That means:
 
 - each primary skill should cover one clear capability area
 - overlapping combined aliases should not be presented as first-class skills
-- larger combined runs still exist, but they belong under presets or compatibility layers
+- larger combined runs still exist, but they belong under presets or compatibility paths
 
 This is why names such as `run-full-workflow` are not part of the primary skill catalog.
 
@@ -278,7 +278,7 @@ A request such as `Run the DeepProfiler branch and collect the deep features.` s
 
 ## Legacy Skill Names
 
-Older skill names are still recognized in the Python layer for compatibility, but they are **legacy aliases**, not the recommended public starting point.
+Older skill names are still recognized in the Python interface for compatibility, but they are **legacy aliases**, not the recommended public starting point.
 
 Examples include:
 

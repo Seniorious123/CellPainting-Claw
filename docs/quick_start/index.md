@@ -2,7 +2,7 @@
 
 This page shows the **shortest practical way** to understand CellPainting-Claw as a toolkit built around modular skills.
 
-The goal is not to run every layer at once. The goal is to:
+The goal is not to run every part of the toolkit at once. The goal is to:
 
 - confirm that the package is installed
 - see the public skill catalog

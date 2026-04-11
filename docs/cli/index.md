@@ -5,7 +5,7 @@ CellPainting-Claw exposes **two public CLI surfaces**:
 - `cellpainting-skills`
 - `cellpainting-claw`
 
-These two CLIs are meant for different levels of use.
+These two CLIs are meant for different kinds of use.
 
 ## Start With The Right CLI
 
@@ -90,12 +90,12 @@ The main CLI is easier to understand as **tool groups**.
 | segmentation tools | run segmentation-side toolkit commands | `run-segmentation`, `run-segmentation-suite`, `summarize-segmentation` |
 | DeepProfiler tools | run DeepProfiler preparation and collection commands | `run-deepprofiler-pipeline`, `run-deepprofiler-full-stack` |
 | named bundles | run named combined task bundles | `run-pipeline-preset`, `run-end-to-end-pipeline` |
-| agent-facing tools | expose or inspect the MCP layer | `serve-mcp`, `list-mcp-tools`, `run-mcp-tool` |
+| agent-facing tools | expose or inspect the MCP interface | `serve-mcp`, `list-mcp-tools`, `run-mcp-tool` |
 | advanced internal helpers | inspect lower-level workflow aliases directly | `run-workflow` |
 
 ## The `.cppipe` Commands
 
-The main CLI includes a public `.cppipe` inspection and validation layer.
+The main CLI includes a public `.cppipe` inspection and validation interface.
 
 These commands are useful when you want to inspect the CellProfiler pipeline selection before a longer run.
 
@@ -155,7 +155,7 @@ The main MCP-related commands are:
 - `show-mcp-tool-catalog`
 - `run-mcp-tool`
 
-This is the bridge layer used by OpenClaw and other MCP-capable clients.
+This is the bridge interface used by OpenClaw and other MCP-capable clients.
 
 ## Related Pages
 

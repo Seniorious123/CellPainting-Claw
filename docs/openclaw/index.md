@@ -2,19 +2,19 @@
 
 This section documents the **OpenClaw integration surface** for CellPainting-Claw.
 
-OpenClaw is the **agent interface** for this stack. It is an optional natural-language front end built on top of the toolkit, task, and MCP layers. It does **not replace the core library implementation**.
+OpenClaw is the **agent interface** for this toolkit. It is an optional natural-language front end built on top of the toolkit, task, and MCP interfaces. It does **not replace the core library implementation**.
 
-## Role In The Stack
+## Role In The Toolkit
 
 The relationship between the components is:
 
-1. `cellpainting_claw` provides the **main toolkit layer**
-2. `cellpainting_skills` provides the **stable skill layer** on top of the toolkit layer
+1. `cellpainting_claw` provides the **main toolkit interface**
+2. `cellpainting_skills` provides the **stable skill catalog** on top of the toolkit interface
 3. `cellpainting-claw serve-mcp` exposes those callable surfaces as **MCP tools**
 4. OpenClaw connects to that MCP surface and provides an **agent interface**
 5. the agent then triggers the same toolkit capabilities through **natural-language requests**
 
-In practical terms, OpenClaw sits on top of the toolkit and task layers. It is **not a separate backend**.
+In practical terms, OpenClaw sits on top of the toolkit and task interfaces. It is **not a separate backend**.
 
 ## Before You Use OpenClaw
 
@@ -24,7 +24,7 @@ A reliable order is:
 
 1. confirm that the core `cellpainting-claw` CLI works
 2. confirm that the MCP server starts cleanly
-3. only then add the OpenClaw layer on top
+3. only then add the OpenClaw interface on top
 
 That order separates toolkit failures from agent-interface failures.
 
@@ -90,7 +90,7 @@ Use OpenClaw when you want:
 
 - **natural-language task execution**
 - an **agent-facing interface** for the toolkit
-- **MCP-based integration** with a controlled agent layer
+- **MCP-based integration** with a controlled agent interface
 
 Use the Python API or the CLI directly when you want:
 
@@ -149,7 +149,7 @@ OpenClaw is useful, but it does **not remove the need to understand the core too
 Important boundaries are:
 
 - the CLI and Python API remain the **canonical interfaces**
-- MCP is the **bridge layer**, not the toolkit implementation itself
+- MCP is the **bridge interface**, not the toolkit implementation itself
 - provider configuration, gateway state, and model access remain deployment concerns outside the core pipeline library
 - toolkit correctness still depends on the underlying config, data paths, and installed backends
 
@@ -166,7 +166,7 @@ A useful debugging order is:
 
 1. run the core CLI directly
 2. start the MCP server and confirm it stays healthy
-3. start the OpenClaw layer
+3. start the OpenClaw interface
 4. only then debug provider configuration or prompt-level behavior
 
 ## Related Pages
