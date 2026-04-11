@@ -43,17 +43,6 @@ Skills are the **core public task interface** of the project.
 | `prepare-deepprofiler-inputs` | prepare DeepProfiler-ready inputs | DeepProfiler export metadata and inputs |
 | `run-deepprofiler` | run the DeepProfiler-oriented tool path | project files and collected deep features |
 
-## Why This Project Exists
-
-Cell Painting stacks are powerful, but they are often difficult to use consistently because:
-
-- the important tools live in different packages
-- one user may want low-level control while another wants task-oriented commands
-- human users and agents need different interaction styles
-- backend script collections are difficult to expose as a stable public interface
-
-CellPainting-Claw exists to solve that interface problem.
-
 ## Where To Start
 
 Start with these pages:
