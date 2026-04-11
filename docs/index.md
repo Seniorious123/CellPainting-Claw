@@ -22,13 +22,13 @@ CellPainting-Claw brings together several core capabilities and the packages tha
 
 ## Public Interfaces
 
-The public surface is organized around **three public interfaces**.
+The public surface is organized around **three public entry points**.
 
-| Interface | What it is | Use it when |
+| If you want to... | Start with | What you will use it for |
 | --- | --- | --- |
-| `cellpainting_claw` | the main toolkit package | you want the full Python toolkit surface, `.cppipe` inspection, lower-level helpers, or MCP support |
-| `cellpainting_skills` | the task package | you want stable named tasks such as `run-segmentation` or `run-deepprofiler` |
-| `OpenClaw` | the agent interface | you want natural-language interaction on top of the same validated task interface |
+| run the project yourself from Python or from the command line | `cellpainting_claw` | use the main toolkit directly for configuration, data access, segmentation-related utilities, classical profiling, and DeepProfiler-related utilities |
+| choose from a small set of ready-made named tasks | `cellpainting_skills` | run clear task units such as planning data access, running segmentation, preparing DeepProfiler inputs, or running classical profiling without wiring together lower-level functions yourself |
+| tell an agent in plain language what you want done | `OpenClaw` | use an optional chat-style interface that maps natural-language requests onto the same toolkit tasks, so you do not have to choose Python functions or CLI commands yourself |
 
 ## Current Skill Catalog
 

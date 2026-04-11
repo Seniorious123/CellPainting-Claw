@@ -16,14 +16,15 @@ CellPainting-Claw integrates or wraps the following package and tool families:
 - **boto3**, **quilt3**, and **cpgdata** for Cell Painting Gallery / JUMP-style data discovery and planning
 - **OpenClaw** through an MCP-facing integration layer for optional natural-language execution
 
-## Public Python Packages
+## Public Entry Points
 
-The repository exposes **two main public Python packages**.
+The project exposes **three public entry points**.
 
-| Package | Role | When to use it |
+| If you want to... | Start with | What you will use it for |
 | --- | --- | --- |
-| `cellpainting_claw` | main toolkit package | use this when you want the full Python toolkit surface: config loading, `.cppipe` inspection, data access, profiling, segmentation, DeepProfiler helpers, and MCP support |
-| `cellpainting_skills` | task package | use this when you want stable named tasks such as `run-segmentation` or `run-deepprofiler` |
+| run the project yourself from Python or from the command line | `cellpainting_claw` | use the main toolkit directly for configuration, data access, segmentation-related utilities, classical profiling, and DeepProfiler-related utilities |
+| choose from a small set of ready-made named tasks | `cellpainting_skills` | run clear task units such as planning data access, running segmentation, preparing DeepProfiler inputs, or running classical profiling without wiring together lower-level functions yourself |
+| tell an agent in plain language what you want done | `OpenClaw` | use an optional chat-style interface that maps natural-language requests onto the same toolkit tasks, so you do not have to choose Python functions or CLI commands yourself |
 
 ## What The Repository Includes
 
