@@ -30,10 +30,9 @@ The project exposes **three public entry points**.
 
 At the public interface level, the repository includes:
 
-- the `cellpainting_claw` Python API
-- the `cellpainting_skills` Python API
-- the `cellpainting-claw` CLI
-- the `cellpainting-skills` CLI
+- a Python toolkit API
+- a named-task API
+- command-line interfaces for both direct use and skill-based use
 - an MCP server surface for agent-facing integrations
 - an OpenClaw integration path
 
@@ -142,14 +141,7 @@ print(result.segmentation_output_dir)
 
 OpenClaw is an **optional agent interface** for the same toolkit.
 
-The relationship is:
-
-1. `cellpainting_claw` provides the canonical library and CLI
-2. the library can be exposed through MCP
-3. OpenClaw can connect to that MCP surface
-4. the agent can then call the same toolkit through natural-language requests
-
-OpenClaw does not replace the core library implementation.
+In normal use, OpenClaw connects to the MCP surface and maps natural-language requests onto the documented skills. It does not replace the core library or CLI.
 
 ## Documentation
 

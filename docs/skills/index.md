@@ -54,13 +54,6 @@ Each page explains:
 - how an agent should map requests onto it
 - what outputs to expect
 
-## Skills And The Main Toolkit
-
-The relationship between the two main packages is simple:
-
-- `cellpainting_claw` is the broader toolkit for direct use
-- `cellpainting_skills` is the smaller named-task catalog
-
 ## Skill Pages
 
 ```{toctree}

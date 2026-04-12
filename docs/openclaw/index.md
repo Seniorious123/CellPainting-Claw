@@ -2,19 +2,18 @@
 
 This section documents the **OpenClaw integration surface** for CellPainting-Claw.
 
-OpenClaw is the **agent interface** for this toolkit. It is an optional natural-language front end built on top of the toolkit, task, and MCP interfaces. It does **not replace the core library implementation**.
+OpenClaw is the **agent interface** for this project. It is an optional natural-language front end that connects to CellPainting-Claw through MCP. It does **not** introduce a separate backend.
 
-## Role In The Toolkit
+## What OpenClaw Does
 
-The relationship between the components is:
+In practical terms, OpenClaw should do one thing well:
 
-1. `cellpainting_claw` provides the **main toolkit interface**
-2. `cellpainting_skills` provides the **stable skill catalog** on top of the toolkit interface
-3. `cellpainting-claw serve-mcp` exposes those callable surfaces as **MCP tools**
-4. OpenClaw connects to that MCP surface and provides an **agent interface**
-5. the agent then triggers the same toolkit capabilities through **natural-language requests**
+1. receive a natural-language request
+2. map that request onto the right public skill
+3. call the same underlying toolkit through MCP
+4. return the result through the agent session
 
-In practical terms, OpenClaw sits on top of the toolkit and task interfaces. It is **not a separate backend**.
+So the OpenClaw path should be understood as an **agent interface over the existing skill catalog**, not as a different workflow implementation.
 
 ## Before You Use OpenClaw
 
@@ -27,19 +26,6 @@ A reliable order is:
 3. only then add the OpenClaw interface on top
 
 That order separates toolkit failures from agent-interface failures.
-
-## What OpenClaw Should Actually Do
-
-OpenClaw should not invent a new workflow model.
-
-Its job is to:
-
-- receive a natural-language request
-- map that request onto one of the public skills
-- call the same validated toolkit surface underneath
-- return the result as an agent-mediated interaction
-
-So the OpenClaw path is an **agent interface over the existing task model**, not a separate execution implementation.
 
 ## Agent Demo
 
@@ -140,16 +126,11 @@ That request should normally resolve to:
 - implementation path: the DeepProfiler preparation task underneath
 - typical outputs: export metadata, image inputs, and location inputs
 
-## What OpenClaw Can Trigger
+## What OpenClaw Should Trigger
 
-Through the MCP surface, OpenClaw can reach the same public library surfaces documented elsewhere in this site, including:
+In normal use, OpenClaw should route requests onto the **public skills** documented in this site.
 
-- public toolkit entrypoints
-- task-oriented skills
-- preset-oriented runs
-- MCP tool wrappers around the public API
-
-In normal use, the most important of those are the **skills**.
+That keeps the agent behavior predictable: the user asks for a task in natural language, and the agent resolves it to a stable task name such as `run-segmentation` or `prepare-deepprofiler-inputs`.
 
 ## When To Use OpenClaw
 
