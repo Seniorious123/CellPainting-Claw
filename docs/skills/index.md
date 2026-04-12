@@ -61,12 +61,6 @@ The relationship between the two main packages is simple:
 - `cellpainting_claw` is the broader toolkit for direct use
 - `cellpainting_skills` is the smaller named-task catalog
 
-## Legacy Names And Presets
-
-Older names still exist in parts of the codebase for compatibility, but they should be treated as **legacy aliases**, not as the recommended public starting point.
-
-Likewise, larger combined runs such as `full-pipeline` are better understood as **presets or examples**, not as the core public skill model.
-
 ## Skill Pages
 
 ```{toctree}
