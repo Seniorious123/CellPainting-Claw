@@ -1,21 +1,35 @@
 # OpenClaw
 
-This section documents the **OpenClaw integration surface** for CellPainting-Claw.
+OpenClaw is the **natural-language entry point** for CellPainting-Claw.
 
-OpenClaw is the **agent interface** for this project. It is an optional natural-language front end that connects to CellPainting-Claw through MCP. It does **not** introduce a separate backend.
+Use it when you want to describe a task in plain language and let an agent route that request onto the documented skills.
 
-## What OpenClaw Does
+## What OpenClaw Is For
 
-In practical terms, OpenClaw should do one thing well:
+In normal use, OpenClaw should do one thing well:
 
 1. receive a natural-language request
-2. map that request onto the right public skill
-3. call the same underlying toolkit through MCP
+2. map that request onto the right skill
+3. call the toolkit through MCP
 4. return the result through the agent session
 
-So the OpenClaw path should be understood as an **agent interface over the existing skill catalog**, not as a different workflow implementation.
+So OpenClaw should be understood as a **natural-language front end for the existing skills**, not as a separate workflow.
 
-## Before You Use OpenClaw
+## When To Use It
+
+Use OpenClaw when you want:
+
+- natural-language task execution
+- an agent-facing interface for the project
+- a chat-style way to run documented skills
+
+Use the CLI or Python directly when you want:
+
+- the most explicit and reproducible interface
+- shell scripts, notebooks, or direct library calls
+- easier debugging of configuration or backend problems
+
+## Before You Start
 
 OpenClaw should **not be the first thing you debug**.
 
@@ -25,11 +39,9 @@ A reliable order is:
 2. confirm that the MCP server starts cleanly
 3. only then add the OpenClaw interface on top
 
-That order separates toolkit failures from agent-interface failures.
+That order separates toolkit problems from agent-interface problems.
 
-## Agent Demo
-
-This is the simplest way to think about OpenClaw as a working agent demo.
+## A Minimal OpenClaw Demo
 
 ### 1. Start the gateway and the TUI
 
@@ -44,12 +56,12 @@ cp provider.env.example provider.env
 ./run_openclaw_tui.sh
 ```
 
-The gateway wrapper starts:
+This starts:
 
 - the OpenClaw gateway
 - the local CellPainting-Claw MCP server
 
-### 2. Give the agent a natural-language request
+### 2. Ask for a task in natural language
 
 For example:
 
@@ -59,48 +71,36 @@ Run segmentation with config configs/project_config.demo.json and write outputs 
 
 What should happen:
 
-- the agent identifies the request as a **segmentation task**
-- the request maps to the skill `run-segmentation`
-- the underlying toolkit runs the same validated segmentation path used by the CLI and Python API
-- the result is returned through the agent session
+- the request is recognized as a segmentation task
+- the agent routes it to `run-segmentation`
+- the same validated segmentation path used elsewhere in the project is called underneath
+- the result comes back through the agent session
 
-Typical outputs for that request:
+Typical outputs for that request include:
 
 - masks
 - previews
 - masked crops
 - unmasked crops
 
-### 3. Another example: prepare DeepProfiler inputs
-
-Prompt:
+### 3. Another example
 
 ```text
 Prepare the DeepProfiler inputs for this config, but do not run DeepProfiler yet.
 ```
 
-Expected routing:
+That request should normally resolve to:
 
 - skill: `prepare-deepprofiler-inputs`
-- task type: DeepProfiler preparation
 - typical outputs: export metadata, image inputs, and location inputs
 
-### 4. What this demo proves
+## What Makes A Good OpenClaw Request
 
-This kind of interaction demonstrates that OpenClaw can:
-
-- understand the task request in natural language
-- route to the correct public skill
-- call the same toolkit capabilities exposed elsewhere in the project
-- return an agent-mediated result without introducing a separate workflow model
-
-## A Concrete Interaction Pattern
-
-A useful OpenClaw request should describe:
+A useful request usually states:
 
 - the task objective
 - the config file
-- the output location
+- the output location when relevant
 
 For example:
 
@@ -108,58 +108,18 @@ For example:
 Run segmentation with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
 ```
 
-That request should normally resolve to:
+The important point is that the request should describe the **task you want done**, not the internal implementation details.
 
-- skill: `run-segmentation`
-- implementation path: the standard segmentation task surface underneath
-- typical outputs: masks, previews, masked crops, and unmasked crops
+## Setup Options
 
-Another example:
-
-```text
-Prepare the DeepProfiler inputs for this config, but do not run DeepProfiler yet.
-```
-
-That request should normally resolve to:
-
-- skill: `prepare-deepprofiler-inputs`
-- implementation path: the DeepProfiler preparation task underneath
-- typical outputs: export metadata, image inputs, and location inputs
-
-## What OpenClaw Should Trigger
-
-In normal use, OpenClaw should route requests onto the **public skills** documented in this site.
-
-That keeps the agent behavior predictable: the user asks for a task in natural language, and the agent resolves it to a stable task name such as `run-segmentation` or `prepare-deepprofiler-inputs`.
-
-## When To Use OpenClaw
-
-Use OpenClaw when you want:
-
-- **natural-language task execution**
-- an **agent-facing interface** for the toolkit
-- **MCP-based integration** with a controlled agent interface
-
-Use the Python API or the CLI directly when you want:
-
-- the most explicit and reproducible interface
-- shell scripts, notebooks, or direct library calls
-- easier debugging of configuration and toolkit errors
-
-## OpenClaw Setups
-
-The repository maintains **two main OpenClaw setup tracks**:
+The repository maintains two main setup paths:
 
 - `integrations/openclaw/autodl/` for AutoDL-like hosts without nested Docker
 - `integrations/openclaw/docker/` for standard Linux hosts with Docker support
 
 For current OpenClaw releases, prefer the **TUI path** rather than the ACP client path.
 
-Both setup tracks keep provider credentials out of repository-managed templates and expose the same library-facing toolkit surface underneath.
-
 ## Shortest AutoDL Path
-
-On AutoDL-like hosts, the normal path is:
 
 ```bash
 cd integrations/openclaw/autodl
@@ -170,11 +130,7 @@ cp provider.env.example provider.env
 ./run_openclaw_tui.sh
 ```
 
-The gateway wrapper starts the **OpenClaw gateway** together with the local **CellPainting-Claw MCP server**.
-
 ## Shortest Docker Path
-
-On standard Docker-capable Linux hosts, the normal path is:
 
 ```bash
 cd integrations/openclaw/docker
@@ -183,39 +139,38 @@ cp .env.example .env
 ./compose_up.sh
 ```
 
-Then open a second shell and start the terminal client:
+Then start the terminal client in a second shell:
 
 ```bash
 cd integrations/openclaw/docker
 ./compose_acp_client.sh
 ```
 
-## Boundaries And Expectations
+## Boundaries
 
-OpenClaw is useful, but it does **not remove the need to understand the core toolkit interfaces**.
+OpenClaw is useful, but it does **not** replace the core toolkit.
 
 Important boundaries are:
 
-- the CLI and Python API remain the **canonical interfaces**
-- MCP is the **bridge interface**, not the toolkit implementation itself
-- provider configuration, gateway state, and model access remain deployment concerns outside the core pipeline library
 - toolkit correctness still depends on the underlying config, data paths, and installed backends
+- MCP is the connection path, not the toolkit itself
+- provider configuration and gateway state are deployment concerns outside the core pipeline library
 
-## Troubleshooting Logic
+## Troubleshooting Order
 
-When OpenClaw fails, the main failure classes are usually:
-
-- provider authentication or base URL configuration
-- gateway not running
-- MCP server not reachable
-- valid agent connection but invalid toolkit config or missing backend dependencies
-
-A useful debugging order is:
+When OpenClaw fails, a useful debugging order is:
 
 1. run the core CLI directly
 2. start the MCP server and confirm it stays healthy
 3. start the OpenClaw interface
 4. only then debug provider configuration or prompt-level behavior
+
+Common failure classes are:
+
+- provider authentication or base URL configuration
+- gateway not running
+- MCP server not reachable
+- valid agent connection but invalid toolkit config or missing backend dependencies
 
 ## Related Pages
 
