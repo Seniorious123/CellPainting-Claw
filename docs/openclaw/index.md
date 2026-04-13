@@ -52,10 +52,10 @@ Purpose:
 - tell OpenClaw which model provider it should use
 - provide the credentials and base URL needed for that provider
 
-On an AutoDL-like host:
+Using one of the repository's OpenClaw setup paths, prepare the provider configuration:
 
 ```bash
-cd integrations/openclaw/autodl
+cd integrations/openclaw/<your-setup>
 cp provider.env.example provider.env
 # edit provider.env
 ./configure_openai_compatible_provider.sh
@@ -89,6 +89,7 @@ What this step does:
 - launches the OpenClaw gateway
 - launches the local CellPainting-Claw MCP server
 - keeps the bridge between OpenClaw and the toolkit available for later requests
+- uses the wrapper scripts from the setup path you chose earlier
 
 What success looks like:
 
