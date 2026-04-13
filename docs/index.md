@@ -1,6 +1,6 @@
 # CellPainting-Claw
 
-CellPainting-Claw brings together the main tools used in **Cell Painting work** into one public toolkit. It covers **data access**, **classical processing**, **deep feature extraction**, **named tasks**, and **natural-language use** in one place.
+CellPainting-Claw turns a **fragmented Cell Painting toolchain** into one public toolkit, bringing scattered packages and workflow steps together while making the same work easier to use directly and easier to access through agent-friendly natural-language requests.
 
 The same validated work can be reached in three different ways:
 
