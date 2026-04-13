@@ -2,7 +2,7 @@
 
 This page describes the recommended installation path for CellPainting-Claw.
 
-The goal of installation is to obtain a working installation of the **toolkit itself**: the main Python package, the skills layer, the public CLI entrypoints, and the optional MCP-facing interface used by agent interfaces.
+The goal of installation is to obtain a working installation of the main package, the public CLI commands, and the optional OpenClaw-facing MCP support.
 
 ## Prerequisites
 
@@ -35,30 +35,17 @@ pip install -e .
 
 This is the recommended installation path for the current project because the validated toolkit depends on a mixed Conda and pip stack.
 
-## What Gets Installed
+## What You Can Use After Installation
 
-After installation, the repository exposes these main public interfaces.
+After installation, the main things you can use are:
 
-### Python packages
-
-- `cellpainting_claw`
-- `cellpainting_skills`
-
-### Command-line entrypoints
-
-- `cellpainting-claw`
-- `cellpainting-skills`
-- `cellpainting-claw-tests`
-
-### Optional agent-facing layer
-
-The main package can also expose an MCP server surface used by agent interfaces such as OpenClaw.
-
-That layer is optional. The core toolkit does not require OpenClaw in order to be installed or used.
+- the Python packages `cellpainting_claw` and `cellpainting_skills`
+- the CLI commands `cellpainting-claw` and `cellpainting-skills`
+- the optional MCP support used by OpenClaw
 
 ## Optional Extras
 
-The project also defines optional extras in `pyproject.toml`. These are mainly useful when building a more customized environment instead of relying on the validated Conda environment.
+The project also defines optional extras in `pyproject.toml`. These are mainly useful for a more customized environment rather than the standard installation path.
 
 ```bash
 pip install -e .[test]
@@ -95,6 +82,6 @@ After installation, the shortest practical next page is:
 
 From there, you can continue into:
 
-- [Skills](../skills/index.md) for the task-oriented layer
-- [CLI](../cli/index.md) for the shell-facing interfaces
-- [OpenClaw](../openclaw/index.md) if you want natural-language or agent-mediated execution
+- [Skills](../skills/index.md) for the skill catalog
+- [CLI](../cli/index.md) for the command-line usage
+- [OpenClaw](../openclaw/index.md) if you want natural-language execution
