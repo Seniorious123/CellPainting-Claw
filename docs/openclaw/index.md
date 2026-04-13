@@ -20,7 +20,7 @@ So OpenClaw should be understood as a **natural-language front end for the exist
 Use OpenClaw when you want:
 
 - natural-language task execution
-- an agent-facing interface for the project
+- a natural-language interface for the project
 - a chat-style way to run documented skills
 
 Use the CLI or Python directly when you want:
@@ -39,7 +39,7 @@ A reliable order is:
 2. confirm that the MCP server starts cleanly
 3. only then add the OpenClaw interface on top
 
-That order separates toolkit problems from agent-interface problems.
+That order separates toolkit problems from OpenClaw-side problems.
 
 ## A Minimal OpenClaw Demo
 

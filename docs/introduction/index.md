@@ -2,7 +2,7 @@
 
 CellPainting-Claw brings together the main tools used in **Cell Painting work** into one public toolkit. Instead of asking users to piece together data access, CellProfiler workflows, pycytominer profiling, DeepProfiler preparation, and agent tooling by hand, the project provides a clearer way to work across those capabilities.
 
-The main idea is simple: **the same validated work should be usable in three ways, through the main toolkit, through named tasks, and through an agent interface**.
+The main idea is simple: **the same validated work should be usable in three ways, through the toolkit, through named tasks, and through a natural-language entry point**.
 
 ## What The Project Brings Together
 
@@ -15,7 +15,7 @@ CellPainting-Claw covers several connected parts of practical Cell Painting work
 | Classical profile generation | `pycytominer` | normalization, feature selection, and profile generation from single-cell tables |
 | Deep feature extraction | `DeepProfiler` | learned features from segmentation-guided single-cell crops |
 | Named task interface | `cellpainting_skills` | stable task names for running common operations without wiring lower-level calls together |
-| Agent interface | `OpenClaw` | optional natural-language access to the same tasks through an agent |
+| Natural-language interface | `OpenClaw` | optional natural-language access to the same tasks through OpenClaw |
 
 These parts are presented in the same order that many users will encounter them in real work: **get data, process images, build profiles, optionally build deep features, and optionally expose the workflow to an agent**.
 
@@ -52,7 +52,7 @@ In short, `cellpainting_skills` is the right starting point when you want to **r
 
 ### OpenClaw
 
-OpenClaw is the **agent entry point**.
+OpenClaw is the **natural-language entry point**.
 
 Use it when you want to:
 
@@ -73,11 +73,6 @@ This makes the project easier to use in practice:
 - a user can choose a task by name
 - a script can call the same task repeatedly
 - an agent can map a natural-language request onto a stable task name
-
-The relationship between the two main packages is simple:
-
-- `cellpainting_claw` is the broader toolkit for direct use
-- `cellpainting_skills` is the smaller task catalog for named-task use
 
 ## CellProfiler `.cppipe` Support
 

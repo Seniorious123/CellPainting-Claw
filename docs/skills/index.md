@@ -8,7 +8,7 @@ Its job is simple: it gives users and agents a **small set of stable task names*
 
 In this project, a skill is a **named task**.
 
-A skill is not a separate backend. It is a public task name that maps onto an implementation in the main toolkit.
+A skill is not a separate backend. It is a public task name that maps onto an implementation in the toolkit.
 
 This makes the project easier to use in practice:
 
@@ -26,8 +26,8 @@ The toolkit brings together several connected capability areas.
 | Image processing and measurement export | `CellProfiler` | produce masks, outlines, crops, and single-cell measurement tables |
 | Classical profile generation | `pycytominer` | build classical profiles from single-cell tables |
 | Deep feature extraction | `DeepProfiler` | build learned features from segmentation-guided crops |
-| Named task interface | `cellpainting_skills` | expose stable named tasks across those capabilities |
-| Agent interface | `OpenClaw` | trigger the same named tasks through natural-language requests |
+| Named-task interface | `cellpainting_skills` | expose stable named tasks across those capabilities |
+| Natural-language interface | `OpenClaw` | trigger the same named tasks through natural-language requests |
 
 ## The Six Primary Skills
 

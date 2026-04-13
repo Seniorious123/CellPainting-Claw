@@ -2,9 +2,7 @@
 
 [Documentation](https://cellpainting-claw.readthedocs.io/en/latest/)
 
-CellPainting-Claw is a **Cell Painting toolkit for both humans and agents**. It provides a cleaner public interface for the tasks that are usually spread across backend scripts, package-specific wrappers, and separate runtimes.
-
-It packages the main task families needed for practical Cell Painting work into one reusable interface.
+CellPainting-Claw brings together the main tools used in **Cell Painting work** into one public toolkit. It covers **data access**, **classical processing**, **deep feature extraction**, **named tasks**, and **natural-language use** in one place.
 
 ## Supported Packages
 
@@ -24,7 +22,7 @@ The project exposes **three public entry points**.
 | --- | --- | --- |
 | run the project yourself from Python or from the command line | `cellpainting_claw` | use the main toolkit directly for configuration, data access, segmentation-related utilities, classical profiling, and DeepProfiler-related utilities |
 | choose from a small set of ready-made named tasks | `cellpainting_skills` | run clear task units such as planning data access, running segmentation, preparing DeepProfiler inputs, or running classical profiling without wiring together lower-level functions yourself |
-| tell an agent in plain language what you want done | `OpenClaw` | use an optional chat-style interface that maps natural-language requests onto the same toolkit tasks, so you do not have to choose Python functions or CLI commands yourself |
+| tell an agent in plain language what you want done | `OpenClaw` | use an optional natural-language entry point that maps requests onto the same documented skills, so you do not have to choose Python functions or CLI commands yourself |
 
 ## What The Repository Includes
 
@@ -139,7 +137,7 @@ print(result.segmentation_output_dir)
 
 ## Agent And OpenClaw Integration
 
-OpenClaw is an **optional agent interface** for the same toolkit.
+OpenClaw is an **optional natural-language entry point** for the same toolkit.
 
 In normal use, OpenClaw connects to the MCP surface and maps natural-language requests onto the documented skills. It does not replace the core library or CLI.
 

@@ -12,11 +12,11 @@ For most users, the right starting point is **`cellpainting-skills`**.
 | If you want to... | Start with | Why |
 | --- | --- | --- |
 | run one clear named task such as segmentation or DeepProfiler preparation | `cellpainting-skills` | this is the shortest path from a user goal to a documented task |
-| inspect configuration, inspect `.cppipe` selection, use data-access helpers, or expose MCP tools | `cellpainting-claw` | this is the broader toolkit CLI |
+| inspect configuration, inspect `.cppipe` selection, use data-access helpers, or expose MCP tools | `cellpainting-claw` | this is the direct toolkit CLI |
 
 ## `cellpainting-skills`: The First CLI For Most Users
 
-`cellpainting-skills` is the task-oriented CLI.
+`cellpainting-skills` is the named-task CLI.
 
 Its three main commands are:
 
@@ -44,7 +44,7 @@ This is the main CLI path that new users should understand first:
 - inspect one skill
 - run one named task
 
-## `cellpainting-claw`: The Broader Toolkit CLI
+## `cellpainting-claw`: The Direct Toolkit CLI
 
 Use `cellpainting-claw` when you need commands that are more specific than a named skill.
 
