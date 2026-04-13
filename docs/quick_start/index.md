@@ -95,17 +95,7 @@ print(result.ok)
 print(result.segmentation_output_dir)
 ```
 
-## 8. Combined Runs Use Presets
-
-If you intentionally want a combined run such as profiling plus segmentation, use a preset rather than treating that combined path as one of the core skills.
-
-For example:
-
-```bash
-cellpainting-claw run-pipeline-preset   --config "$CONFIG"   --preset full-pipeline
-```
-
-## 9. What To Read Next
+## 8. What To Read Next
 
 After this first run, the most useful next pages are:
 
