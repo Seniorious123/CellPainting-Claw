@@ -11,19 +11,7 @@ The same documented skills can be used in two ways:
 
 CellPainting-Claw is organized as a simple three-level structure:
 
-```text
-                        /---------------------------\
-                       /         OpenClaw           \
-                      /-----------------------------\
-
-                  /-----------------------------------\
-                 /       cellpainting_skills          \
-                /-------------------------------------\
-
-            /-----------------------------------------------\
-           /              Foundation packages               \
-          /-------------------------------------------------\
-```
+![CellPainting-Claw structure](images/homepage_structure.svg)
 
 People can use the same skills in two ways:
 
