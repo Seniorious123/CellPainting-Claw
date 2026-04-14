@@ -7,17 +7,40 @@ The same documented skills can be used in two ways:
 - **run the skills directly**
 - **run the same skills through an agent**
 
-## Supported Capabilities And Packages
+## Project Structure
 
-CellPainting-Claw brings together several core capabilities and the packages that support them.
+CellPainting-Claw is organized as a simple three-level structure:
 
-| Capability | Packages or tools | Role in the toolkit |
+```text
+                        /---------------------------\
+                       /         OpenClaw           \
+                      /-----------------------------\
+
+                  /-----------------------------------\
+                 /       cellpainting_skills          \
+                /-------------------------------------\
+
+            /-----------------------------------------------\
+           /              Foundation packages               \
+          /-------------------------------------------------\
+```
+
+People can use the same skills in two ways:
+
+- directly, through `cellpainting_skills`
+- through an agent, through `OpenClaw`
+
+Both paths rely on the same foundation packages underneath.
+
+## Foundation Packages
+
+The foundation layer brings together the underlying packages that provide the main workflow capabilities.
+
+| Foundation area | Packages | Main capability |
 | --- | --- | --- |
 | Data access | `boto3`, `quilt3`, `cpgdata` | dataset discovery, access planning, and download preparation |
-| Classical processing | `CellProfiler`, `pycytominer` | segmentation, measurement export, profile generation, normalization, and feature selection |
-| Deep learning feature extraction | `DeepProfiler` | learned single-cell feature extraction from segmentation-guided crops |
-| Named-task interface | `cellpainting_skills` | stable named tasks for automation, scripting, and direct task execution |
-| Natural-language interface | `OpenClaw` | optional natural-language access to the same documented skills |
+| Classical processing | `CellProfiler`, `pycytominer` | segmentation, measurement export, and classical profile generation |
+| Deep feature extraction | `DeepProfiler` | learned single-cell feature extraction |
 
 ## How To Use CellPainting-Claw
 
