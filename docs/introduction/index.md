@@ -1,8 +1,8 @@
 # Introduction
 
-CellPainting-Claw brings together the main tools used in **Cell Painting work** into one public toolkit. Instead of asking users to piece together data access, CellProfiler workflows, pycytominer profiling, DeepProfiler preparation, and agent tooling by hand, the project provides a clearer way to work across those capabilities.
+CellPainting-Claw brings together the fragmented tools used in **Cell Painting work** into one skill-driven interface. Instead of asking users to piece together data access, CellProfiler workflows, pycytominer profiling, DeepProfiler preparation, and agent tooling by hand, the project lets both humans and agents reach the same documented skills through a clearer public surface.
 
-The main idea is simple: **the same validated work should be usable in three ways, through the toolkit, through named tasks, and through a natural-language entry point**.
+The main idea is simple: **humans should be able to call the documented skills directly, and agents should be able to call the same skills through natural language**.
 
 ## What The Project Brings Together
 
@@ -19,48 +19,37 @@ CellPainting-Claw covers several connected parts of practical Cell Painting work
 
 These parts are presented in the same order that many users will encounter them in real work: **get data, process images, build profiles, optionally build deep features, and optionally expose the workflow to an agent**.
 
-## Three Ways To Use The Project
+## Two Ways To Use CellPainting-Claw
 
-The same toolkit can be used in **three different ways**.
+For most users, CellPainting-Claw should be understood through **two main usage paths**.
 
-### `cellpainting_claw`
+### Run The Skills Directly
 
-`cellpainting_claw` is the **main toolkit entry point**.
-
-Use it when you want to:
-
-- work directly in Python or from the main CLI
-- load and inspect project configuration
-- call data-access, segmentation, profiling, and DeepProfiler helpers yourself
-- inspect or validate CellProfiler `.cppipe` selection
-- control more of the workflow details directly
-
-In short, `cellpainting_claw` is the right starting point when you want to **use the toolkit directly**.
-
-### `cellpainting_skills`
-
-`cellpainting_skills` is the **named-task entry point**.
+The main human-facing starting point is `cellpainting_skills`.
 
 Use it when you want to:
 
-- call a small set of stable named tasks
-- run common operations such as segmentation or DeepProfiler preparation without assembling lower-level helpers yourself
-- build scripts or automation around clear task names
-- give an agent a cleaner and narrower set of actions to call
+- call the documented skills directly from Python or from the CLI
+- run clear tasks such as segmentation, classical profiling, or DeepProfiler-related tasks
+- work from stable task names instead of assembling lower-level helpers yourself
 
-In short, `cellpainting_skills` is the right starting point when you want to **run well-defined tasks**.
+In short, this is the right starting point when you want to **use the documented skills directly**.
 
-### OpenClaw
+### Run The Same Skills Through OpenClaw
 
 OpenClaw is the **natural-language entry point**.
 
 Use it when you want to:
 
 - describe a task in natural language
-- let an agent decide which task to call
-- expose the toolkit through a chat-style interface
+- let an agent route that request to the right documented skill
+- use the same skill catalog through a chat-style interface
 
-OpenClaw is optional. It sits on top of the same validated toolkit and task interfaces rather than replacing them.
+In short, this is the right starting point when you want to **use the same skills through an agent**.
+
+### Advanced Direct Package Use
+
+The lower-level `cellpainting_claw` package remains available for advanced direct package use, including direct configuration inspection, lower-level toolkit commands, and MCP serving. It is still part of the project, but it is not the main starting point for most users.
 
 ## What Skills Are For
 

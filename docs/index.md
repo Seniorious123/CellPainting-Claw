@@ -1,12 +1,11 @@
 # CellPainting-Claw
 
-CellPainting-Claw turns a **fragmented Cell Painting toolchain** into one public toolkit, bringing scattered packages and workflow steps together while making the same work easier to use directly and easier to access through agent-friendly natural-language requests.
+CellPainting-Claw turns a **fragmented Cell Painting toolchain** into one skill-driven interface, bringing scattered packages and workflow steps together while making the same work easier to use directly and easier to access through agent-friendly natural-language requests.
 
-The same validated work can be reached in three different ways:
+The same documented skills can be used in two ways:
 
-- through the **main toolkit**
-- through the **named-task interface**
-- through the **natural-language interface**
+- **run the skills directly**
+- **run the same skills through an agent**
 
 ## Supported Capabilities And Packages
 
@@ -20,15 +19,16 @@ CellPainting-Claw brings together several core capabilities and the packages tha
 | Named-task interface | `cellpainting_skills` | stable named tasks for automation, scripting, and direct task execution |
 | Natural-language interface | `OpenClaw` | optional natural-language access to the same documented skills |
 
-## Public Interfaces
+## How To Use CellPainting-Claw
 
-The public surface is organized around **three public entry points**.
+For most users, CellPainting-Claw should be understood through **two main usage paths**.
 
-| If you want to... | Start with | What you will use it for |
+| If you want to... | Start with | What happens underneath |
 | --- | --- | --- |
-| run the project yourself from Python or from the command line | `cellpainting_claw` | use the main toolkit directly for configuration, data access, segmentation-related utilities, classical profiling, and DeepProfiler-related utilities |
-| choose from a small set of ready-made named tasks | `cellpainting_skills` | run clear task units such as planning data access, running segmentation, preparing DeepProfiler inputs, or running classical profiling without wiring together lower-level functions yourself |
-| tell an agent in plain language what you want done | `OpenClaw` | use an optional natural-language entry point that maps requests onto the same documented skills, so you do not have to choose Python functions or CLI commands yourself |
+| run documented tasks yourself from Python or from the command line | `cellpainting_skills` | you call the documented skills directly, such as segmentation, classical profiling, or DeepProfiler-related tasks |
+| tell an agent in plain language what you want done | `OpenClaw` | the agent maps your request onto the same documented skills and runs them through the same underlying toolkit |
+
+The lower-level `cellpainting_claw` package remains available for advanced direct package use, but it is not the main starting point for most users.
 
 ## Current Skill Catalog
 
