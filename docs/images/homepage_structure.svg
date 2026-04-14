@@ -7,7 +7,7 @@
       .top { fill: #ead2b7; stroke: #8a6a4c; stroke-width: 2.5; }
       .mid { fill: #d7e6df; stroke: #648579; stroke-width: 2.5; }
       .bot { fill: #d7e0ee; stroke: #6d84a7; stroke-width: 2.5; }
-      .inside { font: 700 24px "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #1f2735; }
+      .inside { font: 700 22px "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #1f2735; }
       .left { font: 700 20px "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #3a4454; }
       .rightTitle { font: 700 22px "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #243040; }
       .rightText { font: 500 18px "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #4b596d; }
@@ -19,13 +19,13 @@
 
   <rect class="bg" x="0" y="0" width="1200" height="700" />
 
-  <polygon class="top" points="490,120 560,200 420,200" />
-  <polygon class="mid" points="420,200 560,200 630,330 350,330" />
-  <polygon class="bot" points="350,330 630,330 740,520 240,520" />
+  <polygon class="top" points="490,92 590,210 390,210" />
+  <polygon class="mid" points="390,210 590,210 660,335 320,335" />
+  <polygon class="bot" points="320,335 660,335 760,525 220,525" />
 
-  <text class="inside" x="490" y="170" text-anchor="middle">OpenClaw</text>
-  <text class="inside" x="490" y="276" text-anchor="middle">cellpainting_skills</text>
-  <text class="inside" x="490" y="438" text-anchor="middle">Foundation packages</text>
+  <text class="inside" x="490" y="164" text-anchor="middle">OpenClaw</text>
+  <text class="inside" x="490" y="282" text-anchor="middle">cellpainting_skills</text>
+  <text class="inside" x="490" y="444" text-anchor="middle">Foundation packages</text>
 
   <text class="left" x="90" y="170">Agent access</text>
   <text class="left" x="90" y="280">Shared skills</text>
