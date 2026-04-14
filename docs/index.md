@@ -9,7 +9,7 @@ The same documented skills can be used in two ways:
 
 ## Project Structure
 
-CellPainting-Claw is organized as a simple three-level structure:
+CellPainting-Claw is organized as a simple three-part structure:
 
 ![CellPainting-Claw structure](images/homepage_structure.svg)
 
@@ -22,7 +22,7 @@ Both paths rely on the same foundation packages underneath.
 
 ## Foundation Packages
 
-The foundation layer brings together the underlying packages that provide the main workflow capabilities.
+The foundation packages bring together the underlying tools that provide the main workflow capabilities.
 
 | Foundation area | Packages | Main capability |
 | --- | --- | --- |
