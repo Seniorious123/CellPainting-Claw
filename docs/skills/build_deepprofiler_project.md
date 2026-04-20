@@ -6,8 +6,6 @@ orphan: true
 
 `build-deepprofiler-project` is the skill for assembling a runnable DeepProfiler project directory from a DeepProfiler export.
 
-## Summary
-
 This skill reads the DeepProfiler export manifest, builds the project config and metadata files, stages the location files, and writes a `project_manifest.json`.
 
 Use it when you want to:

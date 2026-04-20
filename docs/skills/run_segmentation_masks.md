@@ -2,8 +2,6 @@
 
 `run-segmentation-masks` is the skill for running segmentation and writing mask artifacts plus sample previews.
 
-## Summary
-
 This skill prepares the segmentation load-data table, runs CellProfiler, generates sample previews, and summarizes the result.
 
 ## Recommended Use

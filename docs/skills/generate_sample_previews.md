@@ -6,8 +6,6 @@ orphan: true
 
 `generate-sample-previews` is the skill for rendering field-level preview PNGs from segmentation input channels.
 
-## Summary
-
 This skill reads the segmentation load-data table and writes composite preview images for each field.
 
 Use it when you want to:

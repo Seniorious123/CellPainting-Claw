@@ -2,8 +2,6 @@
 
 `summarize-classical-profiles` is the skill for turning pycytominer profile tables into a readable summary package.
 
-## Summary
-
 This skill reads a classical profile table, computes feature variability, writes a metadata overview, and produces a simple PCA view.
 
 It can read the profile table either from an explicit `feature_selected` path or from the manifest written by `run-pycytominer`.

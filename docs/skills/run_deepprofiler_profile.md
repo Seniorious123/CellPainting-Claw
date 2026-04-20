@@ -6,8 +6,6 @@ orphan: true
 
 `run-deepprofiler-profile` is the skill for executing the DeepProfiler model on a prepared project directory.
 
-## Summary
-
 This skill runs the DeepProfiler `profile` command against an existing project and writes feature files under the project output directory.
 
 Use it when you want to:

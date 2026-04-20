@@ -2,8 +2,6 @@
 
 `run-deepprofiler` is the public skill for running the DeepProfiler path and returning analysis-ready tables.
 
-## Summary
-
 This skill gives users the final DeepProfiler result rather than one intermediate stage.
 
 Depending on the inputs you provide, it can:

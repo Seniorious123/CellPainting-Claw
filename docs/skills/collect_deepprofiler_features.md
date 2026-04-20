@@ -6,8 +6,6 @@ orphan: true
 
 `collect-deepprofiler-features` is the skill for collecting DeepProfiler feature files into analysis-ready tables.
 
-## Summary
-
 This skill reads DeepProfiler `.npz` feature outputs and writes single-cell and well-level tabular outputs.
 
 Use it when you want to:

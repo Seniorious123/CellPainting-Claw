@@ -2,8 +2,6 @@
 
 `prepare-deepprofiler-project` is the public skill for stopping at a runnable DeepProfiler project directory.
 
-## Summary
-
 This skill prepares the DeepProfiler project stage and writes the project manifest, config, metadata, and locations layout.
 
 It can start from:

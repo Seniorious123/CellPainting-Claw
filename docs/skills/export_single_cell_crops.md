@@ -2,8 +2,6 @@
 
 `export-single-cell-crops` is the public skill for exporting single-cell crop stacks from a segmentation workflow root.
 
-## Summary
-
 This skill reads an existing segmentation workflow root and writes one crop package per segmented cell.
 
 The key choice is the crop mode:

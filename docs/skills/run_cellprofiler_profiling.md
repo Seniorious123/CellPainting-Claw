@@ -1,8 +1,6 @@
 # `run-cellprofiler-profiling`
 
-`run-cellprofiler-profiling` is the skill for running the configured CellProfiler profiling pipeline and writing measurement tables.
-
-## Summary
+`run-cellprofiler-profiling` is the skill for running the CellProfiler profiling workflow and writing measurement tables.
 
 This skill runs the profiling-side CellProfiler workflow and writes the standard output tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv`.
 

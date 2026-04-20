@@ -2,16 +2,14 @@
 
 `download-cellpainting-data` is the skill for downloading one Cell Painting dataset slice into a local cache.
 
-## Summary
-
-This skill resolves a download request, writes a `download_plan.json`, and executes the corresponding download steps.
+This skill turns a data request into a download plan, writes `download_plan.json`, and downloads the requested files.
 
 ## Recommended Use
 
 Use this skill when you want to:
 
 - fetch local inputs for profiling or segmentation
-- download a dataset slice from a configured Gallery-style source
+- download a dataset slice from the data source defined in the project config
 - let an agent turn a data request into local files
 
 ## CLI

@@ -6,8 +6,6 @@ orphan: true
 
 `export-masked-single-cell-crops` is the skill for exporting masked single-cell image stacks from a segmentation workflow root.
 
-## Summary
-
 This skill reads a segmentation workflow root and writes per-cell image stacks together with cell and nuclei masks.
 
 Use it when you want to:

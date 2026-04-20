@@ -2,8 +2,6 @@
 
 `export-single-cell-measurements` is the skill for merging CellProfiler image and object tables into one single-cell table.
 
-## Summary
-
 This skill reads `Image.csv` together with one object table such as `Cells.csv` and writes a merged `single_cell.csv.gz`.
 
 ## Recommended Use

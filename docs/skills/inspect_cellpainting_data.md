@@ -1,17 +1,15 @@
 # `inspect-cellpainting-data`
 
-`inspect-cellpainting-data` is the skill for inspecting which Cell Painting data sources are configured and reachable before starting a download.
+`inspect-cellpainting-data` is the skill for checking which Cell Painting data sources are available before starting a download.
 
-## Summary
-
-This skill queries the configured data-access layer and writes a `data_access_summary.json` file.
+This skill checks the data sources defined in the project config and writes the result to `data_access_summary.json`.
 
 ## Recommended Use
 
 Use this skill when you want to:
 
 - confirm that a dataset or source is visible
-- check the configured access layer before downloading anything
+- check which data sources the project can access before downloading anything
 - let an agent answer "what data is available?" with a concrete result
 
 ## CLI
@@ -27,7 +25,7 @@ cellpainting-skills run \
 
 ## Agent Examples
 
-- `Inspect the configured Cell Painting data sources for this project.`
+- `Inspect the Cell Painting data sources defined for this project.`
 - `Check what Cell Painting data is available before downloading anything.`
 
 ## Outputs

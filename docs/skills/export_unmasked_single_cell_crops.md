@@ -6,8 +6,6 @@ orphan: true
 
 `export-unmasked-single-cell-crops` is the skill for exporting unmasked single-cell image stacks from a segmentation workflow root.
 
-## Summary
-
 This skill writes per-cell image stacks together with the corresponding cell and nuclei masks, while keeping the surrounding image context.
 
 Use it when you want to:
