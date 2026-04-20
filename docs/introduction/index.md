@@ -17,7 +17,7 @@ CellPainting-Claw covers several connected parts of practical Cell Painting work
 
 These capabilities are presented in the same order that many users encounter them in practice: **get data, extract measurements, build classical profiles, and optionally build deep features**.
 
-## Usage
+## Interfaces
 
 For most users, CellPainting-Claw should be understood through **two main usage paths**.
 
