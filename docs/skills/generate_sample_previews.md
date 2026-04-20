@@ -6,7 +6,7 @@ orphan: true
 
 `generate-sample-previews` is the skill for rendering field-level preview PNGs from segmentation input channels.
 
-## What It Does
+## Summary
 
 This skill reads the segmentation load-data table and writes composite preview images for each field.
 
@@ -29,12 +29,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_previews
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Generate field-level preview PNGs from this segmentation workflow root.`
 - `Show preview images for the current segmentation input fields.`
 
-## Typical Outputs
+## Outputs
 
 - `sample_previews_png/`
 - `pipeline_skill_manifest.json`

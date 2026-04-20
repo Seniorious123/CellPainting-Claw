@@ -2,11 +2,11 @@
 
 `run-segmentation-masks` is the skill for running segmentation and writing mask artifacts plus sample previews.
 
-## What It Does
+## Summary
 
 This skill prepares the segmentation load-data table, runs CellProfiler, generates sample previews, and summarizes the result.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -26,12 +26,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_segmentation
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Run the segmentation mask export for this config.`
 - `Generate masks, labels, previews, and object tables for the segmentation workflow.`
 
-## Typical Outputs
+## Outputs
 
 - `cellprofiler_masks/`
 - `labels/`

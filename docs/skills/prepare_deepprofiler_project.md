@@ -2,7 +2,7 @@
 
 `prepare-deepprofiler-project` is the public skill for stopping at a runnable DeepProfiler project directory.
 
-## What It Does
+## Summary
 
 This skill prepares the DeepProfiler project stage and writes the project manifest, config, metadata, and locations layout.
 
@@ -12,7 +12,7 @@ It can start from:
 - an existing DeepProfiler export root
 - explicit `Image.csv`, `Nuclei.csv`, and load-data CSV paths
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -33,12 +33,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_deepprofiler_project_ready
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Prepare a runnable DeepProfiler project from this segmentation workflow root, but do not run DeepProfiler yet.`
 - `Build the DeepProfiler project directory and stop there.`
 
-## Typical Outputs
+## Outputs
 
 - `project_manifest.json`
 - `inputs/config/`

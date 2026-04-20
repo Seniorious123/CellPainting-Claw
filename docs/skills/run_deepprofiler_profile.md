@@ -6,7 +6,7 @@ orphan: true
 
 `run-deepprofiler-profile` is the skill for executing the DeepProfiler model on a prepared project directory.
 
-## What It Does
+## Summary
 
 This skill runs the DeepProfiler `profile` command against an existing project and writes feature files under the project output directory.
 
@@ -30,12 +30,12 @@ cellpainting-skills run \
   --gpu 0
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Run the DeepProfiler model on this prepared project.`
 - `Profile the DeepProfiler project and generate embedding files.`
 
-## Typical Outputs
+## Outputs
 
 - `outputs/<experiment>/features/` under the project root
 - DeepProfiler log output

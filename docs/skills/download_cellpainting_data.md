@@ -2,11 +2,11 @@
 
 `download-cellpainting-data` is the skill for downloading one Cell Painting dataset slice into a local cache.
 
-## What It Does
+## Summary
 
 This skill resolves a download request, writes a `download_plan.json`, and executes the corresponding download steps.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -27,12 +27,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_download
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Download the requested Cell Painting dataset slice into a local cache.`
 - `Fetch the images for this Gallery prefix and save them locally.`
 
-## Typical Outputs
+## Outputs
 
 - `download_plan.json`
 - `downloads/`

@@ -2,7 +2,7 @@
 
 `export-single-cell-crops` is the public skill for exporting single-cell crop stacks from a segmentation workflow root.
 
-## What It Does
+## Summary
 
 This skill reads an existing segmentation workflow root and writes one crop package per segmented cell.
 
@@ -11,7 +11,7 @@ The key choice is the crop mode:
 - `masked` removes background outside the cell mask
 - `unmasked` keeps the surrounding local context
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -33,12 +33,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_single_cell_crops
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Export masked single-cell crops from this segmentation workflow root.`
 - `Export unmasked single-cell crops and keep the local context around each cell.`
 
-## Typical Outputs
+## Outputs
 
 - `masked/` or `unmasked/`
 - `image_stacks/`

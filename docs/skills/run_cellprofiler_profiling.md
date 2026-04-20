@@ -2,11 +2,11 @@
 
 `run-cellprofiler-profiling` is the skill for running the configured CellProfiler profiling pipeline and writing measurement tables.
 
-## What It Does
+## Summary
 
 This skill runs the profiling-side CellProfiler workflow and writes the standard output tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv`.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -25,12 +25,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_profiling
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Run the CellProfiler profiling pipeline for this config.`
 - `Generate the standard CellProfiler measurement tables from the raw images.`
 
-## Typical Outputs
+## Outputs
 
 - `Image.csv`
 - `Cells.csv`

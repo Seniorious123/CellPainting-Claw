@@ -2,7 +2,7 @@
 
 `run-deepprofiler` is the public skill for running the DeepProfiler path and returning analysis-ready tables.
 
-## What It Does
+## Summary
 
 This skill gives users the final DeepProfiler result rather than one intermediate stage.
 
@@ -13,7 +13,7 @@ Depending on the inputs you provide, it can:
 
 The final result is the collected single-cell and well-level feature tables.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -49,12 +49,12 @@ cellpainting-skills run \
   --gpu 0
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Run DeepProfiler from this segmentation workflow root and return the final tables.`
 - `Run DeepProfiler on this prepared project and collect the feature outputs into analysis-ready files.`
 
-## Typical Outputs
+## Outputs
 
 - `deepprofiler_single_cell.parquet`
 - `deepprofiler_single_cell.csv.gz`

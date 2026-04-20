@@ -6,7 +6,7 @@ orphan: true
 
 `build-deepprofiler-project` is the skill for assembling a runnable DeepProfiler project directory from a DeepProfiler export.
 
-## What It Does
+## Summary
 
 This skill reads the DeepProfiler export manifest, builds the project config and metadata files, stages the location files, and writes a `project_manifest.json`.
 
@@ -29,12 +29,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_deepprofiler_project
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Build a runnable DeepProfiler project from this export root.`
 - `Assemble the DeepProfiler project directory but do not profile it yet.`
 
-## Typical Outputs
+## Outputs
 
 - `project_manifest.json`
 - `inputs/config/`

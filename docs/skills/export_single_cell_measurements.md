@@ -2,11 +2,11 @@
 
 `export-single-cell-measurements` is the skill for merging CellProfiler image and object tables into one single-cell table.
 
-## What It Does
+## Summary
 
 This skill reads `Image.csv` together with one object table such as `Cells.csv` and writes a merged `single_cell.csv.gz`.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -29,12 +29,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_single_cell
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Merge the CellProfiler tables into one single-cell file.`
 - `Export a single-cell table from Image.csv and Cells.csv.`
 
-## Typical Outputs
+## Outputs
 
 - `single_cell.csv.gz`
 - `pipeline_skill_manifest.json`

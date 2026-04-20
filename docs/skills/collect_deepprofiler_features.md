@@ -6,7 +6,7 @@ orphan: true
 
 `collect-deepprofiler-features` is the skill for collecting DeepProfiler feature files into analysis-ready tables.
 
-## What It Does
+## Summary
 
 This skill reads DeepProfiler `.npz` feature outputs and writes single-cell and well-level tabular outputs.
 
@@ -29,12 +29,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_deepprofiler_features
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Collect the DeepProfiler outputs into single-cell and well-level tables.`
 - `Turn the DeepProfiler feature files into analysis-ready tabular outputs.`
 
-## Typical Outputs
+## Outputs
 
 - `deepprofiler_single_cell.parquet`
 - `deepprofiler_single_cell.csv.gz`

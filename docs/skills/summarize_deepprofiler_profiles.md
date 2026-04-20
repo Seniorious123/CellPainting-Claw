@@ -2,13 +2,13 @@
 
 `summarize-deepprofiler-profiles` is the skill for turning DeepProfiler output tables into a readable summary package.
 
-## What It Does
+## Summary
 
 This skill reads DeepProfiler single-cell and well-level tables, computes feature variability at the well level, writes a metadata overview, and produces a simple PCA view.
 
 It can read those tables either from explicit parquet paths or from the manifest written by `run-deepprofiler`.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -29,12 +29,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_deepprofiler_summary
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Summarize the DeepProfiler outputs for me.`
 - `Explain the DeepProfiler result tables and produce a PCA view.`
 
-## Typical Outputs
+## Outputs
 
 - `profile_summary.json`
 - `well_metadata_summary.csv`

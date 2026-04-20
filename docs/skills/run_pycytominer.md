@@ -2,11 +2,11 @@
 
 `run-pycytominer` is the skill for running the configured pycytominer processing path and writing classical profile tables.
 
-## What It Does
+## Summary
 
 This skill runs aggregation, annotation, normalization, and feature selection on the configured single-cell measurements.
 
-## When To Use It
+## Recommended Use
 
 Use this skill when you want to:
 
@@ -25,12 +25,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_pycytominer
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Run pycytominer on the configured single-cell measurements.`
 - `Generate the classical Cell Painting profile outputs.`
 
-## Typical Outputs
+## Outputs
 
 - `aggregated.parquet`
 - `annotated.parquet`

@@ -6,7 +6,7 @@ orphan: true
 
 `export-deepprofiler-inputs` is the skill for converting segmentation outputs into DeepProfiler-ready metadata and nuclei-location files.
 
-## What It Does
+## Summary
 
 This skill reads segmentation outputs and writes the `manifest.json`, `images/field_metadata.csv`, and `locations/` layout expected by the next DeepProfiler steps.
 
@@ -29,12 +29,12 @@ cellpainting-skills run \
   --output-dir outputs/demo_deepprofiler_export
 ```
 
-## Agent Request Examples
+## Agent Examples
 
 - `Prepare DeepProfiler inputs from this segmentation workflow root.`
 - `Convert the segmentation outputs into DeepProfiler-ready metadata and location files.`
 
-## Typical Outputs
+## Outputs
 
 - `manifest.json`
 - `images/field_metadata.csv`
