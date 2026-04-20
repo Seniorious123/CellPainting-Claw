@@ -56,7 +56,7 @@ The tables below are written from a user point of view:
 
 | Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`run-cellprofiler-profiling`](run_cellprofiler_profiling.md) | raw Cell Painting images plus the selected profiling `.cppipe` | CellProfiler measurement tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv` | `CellProfiler` |
+| [`run-cellprofiler-profiling`](run_cellprofiler_profiling.md) | raw Cell Painting images plus profiling configuration | CellProfiler measurement tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv` | `CellProfiler` |
 | [`export-single-cell-measurements`](export_single_cell_measurements.md) | CellProfiler measurement tables from a profiling run | one merged single-cell table for later classical profiling | `cellpaint_pipeline.profiling_native` |
 | [`run-pycytominer`](run_pycytominer.md) | single-cell measurements | analysis-ready classical profile tables such as aggregated and feature-selected outputs | `pycytominer` |
 | [`summarize-classical-profiles`](summarize_classical_profiles.md) | classical profile tables from pycytominer | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
@@ -65,7 +65,7 @@ The tables below are written from a user point of view:
 
 | Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`run-segmentation-masks`](run_segmentation_masks.md) | raw Cell Painting images plus the selected segmentation `.cppipe` | a segmentation workflow root with masks, labels, outlines, previews, and object tables | `CellProfiler` |
+| [`run-segmentation-masks`](run_segmentation_masks.md) | raw Cell Painting images plus segmentation configuration | a segmentation workflow root with masks, labels, outlines, previews, and object tables | `CellProfiler` |
 | [`export-single-cell-crops`](export_single_cell_crops.md) | a completed segmentation workflow root | masked or unmasked single-cell crop stacks plus a crop manifest | `cellpaint_pipeline.segmentation_native` |
 
 ### DeepProfiler

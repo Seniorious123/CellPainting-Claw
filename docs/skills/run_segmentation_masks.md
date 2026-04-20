@@ -1,10 +1,10 @@
 # `run-segmentation-masks`
 
-`run-segmentation-masks` is the skill for running the segmentation CellProfiler pipeline and writing mask artifacts plus sample previews.
+`run-segmentation-masks` is the skill for running segmentation and writing mask artifacts plus sample previews.
 
 ## What It Does
 
-This skill prepares the segmentation load-data table, builds the effective mask-export `.cppipe`, runs CellProfiler, generates sample previews, and summarizes the result.
+This skill prepares the segmentation load-data table, runs CellProfiler, generates sample previews, and summarizes the result.
 
 ## When To Use It
 

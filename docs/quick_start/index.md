@@ -7,7 +7,6 @@ The goal is not to run every part of the toolkit at once. The goal is to:
 - confirm that the package is installed
 - see the public skill catalog
 - inspect one skill
-- inspect the CellProfiler `.cppipe` used by that skill
 - run one skill on the bundled demo config
 - run one follow-up skill from the output of the first one
 
@@ -49,22 +48,7 @@ cellpainting-skills describe --skill run-segmentation-masks
 
 This shows what the skill is for and how it fits into the public task catalog.
 
-## 5. Check `.cppipe`
-
-Before running a segmentation-oriented skill, inspect the effective CellProfiler pipeline selection:
-
-```bash
-cellpainting-claw show-cppipe-selection --config "$CONFIG" --kind segmentation
-cellpainting-claw validate-cppipe-config --config "$CONFIG"
-```
-
-What this means:
-
-- `.cppipe` is the CellProfiler pipeline file format
-- this step shows which CellProfiler pipeline the segmentation skill will use
-- this is the right place to check or customize the CellProfiler-side pipeline selection
-
-## 6. Run A Skill
+## 5. Run A Skill
 
 Run the segmentation-mask skill on the demo config:
 
@@ -80,7 +64,6 @@ cellpainting-skills run \
 What this skill does:
 
 - runs the segmentation mask-export path
-- uses the configured segmentation-side CellProfiler `.cppipe`
 - writes the segmentation outputs that later skills can reuse
 
 Typical outputs include:
@@ -93,7 +76,7 @@ Typical outputs include:
 - `outlines/`
 - `sample_previews_png/`
 
-## 7. Run A Follow-Up Skill
+## 6. Run A Follow-Up Skill
 
 Use the workflow root from the previous step and export single-cell crops:
 
@@ -108,7 +91,7 @@ cellpainting-skills run \
 
 This is the main idea behind the skill catalog: one skill produces a concrete output, and later skills can build on that output.
 
-## 8. Python Example
+## 7. Python Example
 
 ```python
 from cellpainting_claw import ProjectConfig
@@ -124,7 +107,7 @@ print(result.ok)
 print(result.primary_outputs["summary_path"])
 ```
 
-## 9. Next Pages
+## 8. Next Pages
 
 After this first run, the most useful next pages are:
 

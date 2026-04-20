@@ -62,23 +62,6 @@ Each skill is meant to do **one practical piece of work** and leave behind a res
 | Segmentation | `run-segmentation-masks`, `export-single-cell-crops` | masks, previews, and crop exports |
 | DeepProfiler | `prepare-deepprofiler-project`, `run-deepprofiler`, `summarize-deepprofiler-profiles` | runnable DeepProfiler projects, collected feature tables, and readable DeepProfiler summaries |
 
-## `.cppipe`
-
-The project also exposes a **public CellProfiler `.cppipe` configuration interface**.
-
-This means users can:
-
-- choose bundled `.cppipe` templates
-- inspect which `.cppipe` a config will use
-- validate that selection before running a longer job
-- provide a custom `.cppipe` override path when needed
-
-Current scope is intentionally clear:
-
-- **profiling** and **segmentation** both use bundled or custom CellProfiler `.cppipe` assets
-- normal users can rely on the bundled defaults
-- advanced users can inspect or override the selected `.cppipe` when needed
-
 ## Boundaries
 
 CellPainting-Claw is a **toolkit and interface project**.

@@ -4,7 +4,7 @@
 
 ## What It Does
 
-This skill runs the profiling-side CellProfiler `.cppipe` and writes the standard output tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv`.
+This skill runs the profiling-side CellProfiler workflow and writes the standard output tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv`.
 
 ## When To Use It
 
