@@ -34,11 +34,11 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `unmasked/image_stacks/`
-- `unmasked/cell_masks/`
-- `unmasked/nuclei_masks/`
-- `unmasked/single_cell_manifest.csv`
-- `pipeline_skill_manifest.json`
+- `unmasked/image_stacks/`: per-cell unmasked image stacks for each exported crop.
+- `unmasked/cell_masks/`: cell mask images for the unmasked crop export.
+- `unmasked/nuclei_masks/`: nucleus mask images for the unmasked crop export.
+- `unmasked/single_cell_manifest.csv`: manifest table for the unmasked crop export.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

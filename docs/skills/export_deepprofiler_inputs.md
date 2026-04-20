@@ -34,10 +34,10 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `manifest.json`
-- `images/field_metadata.csv`
-- `locations/`
-- `pipeline_skill_manifest.json`
+- `manifest.json`: manifest describing the exported DeepProfiler input bundle.
+- `images/field_metadata.csv`: per-field metadata table used by the DeepProfiler export.
+- `locations/`: location files describing the object positions passed to DeepProfiler.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

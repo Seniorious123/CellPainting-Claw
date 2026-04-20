@@ -34,12 +34,12 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `profile_summary.json`
-- `well_metadata_summary.csv`
-- `top_variable_features.csv`
-- `pca_coordinates.csv`
-- `pca_plot.png`
-- `pipeline_skill_manifest.json`
+- `profile_summary.json`: high-level summary of the analyzed profile table and the summary statistics used in this report bundle.
+- `well_metadata_summary.csv`: well-level metadata table included in the summary bundle.
+- `top_variable_features.csv`: ranked list of the most variable features in the selected profile table.
+- `pca_coordinates.csv`: PCA coordinates for each well in the summary view.
+- `pca_plot.png`: quick PCA plot for visual inspection.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

@@ -31,12 +31,12 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `cellprofiler_masks/`
-- `labels/`
-- `outlines/`
-- `sample_previews_png/`
-- `segmentation_summary.json`
-- `pipeline_skill_manifest.json`
+- `cellprofiler_masks/`: exported CellProfiler mask files for the segmented objects.
+- `labels/`: labeled object images assigning an integer id to each segmented object.
+- `outlines/`: outline images for quick visual inspection of segmentation boundaries.
+- `sample_previews_png/`: preview PNGs for quick review of the input fields or segmentation results.
+- `segmentation_summary.json`: summary of the segmentation run and the key generated artifacts.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

@@ -30,11 +30,11 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `Image.csv`
-- `Cells.csv`
-- `Cytoplasm.csv`
-- `Nuclei.csv`
-- `pipeline_skill_manifest.json`
+- `Image.csv`: image-level CellProfiler measurements.
+- `Cells.csv`: cell-level object measurements from CellProfiler.
+- `Cytoplasm.csv`: cytoplasm-level object measurements from CellProfiler.
+- `Nuclei.csv`: nuclei-level object measurements from CellProfiler.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

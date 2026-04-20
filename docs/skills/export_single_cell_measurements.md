@@ -34,8 +34,8 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `single_cell.csv.gz`
-- `pipeline_skill_manifest.json`
+- `single_cell.csv.gz`: merged single-cell measurement table built from the CellProfiler outputs.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

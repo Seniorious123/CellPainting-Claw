@@ -35,9 +35,9 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `outputs/<experiment>/features/` under the project root
-- DeepProfiler log output
-- `pipeline_skill_manifest.json`
+- `outputs/<experiment>/features/` under the project root: raw DeepProfiler feature files written by the model run.
+- DeepProfiler log output: runtime logs produced during the model execution.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

@@ -30,11 +30,11 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `aggregated.parquet`
-- `annotated.parquet`
-- `normalized.parquet`
-- `feature_selected.parquet`
-- `pipeline_skill_manifest.json`
+- `aggregated.parquet`: aggregated well-level profile table produced by pycytominer.
+- `annotated.parquet`: aggregated profile table with metadata annotations attached.
+- `normalized.parquet`: normalized profile table after pycytominer normalization.
+- `feature_selected.parquet`: final feature-selected profile table for downstream analysis.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

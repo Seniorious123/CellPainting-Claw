@@ -34,8 +34,8 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `sample_previews_png/`
-- `pipeline_skill_manifest.json`
+- `sample_previews_png/`: preview PNGs for quick review of the input fields or segmentation results.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

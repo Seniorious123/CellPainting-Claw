@@ -34,11 +34,11 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `deepprofiler_single_cell.parquet`
-- `deepprofiler_single_cell.csv.gz`
-- `deepprofiler_well_aggregated.parquet`
-- `deepprofiler_well_aggregated.csv.gz`
-- `deepprofiler_feature_manifest.json`
+- `deepprofiler_single_cell.parquet`: single-cell DeepProfiler feature table in parquet format.
+- `deepprofiler_single_cell.csv.gz`: single-cell DeepProfiler feature table in compressed CSV format.
+- `deepprofiler_well_aggregated.parquet`: well-level aggregated DeepProfiler feature table in parquet format.
+- `deepprofiler_well_aggregated.csv.gz`: well-level aggregated DeepProfiler feature table in compressed CSV format.
+- `deepprofiler_feature_manifest.json`: manifest describing the collected DeepProfiler feature tables and source files.
 
 ## Related Skills
 

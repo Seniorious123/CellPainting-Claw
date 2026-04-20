@@ -34,11 +34,11 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `project_manifest.json`
-- `inputs/config/`
-- `inputs/metadata/`
-- `inputs/locations/`
-- `pipeline_skill_manifest.json`
+- `project_manifest.json`: manifest describing the prepared DeepProfiler project layout and key paths.
+- `inputs/config/`: DeepProfiler config files staged for the runnable project.
+- `inputs/metadata/`: metadata files staged for the runnable project.
+- `inputs/locations/`: location files staged for the runnable project.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

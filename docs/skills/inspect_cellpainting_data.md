@@ -30,8 +30,8 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `data_access_summary.json`
-- `pipeline_skill_manifest.json`
+- `data_access_summary.json`: summary of the data sources and access settings resolved from the project config.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 

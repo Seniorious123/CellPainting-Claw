@@ -32,9 +32,9 @@ cellpainting-skills run \
 
 ## Outputs
 
-- `download_plan.json`
-- `downloads/`
-- `pipeline_skill_manifest.json`
+- `download_plan.json`: resolved download request showing what will be fetched and where it will be stored.
+- `downloads/`: downloaded files placed in the local cache or output directory.
+- `pipeline_skill_manifest.json`: record of the skill run, including inputs, parameters, and the main output paths.
 
 ## Related Skills
 
