@@ -7,7 +7,7 @@ The same documented skills can be used in two ways:
 - **run the skills directly**
 - **run the same skills through an agent**
 
-## Project Structure
+## Project Layout
 
 CellPainting-Claw is organized as a simple three-part structure:
 
@@ -20,7 +20,7 @@ People can use the same skills in two ways:
 
 Both paths rely on the same foundation packages underneath. The lower-level `cellpainting_claw` package remains available for advanced direct toolkit use, but it is not the main starting point for most users.
 
-## Foundation Packages
+## Foundation Stack
 
 The foundation packages are easiest to understand in workflow order.
 
@@ -31,7 +31,7 @@ The foundation packages are easiest to understand in workflow order.
 | Classical profile generation | `pycytominer` | aggregation, annotation, normalization, and feature selection |
 | Deep feature extraction | `DeepProfiler` | learned single-cell feature extraction |
 
-## How To Use CellPainting-Claw
+## Main Entry Paths
 
 For most users, CellPainting-Claw should be understood through **two main usage paths**.
 
@@ -40,7 +40,7 @@ For most users, CellPainting-Claw should be understood through **two main usage 
 | run documented tasks yourself from Python or from the command line | `cellpainting_skills` | you call the documented skills directly, such as segmentation, pycytominer processing, or DeepProfiler tasks |
 | tell an agent in plain language what you want done | `OpenClaw` | the agent maps your request onto the same documented skills and runs them through the same toolkit |
 
-## Current Skill Catalog
+## Public Skill Catalog
 
 Skills are the **core public task interface** of the project.
 
@@ -75,7 +75,7 @@ Skills are the **core public task interface** of the project.
 | `run-deepprofiler` | run the DeepProfiler path and return collected feature tables |
 | `summarize-deepprofiler-profiles` | turn DeepProfiler tables into readable summaries and PCA views |
 
-## Where To Start
+## Start Here
 
 Start with these pages:
 

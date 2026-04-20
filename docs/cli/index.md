@@ -7,14 +7,14 @@ CellPainting-Claw exposes **two public CLI surfaces**:
 
 For most users, the right starting point is **`cellpainting-skills`**.
 
-## Choose The Right CLI
+## Choosing A CLI
 
 | If you want to... | Start with | Why |
 | --- | --- | --- |
 | run one clear named task such as segmentation, pycytominer, or DeepProfiler | `cellpainting-skills` | this is the shortest path from a user goal to a documented task |
 | inspect configuration, inspect `.cppipe` selection, use data-access helpers, or expose MCP tools | `cellpainting-claw` | this is the direct toolkit CLI |
 
-## `cellpainting-skills`: The First CLI For Most Users
+## `cellpainting-skills`
 
 `cellpainting-skills` is the named-task CLI.
 
@@ -26,7 +26,7 @@ Its three main commands are:
 | `describe` | show what one skill does |
 | `run` | execute one named skill |
 
-## Minimal First Session
+## First Session
 
 ```bash
 CONFIG=configs/project_config.demo.json
@@ -55,7 +55,7 @@ The public CLI skill catalog currently covers:
 - segmentation masks and crop export
 - DeepProfiler project preparation, execution, and summarization
 
-## `cellpainting-claw`: The Direct Toolkit CLI
+## `cellpainting-claw`
 
 Use `cellpainting-claw` when you need commands that are more specific than a named skill.
 
@@ -68,7 +68,7 @@ The most useful command groups for normal users are:
 | direct toolkit runs | run toolkit-side commands when you want lower-level control than a public skill | `run-segmentation`, `run-profiling`, `run-deepprofiler-pipeline` |
 | MCP bridge | expose or inspect the MCP interface used by agent runtimes | `serve-mcp`, `list-mcp-tools`, `run-mcp-tool` |
 
-## Example: Inspect The Selected `.cppipe`
+## `.cppipe` Inspection
 
 ```bash
 CONFIG=configs/project_config.demo.json
@@ -87,7 +87,7 @@ Current public behavior:
 - **profiling** exposes the same inspection and validation commands
 - custom segmentation overrides are treated as ready-to-run mask-export pipelines
 
-## Example: Inspect Or Plan Data Access
+## Data Access Commands
 
 ```bash
 CONFIG=configs/project_config.demo.json
@@ -99,7 +99,7 @@ cellpainting-claw plan-data-access \
   --config "$CONFIG"
 ```
 
-## Example: Expose The MCP Bridge
+## MCP Bridge
 
 ```bash
 cellpainting-claw serve-mcp --transport stdio
@@ -107,7 +107,7 @@ cellpainting-claw serve-mcp --transport stdio
 
 This is the bridge interface used by OpenClaw and other MCP-capable clients.
 
-## What This Page Does Not Cover
+## Lower-Level Commands
 
 The toolkit CLI also contains additional lower-level or compatibility commands. Those remain available, but they are **not the main starting point for most users**, so this page focuses on the command paths that match the public skill model.
 

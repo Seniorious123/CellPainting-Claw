@@ -4,7 +4,7 @@ CellPainting-Claw was built to solve two practical problems in Cell Painting wor
 
 The main idea is simple: **humans should be able to call the documented skills directly, and agents should be able to call the same skills through natural language**.
 
-## What The Project Brings Together
+## Coverage
 
 CellPainting-Claw covers several connected parts of practical Cell Painting work.
 
@@ -19,11 +19,11 @@ CellPainting-Claw covers several connected parts of practical Cell Painting work
 
 These parts are presented in the same order that many users encounter them in practice: **get data, extract measurements, build classical profiles, optionally build deep features, and optionally expose the same work to an agent**.
 
-## Two Ways To Use CellPainting-Claw
+## Usage
 
 For most users, CellPainting-Claw should be understood through **two main usage paths**.
 
-### Run The Skills Directly
+### Direct Skills
 
 The main human-facing starting point is `cellpainting_skills`.
 
@@ -35,7 +35,7 @@ Use it when you want to:
 
 In short, this is the right starting point when you want to **use the documented skills directly**.
 
-### Run The Same Skills Through OpenClaw
+### OpenClaw
 
 OpenClaw is the **natural-language entry point**.
 
@@ -47,11 +47,11 @@ Use it when you want to:
 
 In short, this is the right starting point when you want to **use the same skills through an agent**.
 
-### Advanced Direct Package Use
+### Direct Package Use
 
 The lower-level `cellpainting_claw` package remains available for advanced direct package use, including direct configuration inspection, lower-level toolkit commands, and MCP serving. It is still part of the project, but it is not the main starting point for most users.
 
-## Skill Families
+## Public Skills
 
 The public skill catalog is organized around concrete outputs rather than one fixed end-to-end route.
 
@@ -62,7 +62,7 @@ The public skill catalog is organized around concrete outputs rather than one fi
 | Segmentation | `run-segmentation-masks`, `export-single-cell-crops` | masks, previews, and crop exports |
 | DeepProfiler | `prepare-deepprofiler-project`, `run-deepprofiler`, `summarize-deepprofiler-profiles` | runnable DeepProfiler projects, collected feature tables, and readable DeepProfiler summaries |
 
-## CellProfiler `.cppipe` Support
+## `.cppipe`
 
 The project also exposes a **public CellProfiler `.cppipe` configuration interface**.
 
@@ -79,7 +79,7 @@ Current scope is intentionally clear:
 - normal users can rely on the bundled defaults
 - advanced users can inspect or override the selected `.cppipe` when needed
 
-## Scope
+## Boundaries
 
 CellPainting-Claw is a **toolkit and interface project**.
 
@@ -91,7 +91,7 @@ It does **not** replace:
 
 Its role is to make those tools easier to configure, run, and expose through a stable public interface.
 
-## Where To Go Next
+## Next Steps
 
 After this page, the most useful next pages are:
 

@@ -4,7 +4,7 @@ OpenClaw is the **natural-language entry point** for CellPainting-Claw.
 
 Use it when you want to describe a task in plain language and let an agent route that request onto the documented skills.
 
-## What OpenClaw Is For
+## Role Of OpenClaw
 
 In normal use, OpenClaw should do one thing well:
 
@@ -15,7 +15,7 @@ In normal use, OpenClaw should do one thing well:
 
 So OpenClaw should be understood as a **natural-language front end for the existing skills**, not as a separate workflow.
 
-## When To Use It
+## When To Use OpenClaw
 
 Use OpenClaw when you want:
 
@@ -29,7 +29,7 @@ Use the CLI or Python directly when you want:
 - shell scripts, notebooks, or direct library calls
 - easier debugging of configuration or backend problems
 
-## Before You Start
+## Recommended Setup Order
 
 OpenClaw should **not be the first thing you debug**.
 
@@ -41,11 +41,11 @@ A reliable order is:
 
 That order separates toolkit problems from OpenClaw-side problems.
 
-## A Minimal OpenClaw Demo
+## Minimal OpenClaw Demo
 
 This demo is meant to show the **full OpenClaw path** from startup to a routed skill call.
 
-### Step 1. Prepare the provider configuration
+### Step 1. Provider Configuration
 
 Purpose:
 
@@ -71,7 +71,7 @@ What success looks like:
 - the command finishes without an error
 - the configured provider is ready for the later gateway start
 
-### Step 2. Start the gateway
+### Step 2. Gateway
 
 Purpose:
 
@@ -96,7 +96,7 @@ What success looks like:
 - the gateway stays running instead of exiting immediately
 - the logs show that the gateway and MCP side have both started cleanly
 
-### Step 3. Start the terminal interface
+### Step 3. Terminal Client
 
 Purpose:
 
@@ -118,7 +118,7 @@ What success looks like:
 - the TUI opens normally
 - you can type a request into the session instead of seeing an immediate connection error
 
-### Step 4. Send a natural-language request
+### Step 4. Natural-Language Request
 
 Purpose:
 
@@ -158,7 +158,7 @@ Expected outputs:
 - `outlines/`
 - `sample_previews_png/`
 
-### Step 5. Check the result
+### Step 5. Result Check
 
 Purpose:
 
@@ -176,7 +176,7 @@ What this proves:
 - OpenClaw can route that request onto the correct documented skill
 - the same toolkit path used elsewhere in the project is still the one doing the work underneath
 
-## Another Example
+## Crop Export Example
 
 Prompt:
 
@@ -190,7 +190,7 @@ How this request should be interpreted:
 - the request should route to `export-single-cell-crops`
 - the expected output is a directory of masked single-cell crops plus a crop manifest
 
-## Result-Summary Example
+## Result Summary Example
 
 Prompt:
 
@@ -204,7 +204,7 @@ How this request should be interpreted:
 - the request should route to `summarize-deepprofiler-profiles`
 - the expected output is a summary bundle with metadata tables, top variable features, PCA coordinates, and a PCA plot
 
-## What Makes A Good OpenClaw Request
+## Good OpenClaw Requests
 
 A useful request usually states:
 
@@ -214,7 +214,7 @@ A useful request usually states:
 
 The important point is that the request should describe the **task you want done**, not the internal implementation details.
 
-## Setup Options
+## Setup Paths
 
 The repository maintains two main setup paths:
 
@@ -223,7 +223,7 @@ The repository maintains two main setup paths:
 
 For current OpenClaw releases, prefer the **TUI path** rather than the ACP client path.
 
-## Shortest AutoDL Path
+## AutoDL Path
 
 ```bash
 cd integrations/openclaw/autodl
@@ -234,7 +234,7 @@ cp provider.env.example provider.env
 ./run_openclaw_tui.sh
 ```
 
-## Shortest Docker Path
+## Docker Path
 
 ```bash
 cd integrations/openclaw/docker

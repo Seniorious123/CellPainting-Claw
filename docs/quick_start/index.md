@@ -11,7 +11,7 @@ The goal is not to run every part of the toolkit at once. The goal is to:
 - run one skill on the bundled demo config
 - run one follow-up skill from the output of the first one
 
-## 1. Install The Package
+## 1. Install
 
 From the repository root:
 
@@ -21,7 +21,7 @@ conda activate cellpainting-claw
 pip install -e .
 ```
 
-## 2. Use The Bundled Demo Config
+## 2. Demo Config
 
 For the first run, use the repository's bundled demo config:
 
@@ -31,7 +31,7 @@ CONFIG=configs/project_config.demo.json
 
 This config points to the demo assets included under `demo/`.
 
-## 3. List The Skill Catalog
+## 3. List Skills
 
 ```bash
 cellpainting-skills list
@@ -39,7 +39,7 @@ cellpainting-skills list
 
 This is the fastest way to see the current public task model.
 
-## 4. Inspect One Skill
+## 4. Inspect A Skill
 
 Describe the segmentation skill:
 
@@ -49,7 +49,7 @@ cellpainting-skills describe --skill run-segmentation-masks
 
 This shows what the skill is for and how it fits into the public task catalog.
 
-## 5. Inspect The CellProfiler `.cppipe` Selection
+## 5. Check `.cppipe`
 
 Before running a segmentation-oriented skill, inspect the effective CellProfiler pipeline selection:
 
@@ -64,7 +64,7 @@ What this means:
 - this step shows which CellProfiler pipeline the segmentation skill will use
 - this is the right place to check or customize the CellProfiler-side pipeline selection
 
-## 6. Run One Skill
+## 6. Run A Skill
 
 Run the segmentation-mask skill on the demo config:
 
@@ -93,7 +93,7 @@ Typical outputs include:
 - `outlines/`
 - `sample_previews_png/`
 
-## 7. Run One Follow-Up Skill
+## 7. Run A Follow-Up Skill
 
 Use the workflow root from the previous step and export single-cell crops:
 
@@ -108,7 +108,7 @@ cellpainting-skills run \
 
 This is the main idea behind the skill catalog: one skill produces a concrete output, and later skills can build on that output.
 
-## 8. Python Version Of The Same Idea
+## 8. Python Example
 
 ```python
 from cellpainting_claw import ProjectConfig
@@ -124,7 +124,7 @@ print(result.ok)
 print(result.primary_outputs["summary_path"])
 ```
 
-## 9. What To Read Next
+## 9. Next Pages
 
 After this first run, the most useful next pages are:
 
