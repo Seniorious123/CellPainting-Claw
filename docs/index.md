@@ -35,7 +35,7 @@ The foundation packages are easiest to understand in workflow order.
 
 For most users, CellPainting-Claw should be understood through **two main usage paths**.
 
-| If you want to... | Start with | What happens underneath |
+| Purpose | Start with | Outcome |
 | --- | --- | --- |
 | run documented tasks yourself from Python or from the command line | `cellpainting_skills` | you call the documented skills directly, such as segmentation, pycytominer processing, or DeepProfiler tasks |
 | tell an agent in plain language what you want done | `OpenClaw` | the agent maps your request onto the same documented skills and runs them through the same toolkit |
