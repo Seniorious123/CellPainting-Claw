@@ -14,10 +14,8 @@ CellPainting-Claw covers several connected parts of practical Cell Painting work
 | Measurement extraction | `CellProfiler` | profiling tables, segmentation masks, outlines, and object measurements |
 | Classical profile generation | `pycytominer` | normalization, feature selection, and profile generation from single-cell tables |
 | Deep feature extraction | `DeepProfiler` | learned features from segmentation-guided single-cell crops |
-| Skill interface | `cellpainting_skills` | stable task names for running common operations without wiring lower-level calls together |
-| Natural-language interface | `OpenClaw` | optional natural-language access to the same tasks through OpenClaw |
 
-These parts are presented in the same order that many users encounter them in practice: **get data, extract measurements, build classical profiles, optionally build deep features, and optionally expose the same work to an agent**.
+These capabilities are presented in the same order that many users encounter them in practice: **get data, extract measurements, build classical profiles, and optionally build deep features**.
 
 ## Usage
 
