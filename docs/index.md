@@ -20,11 +20,11 @@ People can use the same skills in two ways:
 
 Both paths rely on the same foundation packages underneath. The lower-level `cellpainting_claw` package remains available for advanced direct toolkit use, but it is not the main starting point for most users.
 
-## Foundation Stack
+## Core Packages
 
 The foundation packages are easiest to understand in workflow order.
 
-| Foundation area | Packages | Main capability |
+| Capability | Packages | Main capability |
 | --- | --- | --- |
 | Data access | `boto3`, `quilt3`, `cpgdata` | dataset discovery and download |
 | Measurement extraction | `CellProfiler` | profiling tables, segmentation masks, labels, outlines, and crop-ready object data |
