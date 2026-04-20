@@ -4,7 +4,7 @@ CellPainting-Claw was built to solve two practical problems in Cell Painting wor
 
 The main idea is simple: **humans should be able to call the documented skills directly, and agents should be able to call the same skills through natural language**.
 
-## Coverage
+## Supported Capabilities
 
 CellPainting-Claw covers several connected parts of practical Cell Painting work.
 
