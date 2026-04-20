@@ -47,13 +47,15 @@ Use it when you want to:
 
 In short, this is the right starting point when you want to **use the same skills through an agent**.
 
-### Direct Package Use
+### Advanced Toolkit Access
 
-The lower-level `cellpainting_claw` package remains available for advanced direct package use, including direct configuration inspection, lower-level toolkit commands, and MCP serving. It is still part of the project, but it is not the main starting point for most users.
+The lower-level `cellpainting_claw` package remains available for advanced direct toolkit access, including direct configuration inspection, lower-level toolkit commands, and MCP serving. It is still part of the project, but it is not the main starting point for most users.
 
 ## Public Skills
 
 The public skill catalog is organized around concrete outputs rather than one fixed end-to-end route.
+
+Each skill is meant to do **one practical piece of work** and leave behind a result that later skills, scripts, or agent requests can reuse.
 
 | Skill family | Public skills | What they produce |
 | --- | --- | --- |

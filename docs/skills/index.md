@@ -4,7 +4,7 @@
 
 Its job is simple: it gives users and agents a stable set of skill names for concrete Cell Painting tasks. The same skill names can be called directly by a person or chosen by an agent from a natural-language request.
 
-## What A Skill Is
+## Skill Model
 
 In this project, a skill is a **named task with a concrete output**.
 
@@ -16,9 +16,15 @@ This makes the project easier to use in practice:
 - a script can call the same task repeatedly
 - an agent can map a natural-language request onto a stable task name
 
-## Where Skills Fit
+The intended pattern is simple:
 
-The toolkit brings together several connected capability areas.
+- choose one task
+- run it through the CLI, Python, or an agent
+- keep the output and pass it to the next task when needed
+
+## Coverage
+
+The skills sit on top of several connected capability areas.
 
 | Capability | Main tools | What this part does |
 | --- | --- | --- |
@@ -33,40 +39,46 @@ The toolkit brings together several connected capability areas.
 
 The main public catalog is grouped by workflow stage and keeps the focus on tasks with meaningful standalone outputs.
 
+The tables below are written from a user point of view:
+
+- **main input** tells you what the skill expects to start from
+- **main result** tells you what you will have when the skill finishes
+- **main tools** shows which backend package or component does most of the work
+
 ### Data Access
 
-| Skill key | What it does | Implemented with | Typical outputs |
+| Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`inspect-cellpainting-data`](inspect_cellpainting_data.md) | inspect configured sources before downloading anything | `boto3`, `quilt3`, `cpgdata` | `data_access_summary.json` |
-| [`download-cellpainting-data`](download_cellpainting_data.md) | download one dataset slice into a local cache | `boto3`, `quilt3`, `cpgdata` | `download_plan.json`, `downloads/` |
+| [`inspect-cellpainting-data`](inspect_cellpainting_data.md) | a project config with data-access settings | a summary of what sources, identifiers, and download settings are configured | `boto3`, `quilt3`, `cpgdata` |
+| [`download-cellpainting-data`](download_cellpainting_data.md) | a project config plus dataset selection settings | a local download cache and the recorded download plan | `boto3`, `quilt3`, `cpgdata` |
 
 ### Profiling
 
-| Skill key | What it does | Implemented with | Typical outputs |
+| Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`run-cellprofiler-profiling`](run_cellprofiler_profiling.md) | run the profiling CellProfiler pipeline | `CellProfiler` | `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, `Nuclei.csv` |
-| [`export-single-cell-measurements`](export_single_cell_measurements.md) | merge CellProfiler tables into one single-cell table | `cellpaint_pipeline.profiling_native` | `single_cell.csv.gz` |
-| [`run-pycytominer`](run_pycytominer.md) | build classical profile tables | `pycytominer` | `aggregated.parquet`, `feature_selected.parquet` |
-| [`summarize-classical-profiles`](summarize_classical_profiles.md) | turn classical profile tables into readable summary outputs | `pandas`, `numpy` | `profile_summary.json`, `pca_plot.png` |
+| [`run-cellprofiler-profiling`](run_cellprofiler_profiling.md) | raw Cell Painting images plus the selected profiling `.cppipe` | CellProfiler measurement tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv` | `CellProfiler` |
+| [`export-single-cell-measurements`](export_single_cell_measurements.md) | CellProfiler measurement tables from a profiling run | one merged single-cell table for later classical profiling | `cellpaint_pipeline.profiling_native` |
+| [`run-pycytominer`](run_pycytominer.md) | single-cell measurements | analysis-ready classical profile tables such as aggregated and feature-selected outputs | `pycytominer` |
+| [`summarize-classical-profiles`](summarize_classical_profiles.md) | classical profile tables from pycytominer | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
 
 ### Segmentation
 
-| Skill key | What it does | Implemented with | Typical outputs |
+| Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`run-segmentation-masks`](run_segmentation_masks.md) | run segmentation and write mask artifacts plus sample previews | `CellProfiler` | `cellprofiler_masks/`, `labels/`, `outlines/`, `sample_previews_png/` |
-| [`export-single-cell-crops`](export_single_cell_crops.md) | export masked or unmasked single-cell crop stacks | `cellpaint_pipeline.segmentation_native` | `masked/` or `unmasked/`, `single_cell_manifest.csv` |
+| [`run-segmentation-masks`](run_segmentation_masks.md) | raw Cell Painting images plus the selected segmentation `.cppipe` | a segmentation workflow root with masks, labels, outlines, previews, and object tables | `CellProfiler` |
+| [`export-single-cell-crops`](export_single_cell_crops.md) | a completed segmentation workflow root | masked or unmasked single-cell crop stacks plus a crop manifest | `cellpaint_pipeline.segmentation_native` |
 
 ### DeepProfiler
 
-| Skill key | What it does | Implemented with | Typical outputs |
+| Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`prepare-deepprofiler-project`](prepare_deepprofiler_project.md) | prepare a runnable DeepProfiler project from a workflow root or export root | DeepProfiler export and project helpers | `project_manifest.json`, `inputs/config/`, `inputs/metadata/` |
-| [`run-deepprofiler`](run_deepprofiler.md) | run the DeepProfiler path and return collected tables | `DeepProfiler`, `pandas`, `pyarrow` | `deepprofiler_single_cell.parquet`, `deepprofiler_well_aggregated.parquet` |
-| [`summarize-deepprofiler-profiles`](summarize_deepprofiler_profiles.md) | turn DeepProfiler tables into readable summary outputs | `pandas`, `numpy` | `profile_summary.json`, `pca_plot.png` |
+| [`prepare-deepprofiler-project`](prepare_deepprofiler_project.md) | a segmentation workflow root or crop export root | a runnable DeepProfiler project directory with the expected config and metadata layout | DeepProfiler export and project helpers |
+| [`run-deepprofiler`](run_deepprofiler.md) | a prepared DeepProfiler project | collected DeepProfiler feature tables at single-cell and aggregated levels | `DeepProfiler`, `pandas`, `pyarrow` |
+| [`summarize-deepprofiler-profiles`](summarize_deepprofiler_profiles.md) | DeepProfiler feature tables | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
 
-## How To Read This Section
+## Individual Skill Pages
 
-Each skill now has its **own page**.
+Each skill has its **own page**.
 
 Each page explains:
 
