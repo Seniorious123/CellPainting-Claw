@@ -5,7 +5,7 @@ orphan: true
 # API
 
 ```{note}
-This page is currently kept as a lightweight internal reference.
+This page is kept as an advanced reference.
 The main public documentation path for CellPainting-Claw is centered on
 [Introduction](../introduction/index.md),
 [Skills](../skills/index.md),
@@ -15,7 +15,7 @@ The main public documentation path for CellPainting-Claw is centered on
 
 This section documents the **Python toolkit surface** of CellPainting-Claw.
 
-The goal of this section is **not** to duplicate the Skills or CLI pages. Instead, it explains the small set of Python entrypoints that matter when you want to call the toolkit directly from code.
+It does **not** duplicate the Skills or CLI pages. Instead, it explains the small set of Python entrypoints that matter when you want to call the toolkit directly from code.
 
 ## What This Section Is For
 
@@ -24,7 +24,7 @@ Use the API section when you want to answer questions such as:
 - which Python entrypoint should I call first?
 - when should I use a skill instead of a lower-level helper?
 - how do I inspect the selected CellProfiler `.cppipe` from Python?
-- when do I need a preset or a broader combined entrypoint?
+- when do I need a broader combined entrypoint?
 
 ## Keep The Main Distinction Clear
 
@@ -37,7 +37,7 @@ Use `cellpainting_claw` when you want:
 - the **main Python toolkit surface**
 - config loading
 - `.cppipe` inspection and validation
-- direct access to data-access, profiling, segmentation, and DeepProfiler helpers
+- direct access to data-access and lower-level helper families
 - direct Python control over toolkit behavior
 
 ### `cellpainting_skills`
@@ -46,7 +46,7 @@ Use `cellpainting_skills` when you want:
 
 - the **task layer**
 - stable skill names
-- simple Python calls such as `run-segmentation`
+- simple Python calls such as `run-segmentation-masks`
 - a cleaner bridge from automation or agent requests into validated toolkit actions
 
 In most cases, users should understand the [Skills](../skills/index.md) page first and then come here only when they need direct Python entrypoints.
@@ -57,8 +57,7 @@ For most users, the Python-side entry model is small.
 
 | Entry style | Use it when | Typical example |
 | --- | --- | --- |
-| skill | you want a stable named task | `run_pipeline_skill(config, "run-segmentation")` |
-| preset | you want a named bundle of options | `run_pipeline_preset(config, "full-pipeline")` |
+| skill | you want a stable named task | `run_pipeline_skill(config, "run-segmentation-masks")` |
 | direct helper family | you want lower-level control | `.cppipe` helpers, data-access helpers, suite runners |
 | broad combined entry | you intentionally want one larger combined run | `run_end_to_end_pipeline(...)` |
 
@@ -71,7 +70,7 @@ It focuses on:
 - `ProjectConfig`
 - the main `.cppipe` helper family
 - the main Python entrypoints
-- how to choose between skill, preset, and lower-level helper calls
+- how to choose between a skill call and a lower-level helper call
 
 ## Relationship To Other Sections
 

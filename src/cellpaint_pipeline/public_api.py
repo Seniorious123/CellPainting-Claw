@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from importlib import import_module
 from pathlib import Path
 from typing import Any
 
@@ -9,28 +10,6 @@ from cellpaint_pipeline.config import ProjectConfig
 
 class PublicApiContractError(ValueError):
     """Raised when a stable public API entrypoint is called with an invalid high-level contract."""
-from cellpaint_pipeline.data_access import (
-    build_data_request,
-    build_download_plan,
-    data_access_summary_to_dict,
-    data_download_execution_result_to_dict,
-    data_download_plan_to_dict,
-    data_request_to_dict,
-    execute_download_plan,
-    load_download_plan,
-    summarize_data_access,
-)
-from cellpaint_pipeline.deepprofiler_pipeline import (
-    deepprofiler_pipeline_result_to_dict,
-    run_deepprofiler_pipeline,
-)
-from cellpaint_pipeline.delivery import run_profiling_suite, run_segmentation_suite
-from cellpaint_pipeline.orchestration import (
-    end_to_end_pipeline_result_to_dict,
-    run_end_to_end_pipeline,
-)
-from cellpaint_pipeline.presets import run_pipeline_preset
-from cellpaint_pipeline.skills import run_pipeline_skill
 
 
 @dataclass(frozen=True)
@@ -131,9 +110,9 @@ PUBLIC_API_ENTRYPOINTS: dict[str, PublicApiEntry] = {
         layer='skill',
         category='task-entrypoint',
         stability='public',
-        description='Execute a named task-oriented skill that maps to a preset-backed workflow objective.',
-        recommended_for='Automation systems that want stable task names rather than parameter bundles.',
-        returns='EndToEndPipelineResult',
+        description='Execute a named small-granularity skill that produces one concrete Cell Painting output.',
+        recommended_for='Humans or agents that want stable task names such as run-segmentation-masks, export-single-cell-crops, or run-deepprofiler.',
+        returns='PipelineSkillResult',
         cli_command='run-pipeline-skill',
     ),
     'run_deepprofiler_pipeline': PublicApiEntry(
@@ -163,9 +142,16 @@ PUBLIC_API_REQUIRES_CONFIG = {
 PATHLIKE_KWARGS = {
     'output_dir',
     'workflow_root',
+    'export_root',
+    'project_root',
     'image_csv_path',
     'nuclei_csv_path',
     'load_data_csv_path',
+    'manifest_path',
+    'object_table_path',
+    'feature_selected_path',
+    'single_cell_parquet_path',
+    'well_aggregated_parquet_path',
 }
 
 PUBLIC_API_OUTPUT_CONTRACTS: dict[str, dict[str, Any]] = {
@@ -329,29 +315,23 @@ PUBLIC_API_OUTPUT_CONTRACTS: dict[str, dict[str, Any]] = {
     },
     'run_pipeline_skill': {
         'output_kind': 'run-artifacts',
-        'primary_fields': ['ok', 'output_dir', 'manifest_path', 'run_report_path'],
+        'primary_fields': ['ok', 'skill_key', 'output_dir', 'manifest_path', 'primary_outputs'],
         'primary_artifacts': [
             {
                 'path_field': 'output_dir',
                 'required': True,
                 'artifact_class': 'formal-output',
-                'role': 'Top-level delivery root produced by the selected skill.',
+                'role': 'Per-skill run directory that stores the skill manifest and any skill-local artifacts.',
             },
             {
                 'path_field': 'manifest_path',
                 'required': True,
                 'artifact_class': 'formal-output',
-                'role': 'Machine-readable manifest for the skill-backed run.',
-            },
-            {
-                'path_field': 'run_report_path',
-                'required': True,
-                'artifact_class': 'formal-output',
-                'role': 'Human-readable report for the skill-backed run.',
+                'role': 'Machine-readable manifest describing the selected skill execution.',
             },
         ],
-        'supporting_fields': ['profiling_manifest_path', 'segmentation_manifest_path', 'validation_report_path'],
-        'notes': 'Skill execution reuses the standard end-to-end output contract and differs mainly in how orchestration arguments are selected.',
+        'supporting_fields': ['category', 'implementation', 'details'],
+        'notes': 'Each skill returns a skill-specific manifest plus concrete primary output paths instead of reusing the full end-to-end pipeline contract.',
     },
     'run_deepprofiler_pipeline': {
         'output_kind': 'run-artifacts',
@@ -525,10 +505,14 @@ def _normalize_public_api_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     for key in ['request', 'data_request']:
         value = resolved.get(key)
         if isinstance(value, dict):
+            from cellpaint_pipeline.data_access import build_data_request
+
             resolved[key] = build_data_request(**value)
     for key in ['plan', 'download_plan']:
         value = resolved.get(key)
         if isinstance(value, (str, Path)):
+            from cellpaint_pipeline.data_access import load_download_plan
+
             plan_path = Path(value).expanduser().resolve()
             if not plan_path.exists():
                 raise PublicApiContractError(f'Download plan path does not exist: {plan_path}')
@@ -539,24 +523,56 @@ def _normalize_public_api_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
 
 
 def _resolve_public_api_function(name: str) -> Any:
+    module_map = {
+        'summarize_data_access': 'cellpaint_pipeline.data_access',
+        'build_data_request': 'cellpaint_pipeline.data_access',
+        'build_download_plan': 'cellpaint_pipeline.data_access',
+        'execute_download_plan': 'cellpaint_pipeline.data_access',
+        'run_profiling_suite': 'cellpaint_pipeline.delivery',
+        'run_segmentation_suite': 'cellpaint_pipeline.delivery',
+        'run_end_to_end_pipeline': 'cellpaint_pipeline.orchestration',
+        'run_pipeline_preset': 'cellpaint_pipeline.presets',
+        'run_pipeline_skill': 'cellpaint_pipeline.skills',
+        'run_deepprofiler_pipeline': 'cellpaint_pipeline.deepprofiler_pipeline',
+    }
+    module_name = module_map.get(name)
+    if module_name is None:
+        raise PublicApiContractError(f'No callable registered for public API entrypoint: {name}')
+    module = import_module(module_name)
     try:
-        return globals()[name]
-    except KeyError as exc:
+        return getattr(module, name)
+    except AttributeError as exc:
         raise PublicApiContractError(f'No callable registered for public API entrypoint: {name}') from exc
 
 
 def _public_api_result_to_dict(name: str, result: Any) -> dict[str, Any]:
     if name == 'summarize_data_access':
+        from cellpaint_pipeline.data_access import data_access_summary_to_dict
+
         return data_access_summary_to_dict(result)
     if name == 'build_data_request':
+        from cellpaint_pipeline.data_access import data_request_to_dict
+
         return data_request_to_dict(result)
     if name == 'build_download_plan':
+        from cellpaint_pipeline.data_access import data_download_plan_to_dict
+
         return data_download_plan_to_dict(result)
     if name == 'execute_download_plan':
+        from cellpaint_pipeline.data_access import data_download_execution_result_to_dict
+
         return data_download_execution_result_to_dict(result)
-    if name in {'run_end_to_end_pipeline', 'run_pipeline_preset', 'run_pipeline_skill'}:
+    if name in {'run_end_to_end_pipeline', 'run_pipeline_preset'}:
+        from cellpaint_pipeline.orchestration import end_to_end_pipeline_result_to_dict
+
         return end_to_end_pipeline_result_to_dict(result)
+    if name == 'run_pipeline_skill':
+        from cellpaint_pipeline.skills import pipeline_skill_result_to_dict
+
+        return pipeline_skill_result_to_dict(result)
     if name == 'run_deepprofiler_pipeline':
+        from cellpaint_pipeline.deepprofiler_pipeline import deepprofiler_pipeline_result_to_dict
+
         return deepprofiler_pipeline_result_to_dict(result)
     if name in {'run_profiling_suite', 'run_segmentation_suite'}:
         return {

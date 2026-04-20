@@ -1,6 +1,6 @@
 # Introduction
 
-CellPainting-Claw brings together the fragmented tools used in **Cell Painting work** into one skill-driven interface. Instead of asking users to piece together data access, CellProfiler workflows, pycytominer profiling, DeepProfiler preparation, and agent tooling by hand, the project lets both humans and agents reach the same documented skills through a clearer public surface.
+CellPainting-Claw was built to solve two practical problems in Cell Painting work: the tooling is often fragmented across many packages and scripts, and it is still awkward to expose that work through agents. This project brings those pieces together behind one documented skill catalog that both people and agents can use.
 
 The main idea is simple: **humans should be able to call the documented skills directly, and agents should be able to call the same skills through natural language**.
 
@@ -10,14 +10,14 @@ CellPainting-Claw covers several connected parts of practical Cell Painting work
 
 | Capability | Packages or tools | What it is used for |
 | --- | --- | --- |
-| Data access | `boto3`, `quilt3`, `cpgdata` | finding datasets, planning downloads, and preparing local inputs |
-| Image processing and measurement export | `CellProfiler` | segmentation, masks, outlines, and single-cell measurement tables |
+| Data access | `boto3`, `quilt3`, `cpgdata` | finding datasets and downloading local inputs |
+| Measurement extraction | `CellProfiler` | profiling tables, segmentation masks, outlines, and object measurements |
 | Classical profile generation | `pycytominer` | normalization, feature selection, and profile generation from single-cell tables |
 | Deep feature extraction | `DeepProfiler` | learned features from segmentation-guided single-cell crops |
-| Named task interface | `cellpainting_skills` | stable task names for running common operations without wiring lower-level calls together |
+| Skill interface | `cellpainting_skills` | stable task names for running common operations without wiring lower-level calls together |
 | Natural-language interface | `OpenClaw` | optional natural-language access to the same tasks through OpenClaw |
 
-These parts are presented in the same order that many users will encounter them in real work: **get data, process images, build profiles, optionally build deep features, and optionally expose the workflow to an agent**.
+These parts are presented in the same order that many users encounter them in practice: **get data, extract measurements, build classical profiles, optionally build deep features, and optionally expose the same work to an agent**.
 
 ## Two Ways To Use CellPainting-Claw
 
@@ -51,17 +51,16 @@ In short, this is the right starting point when you want to **use the same skill
 
 The lower-level `cellpainting_claw` package remains available for advanced direct package use, including direct configuration inspection, lower-level toolkit commands, and MCP serving. It is still part of the project, but it is not the main starting point for most users.
 
-## What Skills Are For
+## Skill Families
 
-Skills give users and agents a **small set of named tasks** for common work.
+The public skill catalog is organized around concrete outputs rather than one fixed end-to-end route.
 
-Instead of choosing from many lower-level helpers, users can start from task names such as `plan-data-access`, `run-segmentation`, or `run-deepprofiler`.
-
-This makes the project easier to use in practice:
-
-- a user can choose a task by name
-- a script can call the same task repeatedly
-- an agent can map a natural-language request onto a stable task name
+| Skill family | Public skills | What they produce |
+| --- | --- | --- |
+| Data access | `inspect-cellpainting-data`, `download-cellpainting-data` | discovery summaries and local dataset downloads |
+| Profiling | `run-cellprofiler-profiling`, `export-single-cell-measurements`, `run-pycytominer`, `summarize-classical-profiles` | CellProfiler tables, single-cell tables, classical profiles, and readable profile summaries |
+| Segmentation | `run-segmentation-masks`, `export-single-cell-crops` | masks, previews, and crop exports |
+| DeepProfiler | `prepare-deepprofiler-project`, `run-deepprofiler`, `summarize-deepprofiler-profiles` | runnable DeepProfiler projects, collected feature tables, and readable DeepProfiler summaries |
 
 ## CellProfiler `.cppipe` Support
 
@@ -76,8 +75,9 @@ This means users can:
 
 Current scope is intentionally clear:
 
-- **segmentation** uses the configured `.cppipe` selection at runtime
-- **profiling** exposes the same inspection and validation helpers, while the public profiling route remains centered on the downstream pycytominer step
+- **profiling** and **segmentation** both use bundled or custom CellProfiler `.cppipe` assets
+- normal users can rely on the bundled defaults
+- advanced users can inspect or override the selected `.cppipe` when needed
 
 ## Scope
 

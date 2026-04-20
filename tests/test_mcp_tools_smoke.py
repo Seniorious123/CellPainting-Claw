@@ -21,7 +21,7 @@ from cellpaint_pipeline.mcp_tools import (
     mcp_tool_definition_to_dict,
     run_mcp_tool_to_dict,
 )
-from cellpaint_pipeline.orchestration import EndToEndPipelineResult
+from cellpaint_pipeline.skills import PipelineSkillResult
 
 CONFIG_PATH = PROJECT_ROOT / 'configs' / 'project_config.example.json'
 
@@ -51,28 +51,20 @@ class McpToolsSmokeTests(unittest.TestCase):
         config = ProjectConfig.from_json(CONFIG_PATH)
         with tempfile.TemporaryDirectory() as tmpdir:
             output_dir = Path(tmpdir) / 'mcp_skill_run'
-            run_pipeline_skill_mock.return_value = EndToEndPipelineResult(
+            run_pipeline_skill_mock.return_value = PipelineSkillResult(
+                skill_key='run-segmentation-masks',
+                category='segmentation',
+                implementation='cellpaint_pipeline.workflows.segmentation',
                 output_dir=output_dir,
-                manifest_path=output_dir / 'end_to_end_pipeline_manifest.json',
-                run_report_path=output_dir / 'run_report.md',
-                data_access_summary_path=None,
-                download_plan_path=None,
-                download_execution_path=None,
-                profiling_output_dir=None,
-                profiling_manifest_path=None,
-                segmentation_output_dir=None,
-                segmentation_manifest_path=None,
-                validation_report_path=None,
-                profiling_suite=None,
-                segmentation_suite=None,
-                deepprofiler_mode='off',
-                stage_count=1,
+                manifest_path=output_dir / 'pipeline_skill_manifest.json',
+                primary_outputs={'cellprofiler_output_dir': output_dir / 'cellprofiler_masks'},
+                details={},
                 ok=True,
             )
             payload = run_mcp_tool_to_dict(
                 'run_pipeline_skill',
                 config=config,
-                skill_key='plan-data-access',
+                skill_key='run-segmentation-masks',
                 output_dir=str(output_dir),
             )
             self.assertEqual(payload['tool'], 'run_pipeline_skill')

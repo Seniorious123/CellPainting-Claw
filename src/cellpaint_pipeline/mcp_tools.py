@@ -24,6 +24,7 @@ from cellpaint_pipeline.skills import (
     available_pipeline_skills,
     get_pipeline_skill_definition,
     pipeline_skill_definition_to_dict,
+    pipeline_skill_result_to_dict,
     run_pipeline_skill,
 )
 
@@ -94,7 +95,7 @@ MCP_TOOLS: dict[str, McpToolDefinition] = {
         target_name=None,
         requires_config=False,
         description='List the modular pipeline skills that give agents and users stable named tools.',
-        recommended_for='Agent discovery of modular task names such as run-segmentation, run-classical-profiling, or run-deepprofiler.',
+        recommended_for='Agent discovery of modular task names such as run-segmentation-masks, export-single-cell-crops, or run-deepprofiler.',
         input_schema={'type': 'object', 'properties': {}},
         returns='list[PipelineSkillDefinitionDict]',
         cli_command='list-mcp-tools',
@@ -113,18 +114,31 @@ MCP_TOOLS: dict[str, McpToolDefinition] = {
             'properties': {
                 'skill_key': {'type': 'string', 'enum': available_pipeline_skills()},
                 'output_dir': {'type': 'string'},
-                'profiling_suite': {'type': 'string'},
-                'segmentation_suite': {'type': 'string'},
-                'deepprofiler_mode': {'type': 'string'},
-                'include_validation_report': {'type': 'boolean'},
-                'include_data_access_summary': {'type': 'boolean'},
-                'plan_data_download': {'type': 'boolean'},
-                'execute_data_download_step': {'type': 'boolean'},
+                'workflow_root': {'type': 'string'},
+                'export_root': {'type': 'string'},
+                'project_root': {'type': 'string'},
+                'image_csv_path': {'type': 'string'},
+                'nuclei_csv_path': {'type': 'string'},
+                'load_data_csv_path': {'type': 'string'},
+                'manifest_path': {'type': 'string'},
+                'object_table_path': {'type': 'string'},
+                'feature_selected_path': {'type': 'string'},
+                'single_cell_parquet_path': {'type': 'string'},
+                'well_aggregated_parquet_path': {'type': 'string'},
+                'object_table': {'type': 'string'},
+                'crop_mode': {'type': 'string', 'enum': ['masked', 'unmasked']},
+                'workers': {'type': 'integer'},
+                'chunk_size': {'type': 'integer'},
+                'gpu': {'type': 'string'},
+                'experiment_name': {'type': 'string'},
+                'config_filename': {'type': 'string'},
+                'metadata_filename': {'type': 'string'},
+                'overwrite': {'type': 'boolean'},
                 'data_request': {'type': 'object'},
                 'download_plan': {'type': 'string'},
             },
         },
-        returns='EndToEndPipelineResultDict',
+        returns='PipelineSkillResultDict',
         cli_command='run-mcp-tool',
     ),
     'list_pipeline_presets': McpToolDefinition(
@@ -272,7 +286,17 @@ def run_mcp_tool_to_dict(
 
 def _normalize_mcp_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     resolved = dict(kwargs)
-    for key in ('output_dir',):
+    for key in (
+        'output_dir',
+        'workflow_root',
+        'export_root',
+        'project_root',
+        'image_csv_path',
+        'nuclei_csv_path',
+        'load_data_csv_path',
+        'manifest_path',
+        'object_table_path',
+    ):
         value = resolved.get(key)
         if isinstance(value, str) and value.strip():
             resolved[key] = Path(value).expanduser().resolve()
@@ -306,6 +330,8 @@ def _mcp_tool_result_to_dict(name: str, result: Any) -> Any:
         'list_pipeline_presets',
     }:
         return result
-    if name in {'run_pipeline_skill', 'run_pipeline_preset'}:
+    if name == 'run_pipeline_skill':
+        return pipeline_skill_result_to_dict(result)
+    if name == 'run_pipeline_preset':
         return end_to_end_pipeline_result_to_dict(result)
     return result

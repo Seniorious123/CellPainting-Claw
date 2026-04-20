@@ -1,57 +1,69 @@
 # `run-deepprofiler`
 
-`run-deepprofiler` is the skill for **running the DeepProfiler path and collecting deep features**.
+`run-deepprofiler` is the public skill for running the DeepProfiler path and returning analysis-ready tables.
 
 ## What It Does
 
-This skill runs the DeepProfiler-oriented path through export preparation, project assembly, profiling, and feature collection.
+This skill gives users the final DeepProfiler result rather than one intermediate stage.
+
+Depending on the inputs you provide, it can:
+
+- start from a prepared `project_root`
+- or start from a segmentation workflow root or explicit source CSVs and run the full DeepProfiler chain
+
+The final result is the collected single-cell and well-level feature tables.
 
 ## When To Use It
 
 Use this skill when you want to:
 
-- generate deep features rather than only classical profiles
-- run the standardized DeepProfiler path end to end
-- collect the feature outputs needed for downstream deep-feature analysis
+- run the DeepProfiler branch as one user-facing task
+- get collected feature tables instead of only raw feature files
+- let an agent complete the whole deep-feature step without exposing internal stages
 
-## Human Use
-
-CLI:
+## CLI
 
 ```bash
+CONFIG=configs/project_config.demo.json
+PROJECT_ROOT=outputs/demo_deepprofiler_project_ready/deepprofiler_project
+
 cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill run-deepprofiler
+  --config "$CONFIG" \
+  --skill run-deepprofiler \
+  --project-root "$PROJECT_ROOT" \
+  --output-dir outputs/demo_deepprofiler_results \
+  --gpu 0
 ```
 
-Python:
+You can also start from a workflow root instead of a prepared project:
 
-```python
-import cellpainting_claw as cp
+```bash
+CONFIG=configs/project_config.demo.json
+WORKFLOW_ROOT=outputs/demo_segmentation
 
-config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-deepprofiler")
-print(result.ok)
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill run-deepprofiler \
+  --workflow-root "$WORKFLOW_ROOT" \
+  --output-dir outputs/demo_deepprofiler_results \
+  --gpu 0
 ```
 
-## Agent Use
+## Agent Request Examples
 
-An agent should map requests such as:
-
-- `Run the DeepProfiler branch and collect deep features.`
-- `Build the DeepProfiler project and return the deep feature outputs.`
-
-onto `run-deepprofiler`.
+- `Run DeepProfiler from this segmentation workflow root and return the final tables.`
+- `Run DeepProfiler on this prepared project and collect the feature outputs into analysis-ready files.`
 
 ## Typical Outputs
 
-Typical outputs include:
-
-- DeepProfiler project files
-- profile outputs
-- collected deep feature tables
+- `deepprofiler_single_cell.parquet`
+- `deepprofiler_single_cell.csv.gz`
+- `deepprofiler_well_aggregated.parquet`
+- `deepprofiler_well_aggregated.csv.gz`
+- `deepprofiler_feature_manifest.json`
+- `pipeline_skill_manifest.json`
 
 ## Related Skills
 
-- [prepare-deepprofiler-inputs](prepare_deepprofiler_inputs.md)
-- [run-classical-profiling](run_classical_profiling.md)
+- [prepare-deepprofiler-project](prepare_deepprofiler_project.md)
+- [summarize-deepprofiler-profiles](summarize_deepprofiler_profiles.md)

@@ -127,20 +127,20 @@ Purpose:
 Example prompt:
 
 ```text
-Run segmentation with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
+Run the segmentation mask export with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
 ```
 
 What this request means:
 
-- the task objective is segmentation
+- the task objective is segmentation mask export
 - the config file is `configs/project_config.demo.json`
 - the requested output location is `outputs/demo_segmentation`
 
 What should happen internally:
 
 - OpenClaw receives the natural-language request
-- the agent recognizes this as a segmentation request
-- the request is routed to the skill `run-segmentation`
+- the agent recognizes this as a segmentation-mask request
+- the request is routed to the skill `run-segmentation-masks`
 - that skill calls the same validated segmentation path used by the CLI and Python API
 
 What success looks like:
@@ -150,10 +150,13 @@ What success looks like:
 
 Expected outputs:
 
-- masks
-- previews
-- masked crops
-- unmasked crops
+- `cellprofiler_masks/`
+- `Image.csv`
+- `Cells.csv`
+- `Nuclei.csv`
+- `labels/`
+- `outlines/`
+- `sample_previews_png/`
 
 ### Step 5. Check the result
 
@@ -165,7 +168,7 @@ What to check:
 
 - the OpenClaw session should report a task result, not only conversational text
 - the requested output location should contain the segmentation artifacts
-- those artifacts should match the normal outputs of `run-segmentation`
+- those artifacts should match the normal outputs of `run-segmentation-masks`
 
 What this proves:
 
@@ -178,14 +181,28 @@ What this proves:
 Prompt:
 
 ```text
-Prepare the DeepProfiler inputs for this config, but do not run DeepProfiler yet.
+Export masked single-cell crops from outputs/demo_segmentation and write them under outputs/demo_crops.
 ```
 
 How this request should be interpreted:
 
-- the task objective is DeepProfiler input preparation
-- the request should route to `prepare-deepprofiler-inputs`
-- the expected outputs are export metadata, image inputs, and location inputs
+- the task objective is crop export from an existing segmentation workflow root
+- the request should route to `export-single-cell-crops`
+- the expected output is a directory of masked single-cell crops plus a crop manifest
+
+## Result-Summary Example
+
+Prompt:
+
+```text
+Summarize the DeepProfiler outputs from outputs/demo_deepprofiler and write a readable report bundle under outputs/demo_deepprofiler_summary.
+```
+
+How this request should be interpreted:
+
+- the task objective is result summarization rather than model execution
+- the request should route to `summarize-deepprofiler-profiles`
+- the expected output is a summary bundle with metadata tables, top variable features, PCA coordinates, and a PCA plot
 
 ## What Makes A Good OpenClaw Request
 

@@ -2,121 +2,122 @@ from __future__ import annotations
 
 import argparse
 import json
+from importlib import import_module
 from pathlib import Path
 
-from cellpaint_pipeline.adapters.deepprofiler import export_deepprofiler_input
-from cellpaint_pipeline.adapters.deepprofiler import infer_deepprofiler_sources_from_workflow_root
-from cellpaint_pipeline.adapters.deepprofiler_features import collect_deepprofiler_features
-from cellpaint_pipeline.adapters.deepprofiler_project import build_deepprofiler_project
-from cellpaint_pipeline.adapters.deepprofiler_project import run_deepprofiler_profile
 from cellpaint_pipeline.config import ProjectConfig
-from cellpaint_pipeline.cppipe import (
-    available_cppipe_templates,
-    cppipe_template_definition_to_dict,
-    cppipe_validation_result_to_dict,
-    get_cppipe_template,
-    resolve_cppipe_selection,
-    resolved_cppipe_selection_to_dict,
-    validate_cppipe_configuration,
-)
-from cellpaint_pipeline.deepprofiler_pipeline import (
-    deepprofiler_pipeline_result_to_dict,
-    run_deepprofiler_pipeline,
-)
-from cellpaint_pipeline.data_access import (
-    browse_quilt_package,
-    build_data_access_status,
-    build_data_request,
-    build_download_plan,
-    cache_gallery_listing,
-    cpgdata_prefix_list_result_to_dict,
-    cpgdata_sync_result_to_dict,
-    data_access_status_to_dict,
-    data_access_summary_to_dict,
-    data_download_execution_result_to_dict,
-    data_download_plan_to_dict,
-    download_gallery_prefix,
-    download_gallery_source,
-    gallery_cache_result_to_dict,
-    gallery_catalog_result_to_dict,
-    gallery_download_result_to_dict,
-    gallery_list_result_to_dict,
-    list_cpgdata_prefixes,
-    load_download_plan,
-    list_gallery_datasets,
-    list_gallery_prefixes,
-    list_gallery_sources,
-    list_quilt_packages,
-    quilt_package_browse_result_to_dict,
-    quilt_package_list_result_to_dict,
-    summarize_data_access,
-    sync_cpgdata_index,
-    sync_cpgdata_inventory,
-    execute_download_plan,
-    write_download_plan,
-)
-from cellpaint_pipeline.delivery import (
-    available_profiling_suites,
-    available_segmentation_suites,
-    run_deepprofiler_full_stack,
-    run_full_pipeline,
-    run_profiling_suite,
-    run_segmentation_bundle,
-    run_segmentation_suite,
-    run_smoke_test,
-)
-from cellpaint_pipeline.evaluation import run_native_evaluation
-from cellpaint_pipeline.orchestration import (
-    available_deepprofiler_modes,
-    end_to_end_pipeline_result_to_dict,
-    run_end_to_end_pipeline,
-)
-from cellpaint_pipeline.mcp_tools import (
-    available_mcp_tools,
-    mcp_tool_catalog,
-    run_mcp_tool_to_dict,
-)
-from cellpaint_pipeline.mcp_server import run_mcp_server
-from cellpaint_pipeline.public_api import (
-    available_public_api_entrypoints,
-    get_public_api_entrypoint,
-    public_api_contract_summary,
-    public_api_entrypoint_to_dict,
-    run_public_api_entrypoint_to_dict,
-)
-from cellpaint_pipeline.presets import (
-    available_pipeline_presets,
-    get_pipeline_preset_definition,
-    pipeline_preset_definition_to_dict,
-    run_pipeline_preset,
-)
-from cellpaint_pipeline.skills import (
-    available_pipeline_skills,
-    get_pipeline_skill_definition,
-    pipeline_skill_definition_to_dict,
-    run_pipeline_skill,
-)
-from cellpaint_pipeline.reporting import collect_validation_report
-from cellpaint_pipeline.segmentation_native import (
-    segmentation_summary_to_dict,
-    summarize_segmentation_outputs,
-    write_segmentation_summary,
-)
-from cellpaint_pipeline.workflows.orchestration import available_workflows, run_workflow
-from cellpaint_pipeline.workflows.profiling import (
-    available_profiling_scripts,
-    available_profiling_tasks,
-    run_profiling_native,
-    run_profiling_script,
-    run_profiling_task,
-)
-from cellpaint_pipeline.workflows.segmentation import (
-    available_segmentation_scripts,
-    available_segmentation_tasks,
-    run_segmentation_native,
-    run_segmentation_script,
-    run_segmentation_task,
-)
+
+
+class _LazyCallable:
+    def __init__(self, module_name: str, attr_name: str) -> None:
+        self.module_name = module_name
+        self.attr_name = attr_name
+
+    def _resolve(self):
+        module = import_module(self.module_name)
+        return getattr(module, self.attr_name)
+
+    def __call__(self, *args, **kwargs):
+        return self._resolve()(*args, **kwargs)
+
+    def __getattr__(self, name: str):
+        return getattr(self._resolve(), name)
+
+
+def _lazy(module_name: str, attr_name: str) -> _LazyCallable:
+    return _LazyCallable(module_name, attr_name)
+
+
+export_deepprofiler_input = _lazy('cellpaint_pipeline.adapters.deepprofiler', 'export_deepprofiler_input')
+infer_deepprofiler_sources_from_workflow_root = _lazy('cellpaint_pipeline.adapters.deepprofiler', 'infer_deepprofiler_sources_from_workflow_root')
+collect_deepprofiler_features = _lazy('cellpaint_pipeline.adapters.deepprofiler_features', 'collect_deepprofiler_features')
+build_deepprofiler_project = _lazy('cellpaint_pipeline.adapters.deepprofiler_project', 'build_deepprofiler_project')
+run_deepprofiler_profile = _lazy('cellpaint_pipeline.adapters.deepprofiler_project', 'run_deepprofiler_profile')
+available_cppipe_templates = _lazy('cellpaint_pipeline.cppipe', 'available_cppipe_templates')
+cppipe_template_definition_to_dict = _lazy('cellpaint_pipeline.cppipe', 'cppipe_template_definition_to_dict')
+cppipe_validation_result_to_dict = _lazy('cellpaint_pipeline.cppipe', 'cppipe_validation_result_to_dict')
+get_cppipe_template = _lazy('cellpaint_pipeline.cppipe', 'get_cppipe_template')
+resolve_cppipe_selection = _lazy('cellpaint_pipeline.cppipe', 'resolve_cppipe_selection')
+resolved_cppipe_selection_to_dict = _lazy('cellpaint_pipeline.cppipe', 'resolved_cppipe_selection_to_dict')
+validate_cppipe_configuration = _lazy('cellpaint_pipeline.cppipe', 'validate_cppipe_configuration')
+deepprofiler_pipeline_result_to_dict = _lazy('cellpaint_pipeline.deepprofiler_pipeline', 'deepprofiler_pipeline_result_to_dict')
+run_deepprofiler_pipeline = _lazy('cellpaint_pipeline.deepprofiler_pipeline', 'run_deepprofiler_pipeline')
+browse_quilt_package = _lazy('cellpaint_pipeline.data_access', 'browse_quilt_package')
+build_data_access_status = _lazy('cellpaint_pipeline.data_access', 'build_data_access_status')
+build_data_request = _lazy('cellpaint_pipeline.data_access', 'build_data_request')
+build_download_plan = _lazy('cellpaint_pipeline.data_access', 'build_download_plan')
+cache_gallery_listing = _lazy('cellpaint_pipeline.data_access', 'cache_gallery_listing')
+cpgdata_prefix_list_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'cpgdata_prefix_list_result_to_dict')
+cpgdata_sync_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'cpgdata_sync_result_to_dict')
+data_access_status_to_dict = _lazy('cellpaint_pipeline.data_access', 'data_access_status_to_dict')
+data_access_summary_to_dict = _lazy('cellpaint_pipeline.data_access', 'data_access_summary_to_dict')
+data_download_execution_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'data_download_execution_result_to_dict')
+data_download_plan_to_dict = _lazy('cellpaint_pipeline.data_access', 'data_download_plan_to_dict')
+download_gallery_prefix = _lazy('cellpaint_pipeline.data_access', 'download_gallery_prefix')
+download_gallery_source = _lazy('cellpaint_pipeline.data_access', 'download_gallery_source')
+gallery_cache_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'gallery_cache_result_to_dict')
+gallery_catalog_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'gallery_catalog_result_to_dict')
+gallery_download_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'gallery_download_result_to_dict')
+gallery_list_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'gallery_list_result_to_dict')
+list_cpgdata_prefixes = _lazy('cellpaint_pipeline.data_access', 'list_cpgdata_prefixes')
+load_download_plan = _lazy('cellpaint_pipeline.data_access', 'load_download_plan')
+list_gallery_datasets = _lazy('cellpaint_pipeline.data_access', 'list_gallery_datasets')
+list_gallery_prefixes = _lazy('cellpaint_pipeline.data_access', 'list_gallery_prefixes')
+list_gallery_sources = _lazy('cellpaint_pipeline.data_access', 'list_gallery_sources')
+list_quilt_packages = _lazy('cellpaint_pipeline.data_access', 'list_quilt_packages')
+quilt_package_browse_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'quilt_package_browse_result_to_dict')
+quilt_package_list_result_to_dict = _lazy('cellpaint_pipeline.data_access', 'quilt_package_list_result_to_dict')
+summarize_data_access = _lazy('cellpaint_pipeline.data_access', 'summarize_data_access')
+sync_cpgdata_index = _lazy('cellpaint_pipeline.data_access', 'sync_cpgdata_index')
+sync_cpgdata_inventory = _lazy('cellpaint_pipeline.data_access', 'sync_cpgdata_inventory')
+execute_download_plan = _lazy('cellpaint_pipeline.data_access', 'execute_download_plan')
+write_download_plan = _lazy('cellpaint_pipeline.data_access', 'write_download_plan')
+available_profiling_suites = _lazy('cellpaint_pipeline.delivery', 'available_profiling_suites')
+available_segmentation_suites = _lazy('cellpaint_pipeline.delivery', 'available_segmentation_suites')
+run_deepprofiler_full_stack = _lazy('cellpaint_pipeline.delivery', 'run_deepprofiler_full_stack')
+run_full_pipeline = _lazy('cellpaint_pipeline.delivery', 'run_full_pipeline')
+run_profiling_suite = _lazy('cellpaint_pipeline.delivery', 'run_profiling_suite')
+run_segmentation_bundle = _lazy('cellpaint_pipeline.delivery', 'run_segmentation_bundle')
+run_segmentation_suite = _lazy('cellpaint_pipeline.delivery', 'run_segmentation_suite')
+run_smoke_test = _lazy('cellpaint_pipeline.delivery', 'run_smoke_test')
+run_native_evaluation = _lazy('cellpaint_pipeline.evaluation', 'run_native_evaluation')
+available_deepprofiler_modes = _lazy('cellpaint_pipeline.orchestration', 'available_deepprofiler_modes')
+end_to_end_pipeline_result_to_dict = _lazy('cellpaint_pipeline.orchestration', 'end_to_end_pipeline_result_to_dict')
+run_end_to_end_pipeline = _lazy('cellpaint_pipeline.orchestration', 'run_end_to_end_pipeline')
+available_mcp_tools = _lazy('cellpaint_pipeline.mcp_tools', 'available_mcp_tools')
+mcp_tool_catalog = _lazy('cellpaint_pipeline.mcp_tools', 'mcp_tool_catalog')
+run_mcp_tool_to_dict = _lazy('cellpaint_pipeline.mcp_tools', 'run_mcp_tool_to_dict')
+run_mcp_server = _lazy('cellpaint_pipeline.mcp_server', 'run_mcp_server')
+available_public_api_entrypoints = _lazy('cellpaint_pipeline.public_api', 'available_public_api_entrypoints')
+get_public_api_entrypoint = _lazy('cellpaint_pipeline.public_api', 'get_public_api_entrypoint')
+public_api_contract_summary = _lazy('cellpaint_pipeline.public_api', 'public_api_contract_summary')
+public_api_entrypoint_to_dict = _lazy('cellpaint_pipeline.public_api', 'public_api_entrypoint_to_dict')
+run_public_api_entrypoint_to_dict = _lazy('cellpaint_pipeline.public_api', 'run_public_api_entrypoint_to_dict')
+available_pipeline_presets = _lazy('cellpaint_pipeline.presets', 'available_pipeline_presets')
+get_pipeline_preset_definition = _lazy('cellpaint_pipeline.presets', 'get_pipeline_preset_definition')
+pipeline_preset_definition_to_dict = _lazy('cellpaint_pipeline.presets', 'pipeline_preset_definition_to_dict')
+run_pipeline_preset = _lazy('cellpaint_pipeline.presets', 'run_pipeline_preset')
+available_pipeline_skills = _lazy('cellpaint_pipeline.skills', 'available_pipeline_skills')
+get_pipeline_skill_definition = _lazy('cellpaint_pipeline.skills', 'get_pipeline_skill_definition')
+pipeline_skill_definition_to_dict = _lazy('cellpaint_pipeline.skills', 'pipeline_skill_definition_to_dict')
+pipeline_skill_result_to_dict = _lazy('cellpaint_pipeline.skills', 'pipeline_skill_result_to_dict')
+run_pipeline_skill = _lazy('cellpaint_pipeline.skills', 'run_pipeline_skill')
+collect_validation_report = _lazy('cellpaint_pipeline.reporting', 'collect_validation_report')
+segmentation_summary_to_dict = _lazy('cellpaint_pipeline.segmentation_native', 'segmentation_summary_to_dict')
+summarize_segmentation_outputs = _lazy('cellpaint_pipeline.segmentation_native', 'summarize_segmentation_outputs')
+write_segmentation_summary = _lazy('cellpaint_pipeline.segmentation_native', 'write_segmentation_summary')
+available_workflows = _lazy('cellpaint_pipeline.workflows.orchestration', 'available_workflows')
+run_workflow = _lazy('cellpaint_pipeline.workflows.orchestration', 'run_workflow')
+available_profiling_scripts = _lazy('cellpaint_pipeline.workflows.profiling', 'available_profiling_scripts')
+available_profiling_tasks = _lazy('cellpaint_pipeline.workflows.profiling', 'available_profiling_tasks')
+run_profiling_native = _lazy('cellpaint_pipeline.workflows.profiling', 'run_profiling_native')
+run_profiling_script = _lazy('cellpaint_pipeline.workflows.profiling', 'run_profiling_script')
+run_profiling_task = _lazy('cellpaint_pipeline.workflows.profiling', 'run_profiling_task')
+available_segmentation_scripts = _lazy('cellpaint_pipeline.workflows.segmentation', 'available_segmentation_scripts')
+available_segmentation_tasks = _lazy('cellpaint_pipeline.workflows.segmentation', 'available_segmentation_tasks')
+run_segmentation_native = _lazy('cellpaint_pipeline.workflows.segmentation', 'run_segmentation_native')
+run_segmentation_script = _lazy('cellpaint_pipeline.workflows.segmentation', 'run_segmentation_script')
+run_segmentation_task = _lazy('cellpaint_pipeline.workflows.segmentation', 'run_segmentation_task')
 
 
 def build_parser(
@@ -453,6 +454,7 @@ def build_parser(
     run_preset_parser.add_argument('--dry-run', action='store_true', help='Mark the embedded data request as dry-run.')
 
     list_skills_parser = subparsers.add_parser('list-pipeline-skills', help='List the available task-oriented pipeline skills.')
+    list_skills_parser.add_argument('--include-advanced', action='store_true', help='Also show advanced direct-control skill names.')
     list_skills_parser.add_argument('--include-legacy', action='store_true', help='Also show legacy compatibility skill names.')
 
     run_skill_parser = subparsers.add_parser('run-pipeline-skill', help='Run a named task-oriented pipeline skill.')
@@ -460,9 +462,25 @@ def build_parser(
     run_skill_parser.add_argument('--skill', required=True, help='Named pipeline skill.')
     run_skill_parser.add_argument('--output-dir', default=None, help='Optional output directory for the skill run.')
     run_skill_parser.add_argument('--plan-path', default=None, help='Optional path to a previously saved download plan JSON.')
-    run_skill_parser.add_argument('--profiling-suite', default=None, choices=available_profiling_suites(), help='Optional profiling suite override.')
-    run_skill_parser.add_argument('--segmentation-suite', default=None, choices=available_segmentation_suites(), help='Optional segmentation suite override.')
-    run_skill_parser.add_argument('--deepprofiler-mode', default=None, choices=available_deepprofiler_modes(), help='Optional DeepProfiler mode override.')
+    run_skill_parser.add_argument('--workflow-root', default=None, help='Optional workflow root used by segmentation or DeepProfiler bridge skills.')
+    run_skill_parser.add_argument('--export-root', default=None, help='Optional DeepProfiler export root used by project-building skills.')
+    run_skill_parser.add_argument('--project-root', default=None, help='Optional DeepProfiler project root used by profiling or feature-collection skills.')
+    run_skill_parser.add_argument('--image-csv-path', default=None, help='Optional explicit Image.csv path.')
+    run_skill_parser.add_argument('--nuclei-csv-path', default=None, help='Optional explicit Nuclei.csv path.')
+    run_skill_parser.add_argument('--load-data-csv-path', default=None, help='Optional explicit load-data CSV path.')
+    run_skill_parser.add_argument('--manifest-path', default=None, help='Optional explicit manifest CSV path for validation-like skills.')
+    run_skill_parser.add_argument('--object-table-path', default=None, help='Optional explicit CellProfiler object table CSV path.')
+    run_skill_parser.add_argument('--feature-selected-path', default=None, help='Optional explicit feature-selected profile table path for summarize-classical-profiles.')
+    run_skill_parser.add_argument('--single-cell-parquet-path', default=None, help='Optional explicit DeepProfiler single-cell parquet path for summarize-deepprofiler-profiles.')
+    run_skill_parser.add_argument('--well-aggregated-parquet-path', default=None, help='Optional explicit DeepProfiler well-level parquet path for summarize-deepprofiler-profiles.')
+    run_skill_parser.add_argument('--object-table', default=None, help='Optional CellProfiler object table name override, for example Cells or Cytoplasm.')
+    run_skill_parser.add_argument('--crop-mode', default=None, choices=['masked', 'unmasked'], help='Optional crop mode override for export-single-cell-crops.')
+    run_skill_parser.add_argument('--workers', type=int, default=0, help='Optional worker override for crop-export skills.')
+    run_skill_parser.add_argument('--chunk-size', type=int, default=64, help='Optional chunk size override for preview-like skills.')
+    run_skill_parser.add_argument('--gpu', default=None, help='Optional GPU identifier override for DeepProfiler profile runs.')
+    run_skill_parser.add_argument('--experiment-name', default=None, help='Optional DeepProfiler experiment name override.')
+    run_skill_parser.add_argument('--config-filename', default=None, help='Optional DeepProfiler project config filename override.')
+    run_skill_parser.add_argument('--metadata-filename', default=None, help='Optional DeepProfiler metadata filename override.')
     run_skill_parser.add_argument('--request-mode', default='gallery-source', choices=['gallery-source', 'gallery-prefix'], help='How to interpret optional request inputs when no plan-path is supplied.')
     run_skill_parser.add_argument('--dataset-id', default=None, help='Optional dataset id override for gallery-source requests.')
     run_skill_parser.add_argument('--source-id', default=None, help='Optional source id override for gallery-source requests.')
@@ -1128,7 +1146,7 @@ def main(
         if args.command == 'list-pipeline-skills':
             payload = [
                 pipeline_skill_definition_to_dict(get_pipeline_skill_definition(key))
-                for key in available_pipeline_skills(include_legacy=args.include_legacy)
+                for key in available_pipeline_skills(include_advanced=args.include_advanced, include_legacy=args.include_legacy)
             ]
             print(json.dumps(payload, indent=2, ensure_ascii=False))
             return 0
@@ -1170,11 +1188,28 @@ def main(
                 output_dir=Path(args.output_dir).expanduser().resolve() if args.output_dir else None,
                 data_request=data_request,
                 download_plan=download_plan,
-                profiling_suite=args.profiling_suite,
-                segmentation_suite=args.segmentation_suite,
-                deepprofiler_mode=args.deepprofiler_mode,
+                workflow_root=Path(args.workflow_root).expanduser().resolve() if args.workflow_root else None,
+                export_root=Path(args.export_root).expanduser().resolve() if args.export_root else None,
+                project_root=Path(args.project_root).expanduser().resolve() if args.project_root else None,
+                image_csv_path=Path(args.image_csv_path).expanduser().resolve() if args.image_csv_path else None,
+                nuclei_csv_path=Path(args.nuclei_csv_path).expanduser().resolve() if args.nuclei_csv_path else None,
+                load_data_csv_path=Path(args.load_data_csv_path).expanduser().resolve() if args.load_data_csv_path else None,
+                manifest_path=Path(args.manifest_path).expanduser().resolve() if args.manifest_path else None,
+                object_table_path=Path(args.object_table_path).expanduser().resolve() if args.object_table_path else None,
+                feature_selected_path=Path(args.feature_selected_path).expanduser().resolve() if args.feature_selected_path else None,
+                single_cell_parquet_path=Path(args.single_cell_parquet_path).expanduser().resolve() if args.single_cell_parquet_path else None,
+                well_aggregated_parquet_path=Path(args.well_aggregated_parquet_path).expanduser().resolve() if args.well_aggregated_parquet_path else None,
+                object_table=args.object_table,
+                crop_mode=args.crop_mode,
+                workers=args.workers,
+                chunk_size=args.chunk_size,
+                gpu=args.gpu,
+                experiment_name=args.experiment_name,
+                config_filename=args.config_filename,
+                metadata_filename=args.metadata_filename,
+                overwrite=args.overwrite,
             )
-            print(json.dumps(end_to_end_pipeline_result_to_dict(result), indent=2, ensure_ascii=False))
+            print(json.dumps(pipeline_skill_result_to_dict(result), indent=2, ensure_ascii=False))
             return 0 if result.ok else 1
 
         if args.command == 'list-mcp-tools':

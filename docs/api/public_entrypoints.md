@@ -1,3 +1,7 @@
+---
+orphan: true
+---
+
 # Public Entrypoints
 
 The main Python toolkit surface is exposed through `cellpainting_claw`.
@@ -9,9 +13,8 @@ This page is intentionally narrow. It is a lightweight internal reference for th
 A practical rule is:
 
 1. use a **skill** first
-2. use a **preset** when you want a named bundle
-3. use a **direct helper family** when you want lower-level control
-4. use the **broad combined entry** only when you intentionally want that larger run shape
+2. use a **direct helper family** when you want lower-level control
+3. use the **broad combined entry** only when you intentionally want that larger run shape
 
 ## `ProjectConfig`
 
@@ -47,19 +50,9 @@ Example:
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-segmentation")
+result = cp.run_pipeline_skill(config, "run-segmentation-masks")
 print(result.ok)
 ```
-
-## `run_pipeline_preset`
-
-`run_pipeline_preset` is for **named bundles**, not for the primary task model.
-
-Use it when:
-
-- you already know you want a combined or pre-shaped run
-- a skill is too narrow but a fully manual call is unnecessary
-- you want a reusable bundle such as `full-pipeline`
 
 ## Lower-Level Helper Families
 
@@ -95,7 +88,7 @@ Examples include:
 
 - `run_profiling_suite`
 - `run_segmentation_suite`
-- `run_deepprofiler_full_stack`
+- `run_deepprofiler_pipeline`
 
 ## `run_end_to_end_pipeline`
 
@@ -112,7 +105,6 @@ Use it only when:
 A practical summary is:
 
 - use `run_pipeline_skill` first
-- use `run_pipeline_preset` for named bundles
 - use helper families for direct control
 - use `run_end_to_end_pipeline` only for intentional broad combined runs
 

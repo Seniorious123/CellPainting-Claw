@@ -1,12 +1,12 @@
 # CellPainting-Skills
 
-`cellpainting_skills` is the **named-task package** of CellPainting-Claw.
+`cellpainting_skills` is the **public task package** of CellPainting-Claw.
 
-Its job is simple: it gives users and agents a **small set of stable task names** for common work. Instead of starting from many lower-level helpers, a user can start from tasks such as `run-segmentation` or `run-deepprofiler`.
+Its job is simple: it gives users and agents a stable set of skill names for concrete Cell Painting tasks. The same skill names can be called directly by a person or chosen by an agent from a natural-language request.
 
 ## What A Skill Is
 
-In this project, a skill is a **named task**.
+In this project, a skill is a **named task with a concrete output**.
 
 A skill is not a separate backend. It is a public task name that maps onto an implementation in the toolkit.
 
@@ -23,24 +23,46 @@ The toolkit brings together several connected capability areas.
 | Capability | Main tools | What this part does |
 | --- | --- | --- |
 | Data access | `boto3`, `quilt3`, `cpgdata` | inspect datasets, build plans, and download inputs |
-| Image processing and measurement export | `CellProfiler` | produce masks, outlines, crops, and single-cell measurement tables |
+| Measurement extraction | `CellProfiler` | produce profiling tables, masks, outlines, crops, and single-cell measurement tables |
 | Classical profile generation | `pycytominer` | build classical profiles from single-cell tables |
 | Deep feature extraction | `DeepProfiler` | build learned features from segmentation-guided crops |
 | Named-task interface | `cellpainting_skills` | expose stable named tasks across those capabilities |
 | Natural-language interface | `OpenClaw` | trigger the same named tasks through natural-language requests |
 
-## The Six Primary Skills
+## Public Skill Catalog
 
-These are the **six primary skills** in the current public task catalog.
+The main public catalog is grouped by workflow stage and keeps the focus on tasks with meaningful standalone outputs.
 
-| Skill key | Main use | Typical outputs |
-| --- | --- | --- |
-| [`plan-data-access`](plan_data_access.md) | inspect a dataset and write a reusable plan | `data_access_summary.json`, `download_plan.json` |
-| [`download-data`](download_data.md) | execute the local download step | `download_plan.json`, `download_execution.json` |
-| [`run-classical-profiling`](run_classical_profiling.md) | build classical profiling outputs | `single_cell.csv.gz`, `pycytominer/`, `evaluation/` |
-| [`run-segmentation`](run_segmentation.md) | build masks, previews, and single-cell crops | masks, previews, masked crops, unmasked crops |
-| [`prepare-deepprofiler-inputs`](prepare_deepprofiler_inputs.md) | prepare DeepProfiler-ready export artifacts | export metadata, image inputs, location inputs |
-| [`run-deepprofiler`](run_deepprofiler.md) | run the DeepProfiler path and collect deep features | project files, profile outputs, deep feature tables |
+### Data Access
+
+| Skill key | What it does | Implemented with | Typical outputs |
+| --- | --- | --- | --- |
+| [`inspect-cellpainting-data`](inspect_cellpainting_data.md) | inspect configured sources before downloading anything | `boto3`, `quilt3`, `cpgdata` | `data_access_summary.json` |
+| [`download-cellpainting-data`](download_cellpainting_data.md) | download one dataset slice into a local cache | `boto3`, `quilt3`, `cpgdata` | `download_plan.json`, `downloads/` |
+
+### Profiling
+
+| Skill key | What it does | Implemented with | Typical outputs |
+| --- | --- | --- | --- |
+| [`run-cellprofiler-profiling`](run_cellprofiler_profiling.md) | run the profiling CellProfiler pipeline | `CellProfiler` | `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, `Nuclei.csv` |
+| [`export-single-cell-measurements`](export_single_cell_measurements.md) | merge CellProfiler tables into one single-cell table | `cellpaint_pipeline.profiling_native` | `single_cell.csv.gz` |
+| [`run-pycytominer`](run_pycytominer.md) | build classical profile tables | `pycytominer` | `aggregated.parquet`, `feature_selected.parquet` |
+| [`summarize-classical-profiles`](summarize_classical_profiles.md) | turn classical profile tables into readable summary outputs | `pandas`, `numpy` | `profile_summary.json`, `pca_plot.png` |
+
+### Segmentation
+
+| Skill key | What it does | Implemented with | Typical outputs |
+| --- | --- | --- | --- |
+| [`run-segmentation-masks`](run_segmentation_masks.md) | run segmentation and write mask artifacts plus sample previews | `CellProfiler` | `cellprofiler_masks/`, `labels/`, `outlines/`, `sample_previews_png/` |
+| [`export-single-cell-crops`](export_single_cell_crops.md) | export masked or unmasked single-cell crop stacks | `cellpaint_pipeline.segmentation_native` | `masked/` or `unmasked/`, `single_cell_manifest.csv` |
+
+### DeepProfiler
+
+| Skill key | What it does | Implemented with | Typical outputs |
+| --- | --- | --- | --- |
+| [`prepare-deepprofiler-project`](prepare_deepprofiler_project.md) | prepare a runnable DeepProfiler project from a workflow root or export root | DeepProfiler export and project helpers | `project_manifest.json`, `inputs/config/`, `inputs/metadata/` |
+| [`run-deepprofiler`](run_deepprofiler.md) | run the DeepProfiler path and return collected tables | `DeepProfiler`, `pandas`, `pyarrow` | `deepprofiler_single_cell.parquet`, `deepprofiler_well_aggregated.parquet` |
+| [`summarize-deepprofiler-profiles`](summarize_deepprofiler_profiles.md) | turn DeepProfiler tables into readable summary outputs | `pandas`, `numpy` | `profile_summary.json`, `pca_plot.png` |
 
 ## How To Read This Section
 
@@ -59,12 +81,17 @@ Each page explains:
 ```{toctree}
 :maxdepth: 1
 
-plan_data_access
-download_data
-run_classical_profiling
-run_segmentation
-prepare_deepprofiler_inputs
+inspect_cellpainting_data
+download_cellpainting_data
+run_cellprofiler_profiling
+export_single_cell_measurements
+run_pycytominer
+summarize_classical_profiles
+run_segmentation_masks
+export_single_cell_crops
+prepare_deepprofiler_project
 run_deepprofiler
+summarize_deepprofiler_profiles
 ```
 
 ## Related Pages

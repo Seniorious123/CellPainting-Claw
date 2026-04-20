@@ -11,7 +11,7 @@ For most users, the right starting point is **`cellpainting-skills`**.
 
 | If you want to... | Start with | Why |
 | --- | --- | --- |
-| run one clear named task such as segmentation or DeepProfiler preparation | `cellpainting-skills` | this is the shortest path from a user goal to a documented task |
+| run one clear named task such as segmentation, pycytominer, or DeepProfiler | `cellpainting-skills` | this is the shortest path from a user goal to a documented task |
 | inspect configuration, inspect `.cppipe` selection, use data-access helpers, or expose MCP tools | `cellpainting-claw` | this is the direct toolkit CLI |
 
 ## `cellpainting-skills`: The First CLI For Most Users
@@ -32,10 +32,11 @@ Its three main commands are:
 CONFIG=configs/project_config.demo.json
 
 cellpainting-skills list
-cellpainting-skills describe --skill run-segmentation
+cellpainting-skills describe --skill run-segmentation-masks
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill run-segmentation
+  --skill run-segmentation-masks \
+  --output-dir outputs/demo_segmentation
 ```
 
 This is the main CLI path that new users should understand first:
@@ -43,6 +44,16 @@ This is the main CLI path that new users should understand first:
 - inspect the available skills
 - inspect one skill
 - run one named task
+
+The public CLI skill catalog currently covers:
+
+- data access inspection and download
+- CellProfiler profiling
+- single-cell measurement export
+- pycytominer processing
+- classical profile summarization
+- segmentation masks and crop export
+- DeepProfiler project preparation, execution, and summarization
 
 ## `cellpainting-claw`: The Direct Toolkit CLI
 
@@ -54,7 +65,7 @@ The most useful command groups for normal users are:
 | --- | --- | --- |
 | configuration and `.cppipe` inspection | inspect config state and CellProfiler pipeline selection | `show-config`, `show-cppipe-selection`, `validate-cppipe-config` |
 | data access | inspect data sources, build plans, and execute downloads | `summarize-data-access`, `plan-data-access`, `execute-download-plan` |
-| direct toolkit runs | run specific toolkit-side commands when you want more control | `run-segmentation`, `run-profiling`, `run-evaluation`, `run-deepprofiler-pipeline` |
+| direct toolkit runs | run toolkit-side commands when you want lower-level control than a public skill | `run-segmentation`, `run-profiling`, `run-deepprofiler-pipeline` |
 | MCP bridge | expose or inspect the MCP interface used by agent runtimes | `serve-mcp`, `list-mcp-tools`, `run-mcp-tool` |
 
 ## Example: Inspect The Selected `.cppipe`
@@ -98,7 +109,7 @@ This is the bridge interface used by OpenClaw and other MCP-capable clients.
 
 ## What This Page Does Not Cover
 
-The toolkit CLI also contains additional lower-level or bundled commands. Those exist in the codebase, but they are **not the main starting point for most users**, so this page focuses on the commands that are most useful first.
+The toolkit CLI also contains additional lower-level or compatibility commands. Those remain available, but they are **not the main starting point for most users**, so this page focuses on the command paths that match the public skill model.
 
 ## Related Pages
 

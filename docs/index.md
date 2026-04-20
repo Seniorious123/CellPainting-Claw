@@ -1,6 +1,6 @@
 # CellPainting-Claw
 
-CellPainting-Claw turns a **fragmented Cell Painting toolchain** into one skill-driven interface, bringing scattered packages and workflow steps together while making the same work easier to use directly and easier to access through agent-friendly natural-language requests.
+CellPainting-Claw was built to make Cell Painting work less fragmented and more usable through agents. Instead of asking users to stitch together data-access utilities, CellProfiler steps, pycytominer processing, DeepProfiler preparation, and agent glue by hand, the project exposes one documented skill catalog for both direct use and agent-mediated use.
 
 The same documented skills can be used in two ways:
 
@@ -18,16 +18,17 @@ People can use the same skills in two ways:
 - directly, through `cellpainting_skills`
 - through an agent, through `OpenClaw`
 
-Both paths rely on the same foundation packages underneath.
+Both paths rely on the same foundation packages underneath. The lower-level `cellpainting_claw` package remains available for advanced direct toolkit use, but it is not the main starting point for most users.
 
 ## Foundation Packages
 
-The foundation packages bring together the underlying tools that provide the main workflow capabilities.
+The foundation packages are easiest to understand in workflow order.
 
 | Foundation area | Packages | Main capability |
 | --- | --- | --- |
-| Data access | `boto3`, `quilt3`, `cpgdata` | dataset discovery, access planning, and download preparation |
-| Classical processing | `CellProfiler`, `pycytominer` | segmentation, measurement export, and classical profile generation |
+| Data access | `boto3`, `quilt3`, `cpgdata` | dataset discovery and download |
+| Measurement extraction | `CellProfiler` | profiling tables, segmentation masks, labels, outlines, and crop-ready object data |
+| Classical profile generation | `pycytominer` | aggregation, annotation, normalization, and feature selection |
 | Deep feature extraction | `DeepProfiler` | learned single-cell feature extraction |
 
 ## How To Use CellPainting-Claw
@@ -36,23 +37,43 @@ For most users, CellPainting-Claw should be understood through **two main usage 
 
 | If you want to... | Start with | What happens underneath |
 | --- | --- | --- |
-| run documented tasks yourself from Python or from the command line | `cellpainting_skills` | you call the documented skills directly, such as segmentation, classical profiling, or DeepProfiler-related tasks |
-| tell an agent in plain language what you want done | `OpenClaw` | the agent maps your request onto the same documented skills and runs them through the same underlying toolkit |
-
-The lower-level `cellpainting_claw` package remains available for advanced direct package use, but it is not the main starting point for most users.
+| run documented tasks yourself from Python or from the command line | `cellpainting_skills` | you call the documented skills directly, such as segmentation, pycytominer processing, or DeepProfiler tasks |
+| tell an agent in plain language what you want done | `OpenClaw` | the agent maps your request onto the same documented skills and runs them through the same toolkit |
 
 ## Current Skill Catalog
 
 Skills are the **core public task interface** of the project.
 
-| Skill key | Main purpose | Typical result |
-| --- | --- | --- |
-| `plan-data-access` | inspect a dataset and write a reusable plan | data-access summary and plan JSON |
-| `download-data` | execute the local download step | download plan and download execution JSON |
-| `run-classical-profiling` | run the classical profiling tool path | single-cell tables and pycytominer outputs |
-| `run-segmentation` | run the segmentation tool path | masks, previews, and single-cell crops |
-| `prepare-deepprofiler-inputs` | prepare DeepProfiler-ready inputs | DeepProfiler export metadata and inputs |
-| `run-deepprofiler` | run the DeepProfiler-oriented tool path | project files and collected deep features |
+### Data Access
+
+| Skill | Main result |
+| --- | --- |
+| `inspect-cellpainting-data` | inspect configured sources and write a data-access summary |
+| `download-cellpainting-data` | download one dataset slice into a local cache |
+
+### Profiling
+
+| Skill | Main result |
+| --- | --- |
+| `run-cellprofiler-profiling` | write CellProfiler measurement tables |
+| `export-single-cell-measurements` | merge CellProfiler tables into one single-cell measurements table |
+| `run-pycytominer` | write classical profile outputs |
+| `summarize-classical-profiles` | turn classical profile outputs into readable summaries and PCA views |
+
+### Segmentation
+
+| Skill | Main result |
+| --- | --- |
+| `run-segmentation-masks` | write masks, labels, outlines, segmentation tables, and sample previews |
+| `export-single-cell-crops` | export masked or unmasked single-cell crop stacks |
+
+### DeepProfiler
+
+| Skill | Main result |
+| --- | --- |
+| `prepare-deepprofiler-project` | prepare a runnable DeepProfiler project directory |
+| `run-deepprofiler` | run the DeepProfiler path and return collected feature tables |
+| `summarize-deepprofiler-profiles` | turn DeepProfiler tables into readable summaries and PCA views |
 
 ## Where To Start
 

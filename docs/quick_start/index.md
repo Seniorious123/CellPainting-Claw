@@ -9,6 +9,7 @@ The goal is not to run every part of the toolkit at once. The goal is to:
 - inspect one skill
 - inspect the CellProfiler `.cppipe` used by that skill
 - run one skill on the bundled demo config
+- run one follow-up skill from the output of the first one
 
 ## 1. Install The Package
 
@@ -43,7 +44,7 @@ This is the fastest way to see the current public task model.
 Describe the segmentation skill:
 
 ```bash
-cellpainting-skills describe --skill run-segmentation
+cellpainting-skills describe --skill run-segmentation-masks
 ```
 
 This shows what the skill is for and how it fits into the public task catalog.
@@ -65,37 +66,65 @@ What this means:
 
 ## 6. Run One Skill
 
-Run the segmentation skill on the demo config:
+Run the segmentation-mask skill on the demo config:
 
 ```bash
-cellpainting-skills run   --config "$CONFIG"   --skill run-segmentation
+RUN_ROOT=outputs/demo_segmentation
+
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill run-segmentation-masks \
+  --output-dir "$RUN_ROOT"
 ```
 
 What this skill does:
 
-- runs the segmentation path
+- runs the segmentation mask-export path
 - uses the configured segmentation-side CellProfiler `.cppipe`
-- produces segmentation artifacts rather than pycytominer outputs
+- writes the segmentation outputs that later skills can reuse
 
 Typical outputs include:
 
-- label masks
-- sample preview images
-- masked single-cell crops
-- unmasked single-cell crops
+- `cellprofiler_masks/`
+- `Image.csv`
+- `Cells.csv`
+- `Nuclei.csv`
+- `labels/`
+- `outlines/`
+- `sample_previews_png/`
 
-## 7. Python Version Of The Same Idea
+## 7. Run One Follow-Up Skill
 
-```python
-import cellpainting_claw as cp
+Use the workflow root from the previous step and export single-cell crops:
 
-config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-segmentation")
-print(result.ok)
-print(result.segmentation_output_dir)
+```bash
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill export-single-cell-crops \
+  --workflow-root "$RUN_ROOT" \
+  --crop-mode masked \
+  --output-dir "$RUN_ROOT/crops"
 ```
 
-## 8. What To Read Next
+This is the main idea behind the skill catalog: one skill produces a concrete output, and later skills can build on that output.
+
+## 8. Python Version Of The Same Idea
+
+```python
+from cellpainting_claw import ProjectConfig
+import cellpainting_skills as cps
+
+config = ProjectConfig.from_json("configs/project_config.demo.json")
+result = cps.run_pipeline_skill(
+    config,
+    "run-segmentation-masks",
+    output_dir="outputs/demo_segmentation",
+)
+print(result.ok)
+print(result.primary_outputs["summary_path"])
+```
+
+## 9. What To Read Next
 
 After this first run, the most useful next pages are:
 
