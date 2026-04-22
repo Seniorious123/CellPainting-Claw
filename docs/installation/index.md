@@ -35,7 +35,7 @@ pip install -e .
 
 This is the recommended installation path for the current project because the validated toolkit depends on a mixed Conda and pip stack.
 
-## What You Can Use After Installation
+## Available Components After Installation
 
 After installation, the main things you can use are:
 

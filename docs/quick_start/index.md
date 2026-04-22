@@ -43,28 +43,29 @@ This is the fastest way to see the current public task model.
 Describe the segmentation skill:
 
 ```bash
-cellpainting-skills describe --skill run-segmentation-masks
+cellpainting-skills describe --skill cp-extract-segmentation-artifacts
 ```
 
 This shows what the skill is for and how it fits into the public task catalog.
 
 ## 5. Run A Skill
 
-Run the segmentation-mask skill on the demo config:
+Run the segmentation artifact skill on the demo config:
 
 ```bash
 RUN_ROOT=outputs/demo_segmentation
 
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill run-segmentation-masks \
+  --skill cp-extract-segmentation-artifacts \
   --output-dir "$RUN_ROOT"
 ```
 
-What this skill does:
+Skill effect:
 
-- runs the segmentation mask-export path
+- runs the segmentation CellProfiler path selected by the project config
 - writes the segmentation outputs that later skills can reuse
+- uses the repository-provided segmentation `.cppipe` unless the config overrides it
 
 Typical outputs include:
 
@@ -83,7 +84,7 @@ Use the workflow root from the previous step and export single-cell crops:
 ```bash
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill export-single-cell-crops \
+  --skill crop-export-single-cell-crops \
   --workflow-root "$RUN_ROOT" \
   --crop-mode masked \
   --output-dir "$RUN_ROOT/crops"
@@ -100,11 +101,11 @@ import cellpainting_skills as cps
 config = ProjectConfig.from_json("configs/project_config.demo.json")
 result = cps.run_pipeline_skill(
     config,
-    "run-segmentation-masks",
+    "cp-extract-segmentation-artifacts",
     output_dir="outputs/demo_segmentation",
 )
 print(result.ok)
-print(result.primary_outputs["summary_path"])
+print(result.primary_outputs["workflow_root"])
 ```
 
 ## 8. Next Pages

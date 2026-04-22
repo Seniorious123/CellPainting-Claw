@@ -15,7 +15,7 @@ In normal use, OpenClaw should do one thing well:
 
 So OpenClaw should be understood as a **natural-language front end for the existing skills**, not as a separate workflow.
 
-## When To Use OpenClaw
+## OpenClaw Fit
 
 Use OpenClaw when you want:
 
@@ -61,12 +61,12 @@ cp provider.env.example provider.env
 ./configure_openai_compatible_provider.sh
 ```
 
-What this step does:
+Step behavior:
 
 - reads your provider settings from `provider.env`
 - writes the OpenClaw-side provider configuration used by the gateway
 
-What success looks like:
+Success criteria:
 
 - the command finishes without an error
 - the configured provider is ready for the later gateway start
@@ -84,14 +84,14 @@ Command:
 ./run_openclaw_gateway.sh
 ```
 
-What this step does:
+Step behavior:
 
 - launches the OpenClaw gateway
 - launches the local CellPainting-Claw MCP server
 - keeps the bridge between OpenClaw and the toolkit available for later requests
 - uses the wrapper scripts from the setup path you chose earlier
 
-What success looks like:
+Success criteria:
 
 - the gateway stays running instead of exiting immediately
 - the logs show that the gateway and MCP side have both started cleanly
@@ -108,12 +108,12 @@ Command:
 ./run_openclaw_tui.sh
 ```
 
-What this step does:
+Step behavior:
 
 - opens the OpenClaw terminal client
 - connects that client to the running gateway session
 
-What success looks like:
+Success criteria:
 
 - the TUI opens normally
 - you can type a request into the session instead of seeing an immediate connection error
@@ -130,20 +130,20 @@ Example prompt:
 Run the segmentation mask export with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
 ```
 
-What this request means:
+Request interpretation:
 
 - the task objective is segmentation mask export
 - the config file is `configs/project_config.demo.json`
 - the requested output location is `outputs/demo_segmentation`
 
-What should happen internally:
+Internal routing:
 
 - OpenClaw receives the natural-language request
 - the agent recognizes this as a segmentation-mask request
-- the request is routed to the skill `run-segmentation-masks`
+- the request is routed to the skill `cp-extract-segmentation-artifacts`
 - that skill calls the same validated segmentation path used by the CLI and Python API
 
-What success looks like:
+Success criteria:
 
 - the agent returns a result instead of failing at the provider, gateway, or MCP level
 - the request behaves like a routed toolkit task rather than a free-form chat answer
@@ -164,13 +164,13 @@ Purpose:
 
 - confirm that the request reached the underlying toolkit and produced real outputs
 
-What to check:
+Checks:
 
 - the OpenClaw session should report a task result, not only conversational text
 - the requested output location should contain the segmentation artifacts
-- those artifacts should match the normal outputs of `run-segmentation-masks`
+- those artifacts should match the normal outputs of `cp-extract-segmentation-artifacts`
 
-What this proves:
+Confirmed behavior:
 
 - OpenClaw can understand a task request in natural language
 - OpenClaw can route that request onto the correct documented skill
@@ -184,10 +184,10 @@ Prompt:
 Export masked single-cell crops from outputs/demo_segmentation and write them under outputs/demo_crops.
 ```
 
-How this request should be interpreted:
+Request interpretation:
 
 - the task objective is crop export from an existing segmentation workflow root
-- the request should route to `export-single-cell-crops`
+- the request should route to `crop-export-single-cell-crops`
 - the expected output is a directory of masked single-cell crops plus a crop manifest
 
 ## Result Summary Example
@@ -198,10 +198,10 @@ Prompt:
 Summarize the DeepProfiler outputs from outputs/demo_deepprofiler and write a readable report bundle under outputs/demo_deepprofiler_summary.
 ```
 
-How this request should be interpreted:
+Request interpretation:
 
 - the task objective is result summarization rather than model execution
-- the request should route to `summarize-deepprofiler-profiles`
+- the request should route to `dp-summarize-deep-features`
 - the expected output is a summary bundle with metadata tables, top variable features, PCA coordinates, and a PCA plot
 
 ## Good OpenClaw Requests

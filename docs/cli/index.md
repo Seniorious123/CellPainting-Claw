@@ -9,7 +9,7 @@ For most users, the right starting point is **`cellpainting-skills`**.
 
 ## Choosing A CLI
 
-| If you want to... | Start with | Why |
+| User goal | Start with | Rationale |
 | --- | --- | --- |
 | run one clear named task such as segmentation, pycytominer, or DeepProfiler | `cellpainting-skills` | this is the shortest path from a user goal to a documented task |
 | inspect configuration, use data-access helpers, or expose MCP tools | `cellpainting-claw` | this is the direct toolkit CLI |
@@ -20,7 +20,7 @@ For most users, the right starting point is **`cellpainting-skills`**.
 
 Its three main commands are:
 
-| Command | What it does |
+| Command | Role |
 | --- | --- |
 | `list` | show the public skill catalog |
 | `describe` | show what one skill does |
@@ -32,10 +32,10 @@ Its three main commands are:
 CONFIG=configs/project_config.demo.json
 
 cellpainting-skills list
-cellpainting-skills describe --skill run-segmentation-masks
+cellpainting-skills describe --skill cp-extract-segmentation-artifacts
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill run-segmentation-masks \
+  --skill cp-extract-segmentation-artifacts \
   --output-dir outputs/demo_segmentation
 ```
 
@@ -47,13 +47,11 @@ This is the main CLI path that new users should understand first:
 
 The public CLI skill catalog currently covers:
 
-- data access inspection and download
-- CellProfiler profiling
-- single-cell measurement export
-- pycytominer processing
-- classical profile summarization
-- segmentation masks and crop export
-- DeepProfiler project preparation, execution, and summarization
+- data access inspection, planning, and download
+- CellProfiler measurement extraction and single-cell table construction
+- pycytominer aggregation, annotation, normalization, feature selection, and summarization
+- segmentation preparation, artifact export, preview generation, and crop export
+- DeepProfiler input export, project building, model execution, feature collection, and summarization
 
 ## `cellpainting-claw`
 
@@ -61,7 +59,7 @@ Use `cellpainting-claw` when you need commands that are more specific than a nam
 
 The most useful command groups for normal users are:
 
-| Command group | What it is for | Example commands |
+| Command group | Scope | Example commands |
 | --- | --- | --- |
 | configuration inspection | inspect config state and other advanced runtime selections | `show-config`, `show-cppipe-selection`, `validate-cppipe-config` |
 | data access | inspect data sources, build plans, and execute downloads | `summarize-data-access`, `plan-data-access`, `execute-download-plan` |

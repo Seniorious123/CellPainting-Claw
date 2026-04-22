@@ -13,6 +13,10 @@ from cellpaint_pipeline.profile_summaries import (
 )
 from cellpaint_pipeline.profiling_native import (
     export_cellprofiler_to_singlecell_native,
+    run_pycytominer_aggregate_native,
+    run_pycytominer_annotate_native,
+    run_pycytominer_feature_select_native,
+    run_pycytominer_normalize_native,
     run_pycytominer_native,
 )
 from cellpaint_pipeline.runner import ExecutionResult
@@ -53,7 +57,7 @@ class PipelineSkillResult:
     ok: bool
 
 
-PRIMARY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
+CURRENT_PRIMARY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     'inspect-cellpainting-data': PipelineSkillDefinition(
         key='inspect-cellpainting-data',
         description='Inspect the configured Cell Painting data sources and return a usable availability summary.',
@@ -175,7 +179,7 @@ PRIMARY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     ),
 }
 
-ADVANCED_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
+CURRENT_ADVANCED_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     'generate-sample-previews': PipelineSkillDefinition(
         key='generate-sample-previews',
         description='Render field-level RGB preview PNGs from the segmentation source channels.',
@@ -260,7 +264,7 @@ ADVANCED_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     ),
 }
 
-LEGACY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
+CURRENT_LEGACY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     'build-image-manifest': PipelineSkillDefinition(
         key='build-image-manifest',
         description='Former helper-style skill name retained for compatibility discovery only.',
@@ -359,6 +363,259 @@ LEGACY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     ),
 }
 
+def _remap_skill_definition(
+    definition: PipelineSkillDefinition,
+    *,
+    key: str | None = None,
+    description: str | None = None,
+    category: str | None = None,
+    input_keys: tuple[str, ...] | None = None,
+    typical_outputs: tuple[str, ...] | None = None,
+    implements_with: tuple[str, ...] | None = None,
+    user_summary: str | None = None,
+    agent_summary: str | None = None,
+    composes_with: tuple[str, ...] | None = None,
+    status: str | None = None,
+    replaced_by: tuple[str, ...] | None = None,
+) -> PipelineSkillDefinition:
+    return replace(
+        definition,
+        key=key or definition.key,
+        description=description or definition.description,
+        category=category or definition.category,
+        input_keys=input_keys if input_keys is not None else definition.input_keys,
+        typical_outputs=typical_outputs if typical_outputs is not None else definition.typical_outputs,
+        implements_with=implements_with if implements_with is not None else definition.implements_with,
+        user_summary=user_summary or definition.user_summary,
+        agent_summary=agent_summary or definition.agent_summary,
+        composes_with=composes_with if composes_with is not None else definition.composes_with,
+        status=status or definition.status,
+        replaced_by=replaced_by if replaced_by is not None else definition.replaced_by,
+    )
+
+
+PRIMARY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
+    'data-inspect-availability': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['inspect-cellpainting-data'],
+        key='data-inspect-availability',
+        description='Inspect the configured Cell Painting data sources and return a usable availability summary.',
+        user_summary='Use this skill when you want to inspect configured Cell Painting data sources before planning or downloading anything.',
+        agent_summary='Choose this skill when the request is to inspect available Cell Painting sources, dataset identifiers, or access status.',
+        composes_with=('data-plan-download', 'data-download'),
+    ),
+    'data-plan-download': PipelineSkillDefinition(
+        key='data-plan-download',
+        description='Resolve one configured Cell Painting data request into a concrete download plan without executing the download.',
+        category='data-access',
+        input_keys=('data_request', 'output_dir'),
+        typical_outputs=('download_plan.json',),
+        implements_with=('cellpaint_pipeline.data_access', 'boto3', 'cpgdata', 'quilt3'),
+        user_summary='Use this skill when you want a concrete download plan before fetching files.',
+        agent_summary='Choose this skill when the request is to preview or validate what a download would fetch without executing it.',
+        composes_with=('data-download',),
+    ),
+    'data-download': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['download-cellpainting-data'],
+        key='data-download',
+        description='Download one configured Cell Painting dataset slice into a local cache directory.',
+        user_summary='Use this skill when you want local input files for the rest of the toolkit.',
+        agent_summary='Choose this skill when the request is to fetch Cell Painting inputs from the configured access layer.',
+        composes_with=('cp-extract-measurements', 'cp-extract-segmentation-artifacts'),
+    ),
+    'cp-extract-measurements': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['run-cellprofiler-profiling'],
+        key='cp-extract-measurements',
+        description='Run the configured CellProfiler profiling pipeline and write the standard measurement tables.',
+        user_summary='Use this skill when you want CellProfiler measurement tables from raw images.',
+        agent_summary='Choose this skill when the request is to run the profiling .cppipe and produce CellProfiler tables.',
+        composes_with=('cp-build-single-cell-table',),
+    ),
+    'cp-build-single-cell-table': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['export-single-cell-measurements'],
+        key='cp-build-single-cell-table',
+        description='Merge CellProfiler image and object tables into a single-cell measurements table.',
+        user_summary='Use this skill when you want one single-cell table after CellProfiler has produced the compartment tables.',
+        agent_summary='Choose this skill when the request is to turn CellProfiler output tables into one single-cell table.',
+        composes_with=('cyto-aggregate-profiles', 'cyto-annotate-profiles', 'cyto-normalize-profiles', 'cyto-select-profile-features'),
+    ),
+    'cyto-aggregate-profiles': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['run-pycytominer'],
+        key='cyto-aggregate-profiles',
+        description='Run the pycytominer path and return the aggregated classical profile table.',
+        input_keys=('single_cell_path', 'output_dir'),
+        typical_outputs=('aggregated.parquet',),
+        user_summary='Use this skill when you want the aggregated pycytominer profile table.',
+        agent_summary='Choose this skill when the request is to aggregate single-cell measurements into classical profiles.',
+        composes_with=('cyto-annotate-profiles',),
+    ),
+    'cyto-annotate-profiles': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['run-pycytominer'],
+        key='cyto-annotate-profiles',
+        description='Run the pycytominer path and return the annotated classical profile table.',
+        input_keys=('aggregated_path', 'output_dir'),
+        typical_outputs=('annotated.parquet',),
+        user_summary='Use this skill when you want the metadata-annotated pycytominer profile table.',
+        agent_summary='Choose this skill when the request is to attach plate-map or treatment metadata to classical profiles.',
+        composes_with=('cyto-normalize-profiles',),
+    ),
+    'cyto-normalize-profiles': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['run-pycytominer'],
+        key='cyto-normalize-profiles',
+        description='Run the pycytominer path and return the normalized classical profile table.',
+        input_keys=('annotated_path', 'output_dir'),
+        typical_outputs=('normalized.parquet',),
+        user_summary='Use this skill when you want the normalized pycytominer profile table.',
+        agent_summary='Choose this skill when the request is to normalize classical profiles before feature selection.',
+        composes_with=('cyto-select-profile-features',),
+    ),
+    'cyto-select-profile-features': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['run-pycytominer'],
+        key='cyto-select-profile-features',
+        description='Run the pycytominer path and return the feature-selected classical profile table.',
+        input_keys=('normalized_path', 'output_dir'),
+        typical_outputs=('feature_selected.parquet',),
+        user_summary='Use this skill when you want the final feature-selected classical profile table.',
+        agent_summary='Choose this skill when the request is to produce the feature-selected pycytominer output.',
+        composes_with=('cyto-summarize-classical-profiles',),
+    ),
+    'cyto-summarize-classical-profiles': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['summarize-classical-profiles'],
+        key='cyto-summarize-classical-profiles',
+        user_summary='Use this skill when you want a readable summary of classical profile outputs instead of raw tables only.',
+        agent_summary='Choose this skill when the request is to explain or summarize classical pycytominer outputs for a human reader.',
+    ),
+    'cp-prepare-segmentation-inputs': PipelineSkillDefinition(
+        key='cp-prepare-segmentation-inputs',
+        description='Prepare the load-data table that the segmentation CellProfiler pipeline will use.',
+        category='segmentation',
+        input_keys=('output_dir',),
+        typical_outputs=('load_data_for_segmentation.csv',),
+        implements_with=('cellpaint_pipeline.segmentation_native',),
+        user_summary='Use this skill when you want the segmentation input table without running the full segmentation export yet.',
+        agent_summary='Choose this skill when the request is to prepare segmentation inputs before mask extraction.',
+        composes_with=('cp-extract-segmentation-artifacts', 'cp-generate-segmentation-previews'),
+    ),
+    'cp-extract-segmentation-artifacts': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['run-segmentation-masks'],
+        key='cp-extract-segmentation-artifacts',
+        description='Run the segmentation CellProfiler pipeline and produce mask tables, labels, and outlines.',
+        typical_outputs=('cellprofiler_masks/', 'Image.csv', 'Cells.csv', 'Nuclei.csv', 'labels/', 'outlines/'),
+        user_summary='Use this skill when you want segmentation outputs such as masks, labels, outlines, and object tables.',
+        agent_summary='Choose this skill when the request is to execute the segmentation branch and produce mask artifacts.',
+        composes_with=('cp-generate-segmentation-previews', 'crop-export-single-cell-crops', 'dp-export-deep-feature-inputs'),
+    ),
+    'cp-generate-segmentation-previews': _remap_skill_definition(
+        CURRENT_ADVANCED_PIPELINE_SKILLS['generate-sample-previews'],
+        key='cp-generate-segmentation-previews',
+        user_summary='Use this skill when you want only segmentation preview PNGs from prepared inputs or a workflow root.',
+        agent_summary='Choose this skill when the request is explicitly for segmentation preview images.',
+    ),
+    'crop-export-single-cell-crops': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['export-single-cell-crops'],
+        key='crop-export-single-cell-crops',
+        category='segmentation',
+        user_summary='Use this skill when you want masked or unmasked single-cell crop stacks from a segmentation workflow root.',
+        agent_summary='Choose this skill when the request is to export single-cell crops and the only decision is masked versus unmasked mode.',
+        composes_with=('dp-export-deep-feature-inputs',),
+    ),
+    'dp-export-deep-feature-inputs': _remap_skill_definition(
+        CURRENT_ADVANCED_PIPELINE_SKILLS['export-deepprofiler-inputs'],
+        key='dp-export-deep-feature-inputs',
+        description='Write the DeepProfiler field metadata and per-field nuclei location CSV files.',
+        category='deepprofiler',
+        user_summary='Use this skill when you want the DeepProfiler export bundle without building the project yet.',
+        agent_summary='Choose this skill when the request is to stop at the DeepProfiler export stage.',
+        composes_with=('dp-build-deep-feature-project',),
+    ),
+    'dp-build-deep-feature-project': _remap_skill_definition(
+        CURRENT_ADVANCED_PIPELINE_SKILLS['build-deepprofiler-project'],
+        key='dp-build-deep-feature-project',
+        description='Build a runnable DeepProfiler project directory from a DeepProfiler export.',
+        category='deepprofiler',
+        user_summary='Use this skill when you want a runnable DeepProfiler project directory that is ready to execute next.',
+        agent_summary='Choose this skill when the request is to build the DeepProfiler project stage without running the model yet.',
+        composes_with=('dp-run-deep-feature-model',),
+    ),
+    'dp-run-deep-feature-model': _remap_skill_definition(
+        CURRENT_ADVANCED_PIPELINE_SKILLS['run-deepprofiler-profile'],
+        key='dp-run-deep-feature-model',
+        description='Run the DeepProfiler model against a prepared DeepProfiler project.',
+        category='deepprofiler',
+        user_summary='Use this skill when you want raw DeepProfiler feature files from a prepared project.',
+        agent_summary='Choose this skill when the request is to execute the deep feature model without collecting the tabular outputs yet.',
+        composes_with=('dp-collect-deep-features',),
+    ),
+    'dp-collect-deep-features': _remap_skill_definition(
+        CURRENT_ADVANCED_PIPELINE_SKILLS['collect-deepprofiler-features'],
+        key='dp-collect-deep-features',
+        description='Collect DeepProfiler outputs into single-cell and well-level tabular feature files.',
+        category='deepprofiler',
+        user_summary='Use this skill when you want DeepProfiler feature files collected into analysis-ready tables.',
+        agent_summary='Choose this skill when the request is to convert raw DeepProfiler outputs into tabular features.',
+        composes_with=('dp-summarize-deep-features',),
+    ),
+    'dp-summarize-deep-features': _remap_skill_definition(
+        CURRENT_PRIMARY_PIPELINE_SKILLS['summarize-deepprofiler-profiles'],
+        key='dp-summarize-deep-features',
+        description='Summarize DeepProfiler single-cell and well-level tables into readable metadata, variability, and PCA outputs.',
+        category='deepprofiler',
+        user_summary='Use this skill when you want a readable summary of DeepProfiler outputs instead of raw embedding tables only.',
+        agent_summary='Choose this skill when the request is to explain or summarize DeepProfiler outputs for a human reader.',
+    ),
+}
+
+ADVANCED_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
+    **{
+        key: _remap_skill_definition(
+            definition,
+            status='advanced',
+        )
+        for key, definition in CURRENT_PRIMARY_PIPELINE_SKILLS.items()
+    },
+    **{
+        key: _remap_skill_definition(
+            definition,
+            status='advanced',
+        )
+        for key, definition in CURRENT_ADVANCED_PIPELINE_SKILLS.items()
+    },
+}
+
+LEGACY_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
+    'build-image-manifest': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['build-image-manifest'],
+        replaced_by=('cp-extract-measurements',),
+    ),
+    'validate-profiling-inputs': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['validate-profiling-inputs'],
+        replaced_by=('cp-extract-measurements', 'cp-build-single-cell-table'),
+    ),
+    'export-segmentation-load-data': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['export-segmentation-load-data'],
+        replaced_by=('cp-prepare-segmentation-inputs',),
+    ),
+    'plan-data-access': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['plan-data-access'],
+        replaced_by=('data-inspect-availability', 'data-plan-download'),
+    ),
+    'download-data': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['download-data'],
+        replaced_by=('data-download',),
+    ),
+    'run-classical-profiling': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['run-classical-profiling'],
+        replaced_by=('cyto-aggregate-profiles', 'cyto-select-profile-features'),
+    ),
+    'run-segmentation': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['run-segmentation'],
+        replaced_by=('cp-extract-segmentation-artifacts',),
+    ),
+    'prepare-deepprofiler-inputs': _remap_skill_definition(
+        CURRENT_LEGACY_PIPELINE_SKILLS['prepare-deepprofiler-inputs'],
+        replaced_by=('dp-export-deep-feature-inputs',),
+    ),
+}
+
 ALL_PIPELINE_SKILLS: dict[str, PipelineSkillDefinition] = {
     **PRIMARY_PIPELINE_SKILLS,
     **ADVANCED_PIPELINE_SKILLS,
@@ -426,6 +683,10 @@ class SkillRuntimeContext:
     load_data_csv_path: Path | None
     manifest_path: Path | None
     object_table_path: Path | None
+    single_cell_path: Path | None
+    aggregated_path: Path | None
+    annotated_path: Path | None
+    normalized_path: Path | None
     feature_selected_path: Path | None
     single_cell_parquet_path: Path | None
     well_aggregated_parquet_path: Path | None
@@ -455,6 +716,10 @@ def run_pipeline_skill(
     load_data_csv_path: Path | None = None,
     manifest_path: Path | None = None,
     object_table_path: Path | None = None,
+    single_cell_path: Path | None = None,
+    aggregated_path: Path | None = None,
+    annotated_path: Path | None = None,
+    normalized_path: Path | None = None,
     feature_selected_path: Path | None = None,
     single_cell_parquet_path: Path | None = None,
     well_aggregated_parquet_path: Path | None = None,
@@ -504,6 +769,10 @@ def run_pipeline_skill(
         load_data_csv_path=load_data_csv_path.expanduser().resolve() if load_data_csv_path is not None else None,
         manifest_path=manifest_path.expanduser().resolve() if manifest_path is not None else None,
         object_table_path=object_table_path.expanduser().resolve() if object_table_path is not None else None,
+        single_cell_path=single_cell_path.expanduser().resolve() if single_cell_path is not None else None,
+        aggregated_path=aggregated_path.expanduser().resolve() if aggregated_path is not None else None,
+        annotated_path=annotated_path.expanduser().resolve() if annotated_path is not None else None,
+        normalized_path=normalized_path.expanduser().resolve() if normalized_path is not None else None,
         feature_selected_path=feature_selected_path.expanduser().resolve() if feature_selected_path is not None else None,
         single_cell_parquet_path=single_cell_parquet_path.expanduser().resolve() if single_cell_parquet_path is not None else None,
         well_aggregated_parquet_path=well_aggregated_parquet_path.expanduser().resolve() if well_aggregated_parquet_path is not None else None,
@@ -520,33 +789,51 @@ def run_pipeline_skill(
     return SKILL_RUNNERS[skill_key](context)
 
 
+def _resolve_download_request_and_plan(context: SkillRuntimeContext):
+    from cellpaint_pipeline.data_access import build_data_request, build_download_plan
+
+    request = context.data_request
+    if context.download_plan is not None:
+        return request, context.download_plan
+    if request is None:
+        request = build_data_request(
+            dataset_id=context.config.data_access.default_dataset_id,
+            source_id=context.config.data_access.default_source_id,
+            dry_run=False,
+            output_dir=context.run_root / 'downloads',
+            manifest_path=context.run_root / 'downloads' / 'download_manifest.json',
+        )
+    elif request.output_dir is None or request.manifest_path is None:
+        request = replace(
+            request,
+            output_dir=request.output_dir or (context.run_root / 'downloads'),
+            manifest_path=request.manifest_path or (context.run_root / 'downloads' / 'download_manifest.json'),
+        )
+    return request, build_download_plan(context.config, request)
+
+
+def _run_data_plan_download(context: SkillRuntimeContext) -> PipelineSkillResult:
+    from cellpaint_pipeline.data_access import data_download_plan_to_dict, write_download_plan
+
+    _, plan = _resolve_download_request_and_plan(context)
+    plan_path = write_download_plan(plan, context.run_root / 'download_plan.json')
+    plan_payload = data_download_plan_to_dict(plan)
+    return _finalize_skill_result(
+        context,
+        implementation='cellpaint_pipeline.data_access',
+        primary_outputs={'download_plan_path': plan_path},
+        details=plan_payload,
+        ok=True,
+    )
+
+
 def _run_download_cellpainting_data(context: SkillRuntimeContext) -> PipelineSkillResult:
     from cellpaint_pipeline.data_access import (
-        build_data_request,
-        build_download_plan,
         execute_download_plan,
         write_download_plan,
     )
 
-    request = context.data_request
-    if context.download_plan is None:
-        if request is None:
-            request = build_data_request(
-                dataset_id=context.config.data_access.default_dataset_id,
-                source_id=context.config.data_access.default_source_id,
-                dry_run=False,
-                output_dir=context.run_root / 'downloads',
-                manifest_path=context.run_root / 'downloads' / 'download_manifest.json',
-            )
-        elif request.output_dir is None or request.manifest_path is None:
-            request = replace(
-                request,
-                output_dir=request.output_dir or (context.run_root / 'downloads'),
-                manifest_path=request.manifest_path or (context.run_root / 'downloads' / 'download_manifest.json'),
-            )
-        plan = build_download_plan(context.config, request)
-    else:
-        plan = context.download_plan
+    _, plan = _resolve_download_request_and_plan(context)
     plan_path = write_download_plan(plan, context.run_root / 'download_plan.json')
     execution = execute_download_plan(context.config, plan)
     return _finalize_skill_result(
@@ -597,6 +884,89 @@ def _run_cellprofiler_profiling(context: SkillRuntimeContext) -> PipelineSkillRe
     )
 
 
+def _run_pycytominer_stage(context: SkillRuntimeContext, *, stage: str) -> PipelineSkillResult:
+    stage_root = context.run_root / 'pycytominer'
+    if stage == 'aggregate':
+        result = run_pycytominer_aggregate_native(
+            context.config,
+            output_path=stage_root / 'aggregated.parquet',
+            single_cell_path=context.single_cell_path,
+        )
+        primary_outputs = {'aggregated_path': result.output_path}
+    elif stage == 'annotate':
+        aggregated_path = context.aggregated_path
+        if aggregated_path is None:
+            aggregated_path = run_pycytominer_aggregate_native(
+                context.config,
+                output_path=stage_root / 'aggregated.parquet',
+                single_cell_path=context.single_cell_path,
+            ).output_path
+        result = run_pycytominer_annotate_native(
+            context.config,
+            output_path=stage_root / 'annotated.parquet',
+            aggregated_path=aggregated_path,
+        )
+        primary_outputs = {'annotated_path': result.output_path}
+    elif stage == 'normalize':
+        annotated_path = context.annotated_path
+        if annotated_path is None:
+            aggregated_path = context.aggregated_path
+            if aggregated_path is None:
+                aggregated_path = run_pycytominer_aggregate_native(
+                    context.config,
+                    output_path=stage_root / 'aggregated.parquet',
+                    single_cell_path=context.single_cell_path,
+                ).output_path
+            annotated_path = run_pycytominer_annotate_native(
+                context.config,
+                output_path=stage_root / 'annotated.parquet',
+                aggregated_path=aggregated_path,
+            ).output_path
+        result = run_pycytominer_normalize_native(
+            context.config,
+            output_path=stage_root / 'normalized.parquet',
+            annotated_path=annotated_path,
+        )
+        primary_outputs = {'normalized_path': result.output_path}
+    elif stage == 'select':
+        normalized_path = context.normalized_path
+        if normalized_path is None:
+            annotated_path = context.annotated_path
+            if annotated_path is None:
+                aggregated_path = context.aggregated_path
+                if aggregated_path is None:
+                    aggregated_path = run_pycytominer_aggregate_native(
+                        context.config,
+                        output_path=stage_root / 'aggregated.parquet',
+                        single_cell_path=context.single_cell_path,
+                    ).output_path
+                annotated_path = run_pycytominer_annotate_native(
+                    context.config,
+                    output_path=stage_root / 'annotated.parquet',
+                    aggregated_path=aggregated_path,
+                ).output_path
+            normalized_path = run_pycytominer_normalize_native(
+                context.config,
+                output_path=stage_root / 'normalized.parquet',
+                annotated_path=annotated_path,
+            ).output_path
+        result = run_pycytominer_feature_select_native(
+            context.config,
+            output_path=stage_root / 'feature_selected.parquet',
+            normalized_path=normalized_path,
+        )
+        primary_outputs = {'feature_selected_path': result.output_path}
+    else:
+        raise ValueError(f'Unsupported pycytominer stage: {stage}')
+    return _finalize_skill_result(
+        context,
+        implementation='cellpaint_pipeline.profiling_native',
+        primary_outputs=primary_outputs,
+        details=_json_ready(result),
+        ok=True,
+    )
+
+
 def _run_export_single_cell_measurements(context: SkillRuntimeContext) -> PipelineSkillResult:
     export_result = export_cellprofiler_to_singlecell_native(
         context.config,
@@ -614,8 +984,28 @@ def _run_export_single_cell_measurements(context: SkillRuntimeContext) -> Pipeli
     )
 
 
+def _run_cyto_aggregate_profiles(context: SkillRuntimeContext) -> PipelineSkillResult:
+    return _run_pycytominer_stage(context, stage='aggregate')
+
+
+def _run_cyto_annotate_profiles(context: SkillRuntimeContext) -> PipelineSkillResult:
+    return _run_pycytominer_stage(context, stage='annotate')
+
+
+def _run_cyto_normalize_profiles(context: SkillRuntimeContext) -> PipelineSkillResult:
+    return _run_pycytominer_stage(context, stage='normalize')
+
+
+def _run_cyto_select_profile_features(context: SkillRuntimeContext) -> PipelineSkillResult:
+    return _run_pycytominer_stage(context, stage='select')
+
+
 def _run_pycytominer(context: SkillRuntimeContext) -> PipelineSkillResult:
-    result = run_pycytominer_native(context.config, output_dir=context.run_root / 'pycytominer')
+    result = run_pycytominer_native(
+        context.config,
+        output_dir=context.run_root / 'pycytominer',
+        single_cell_path=context.single_cell_path,
+    )
     return _finalize_skill_result(
         context,
         implementation='cellpaint_pipeline.profiling_native',
@@ -649,6 +1039,74 @@ def _run_summarize_classical_profiles(context: SkillRuntimeContext) -> PipelineS
         },
         details=_json_ready(result),
         ok=True,
+    )
+
+
+def _run_prepare_segmentation_inputs(context: SkillRuntimeContext) -> PipelineSkillResult:
+    result = prepare_segmentation_load_data_native(
+        context.config,
+        output_path=context.run_root / 'load_data_for_segmentation.csv',
+    )
+    return _finalize_skill_result(
+        context,
+        implementation='cellpaint_pipeline.segmentation_native',
+        primary_outputs={'load_data_path': result.output_path},
+        details=_json_ready(result),
+        ok=True,
+    )
+
+
+def _run_extract_segmentation_artifacts(context: SkillRuntimeContext) -> PipelineSkillResult:
+    load_data_path = context.run_root / 'load_data_for_segmentation.csv'
+    pipeline_path = context.run_root / 'CPJUMP1_analysis_mask_export.cppipe'
+    load_data_result = prepare_segmentation_load_data_native(context.config, output_path=load_data_path)
+    pipeline_result = build_mask_export_pipeline_native(context.config, output_path=pipeline_path)
+    workflow_config = _build_isolated_segmentation_skill_config(
+        context.config,
+        workflow_root=context.run_root,
+        load_data_path=load_data_path,
+        pipeline_path=pipeline_path,
+    )
+    execution = run_segmentation_script(
+        workflow_config,
+        'run-mask-export',
+        ['--config', str(workflow_config.segmentation_backend_config), '--reuse-load-data', '--reuse-pipeline'],
+    )
+    mask_output_dir = context.run_root / 'cellprofiler_masks'
+    summary_path = context.run_root / 'segmentation_summary.json'
+    summary_payload = {
+        'implementation': 'cellpaint_pipeline.skills.cp-extract-segmentation-artifacts',
+        'load_data_path': str(load_data_result.output_path),
+        'pipeline_path': str(pipeline_result.output_path),
+        'cellprofiler_output_dir': str(mask_output_dir),
+        'image_table_path': str(mask_output_dir / 'Image.csv'),
+        'cells_table_path': str(mask_output_dir / 'Cells.csv'),
+        'nuclei_table_path': str(mask_output_dir / 'Nuclei.csv'),
+        'labels_dir': str(mask_output_dir / 'labels'),
+        'outlines_dir': str(mask_output_dir / 'outlines'),
+        'execution': _execution_result_to_dict(execution),
+    }
+    summary_path.write_text(json.dumps(summary_payload, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    return _finalize_skill_result(
+        context,
+        implementation='cellpaint_pipeline.workflows.segmentation',
+        primary_outputs={
+            'load_data_path': load_data_result.output_path,
+            'pipeline_path': pipeline_result.output_path,
+            'cellprofiler_output_dir': mask_output_dir,
+            'image_table_path': mask_output_dir / 'Image.csv',
+            'cells_table_path': mask_output_dir / 'Cells.csv',
+            'nuclei_table_path': mask_output_dir / 'Nuclei.csv',
+            'summary_path': summary_path,
+            'log_path': execution.log_path,
+        },
+        details={
+            'load_data': _json_ready(load_data_result),
+            'pipeline': _json_ready(pipeline_result),
+            'execution': _execution_result_to_dict(execution),
+            'summary': summary_payload,
+        },
+        ok=execution.returncode == 0,
     )
 
 
@@ -1028,6 +1486,25 @@ def _run_collect_deepprofiler_features(context: SkillRuntimeContext) -> Pipeline
 
 
 SKILL_RUNNERS: dict[str, Callable[[SkillRuntimeContext], PipelineSkillResult]] = {
+    'data-inspect-availability': _run_inspect_cellpainting_data,
+    'data-plan-download': _run_data_plan_download,
+    'data-download': _run_download_cellpainting_data,
+    'cp-extract-measurements': _run_cellprofiler_profiling,
+    'cp-build-single-cell-table': _run_export_single_cell_measurements,
+    'cyto-aggregate-profiles': _run_cyto_aggregate_profiles,
+    'cyto-annotate-profiles': _run_cyto_annotate_profiles,
+    'cyto-normalize-profiles': _run_cyto_normalize_profiles,
+    'cyto-select-profile-features': _run_cyto_select_profile_features,
+    'cyto-summarize-classical-profiles': _run_summarize_classical_profiles,
+    'cp-prepare-segmentation-inputs': _run_prepare_segmentation_inputs,
+    'cp-extract-segmentation-artifacts': _run_extract_segmentation_artifacts,
+    'cp-generate-segmentation-previews': _run_generate_sample_previews,
+    'crop-export-single-cell-crops': _run_export_single_cell_crops,
+    'dp-export-deep-feature-inputs': _run_export_deepprofiler_inputs,
+    'dp-build-deep-feature-project': _run_build_deepprofiler_project,
+    'dp-run-deep-feature-model': _run_deepprofiler_profile,
+    'dp-collect-deep-features': _run_collect_deepprofiler_features,
+    'dp-summarize-deep-features': _run_summarize_deepprofiler_profiles,
     'inspect-cellpainting-data': _run_inspect_cellpainting_data,
     'download-cellpainting-data': _run_download_cellpainting_data,
     'run-cellprofiler-profiling': _run_cellprofiler_profiling,

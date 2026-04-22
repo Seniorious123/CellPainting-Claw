@@ -48,32 +48,40 @@ Skills are the **core public task interface** of the project.
 
 | Skill | Main result |
 | --- | --- |
-| `inspect-cellpainting-data` | inspect configured sources and write a data-access summary |
-| `download-cellpainting-data` | download one dataset slice into a local cache |
+| `data-inspect-availability` | inspect configured sources and write an availability summary |
+| `data-plan-download` | resolve a download request into a saved download plan |
+| `data-download` | download one dataset slice into a local cache |
 
 ### Profiling
 
 | Skill | Main result |
 | --- | --- |
-| `run-cellprofiler-profiling` | write CellProfiler measurement tables |
-| `export-single-cell-measurements` | merge CellProfiler tables into one single-cell measurements table |
-| `run-pycytominer` | write classical profile outputs |
-| `summarize-classical-profiles` | turn classical profile outputs into readable summaries and PCA views |
+| `cp-extract-measurements` | write CellProfiler measurement tables |
+| `cp-build-single-cell-table` | merge CellProfiler tables into one single-cell measurements table |
+| `cyto-aggregate-profiles` | write the aggregated classical profile table |
+| `cyto-annotate-profiles` | attach metadata to aggregated profiles |
+| `cyto-normalize-profiles` | write the normalized classical profile table |
+| `cyto-select-profile-features` | write the feature-selected classical profile table |
+| `cyto-summarize-classical-profiles` | turn classical profile outputs into readable summaries and PCA views |
 
 ### Segmentation
 
 | Skill | Main result |
 | --- | --- |
-| `run-segmentation-masks` | write masks, labels, outlines, segmentation tables, and sample previews |
-| `export-single-cell-crops` | export masked or unmasked single-cell crop stacks |
+| `cp-prepare-segmentation-inputs` | prepare the load-data table used by segmentation |
+| `cp-extract-segmentation-artifacts` | write masks, labels, outlines, and segmentation tables |
+| `cp-generate-segmentation-previews` | write preview PNGs for quick review |
+| `crop-export-single-cell-crops` | export masked or unmasked single-cell crop stacks |
 
-### DeepProfiler
+### Deep Features
 
 | Skill | Main result |
 | --- | --- |
-| `prepare-deepprofiler-project` | prepare a runnable DeepProfiler project directory |
-| `run-deepprofiler` | run the DeepProfiler path and return collected feature tables |
-| `summarize-deepprofiler-profiles` | turn DeepProfiler tables into readable summaries and PCA views |
+| `dp-export-deep-feature-inputs` | build DeepProfiler-ready metadata and location files |
+| `dp-build-deep-feature-project` | prepare a runnable DeepProfiler project directory |
+| `dp-run-deep-feature-model` | run the DeepProfiler model and write raw feature files |
+| `dp-collect-deep-features` | collect raw feature files into tabular outputs |
+| `dp-summarize-deep-features` | turn DeepProfiler tables into readable summaries and PCA views |
 
 ## Start Here
 

@@ -1,113 +1,94 @@
 # CellPainting-Skills
 
-`cellpainting_skills` is the **public task package** of CellPainting-Claw.
+`cellpainting_skills` is the public task package of CellPainting-Claw.
 
-Its job is simple: it gives users and agents a stable set of skill names for concrete Cell Painting tasks. The same skill names can be called directly by a person or chosen by an agent from a natural-language request.
+Its purpose is to give both people and agents the same stable names for concrete Cell Painting tasks. Each skill is designed to produce a usable output that can stand on its own or feed the next task.
 
-## Skill Model
+## Public Model
 
-In this project, a skill is a **named task with a concrete output**.
+A public skill in this project is:
 
-A skill is not a separate backend. It is a public task name that maps onto an implementation in the toolkit.
+- one named task
+- one main result
+- one documented interface that can be used from the CLI, Python, or OpenClaw
 
-This makes the project easier to use in practice:
+The main public catalog below focuses only on the current recommended skill names. Advanced and legacy aliases still exist in the codebase for compatibility, but they are not the primary documentation path.
 
-- a human user can choose a task by name
-- a script can call the same task repeatedly
-- an agent can map a natural-language request onto a stable task name
+## Main Catalog
 
-The intended pattern is simple:
+The tables below are written from the user point of view:
 
-- choose one task
-- run it through the CLI, Python, or an agent
-- keep the output and pass it to the next task when needed
-
-## Coverage
-
-The skills sit on top of several connected capability areas.
-
-| Capability | Main tools | What this part does |
-| --- | --- | --- |
-| Data access | `boto3`, `quilt3`, `cpgdata` | inspect datasets, build plans, and download inputs |
-| Measurement extraction | `CellProfiler` | produce profiling tables, masks, outlines, crops, and single-cell measurement tables |
-| Classical profile generation | `pycytominer` | build classical profiles from single-cell tables |
-| Deep feature extraction | `DeepProfiler` | build learned features from segmentation-guided crops |
-| Named-task interface | `cellpainting_skills` | expose stable named tasks across those capabilities |
-| Natural-language interface | `OpenClaw` | trigger the same named tasks through natural-language requests |
-
-## Public Skill Catalog
-
-The main public catalog is grouped by workflow stage and keeps the focus on tasks with meaningful standalone outputs.
-
-The tables below are written from a user point of view:
-
-- **main input** tells you what the skill expects to start from
-- **main result** tells you what you will have when the skill finishes
-- **main tools** shows which backend package or component does most of the work
+- **main input** is the artifact or setting the skill starts from
+- **main result** is the main output the skill is expected to leave behind
+- **main tools** shows which package or component does most of the work
 
 ### Data Access
 
 | Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`inspect-cellpainting-data`](inspect_cellpainting_data.md) | a project config with data-access settings | a summary of what sources, identifiers, and download settings are configured | `boto3`, `quilt3`, `cpgdata` |
-| [`download-cellpainting-data`](download_cellpainting_data.md) | a project config plus dataset selection settings | a local download cache and the recorded download plan | `boto3`, `quilt3`, `cpgdata` |
+| [`data-inspect-availability`](data_inspect_availability.md) | a project config with data-access settings | an availability summary for the configured data sources | `boto3`, `quilt3`, `cpgdata` |
+| [`data-plan-download`](data_plan_download.md) | a project config plus a requested dataset or prefix | a saved download plan without downloading files yet | `boto3`, `quilt3`, `cpgdata` |
+| [`data-download`](data_download.md) | a saved download plan or direct data request | a local download cache plus execution records | `boto3`, `quilt3`, `cpgdata` |
 
 ### Profiling
 
 | Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`run-cellprofiler-profiling`](run_cellprofiler_profiling.md) | raw Cell Painting images plus profiling configuration | CellProfiler measurement tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv` | `CellProfiler` |
-| [`export-single-cell-measurements`](export_single_cell_measurements.md) | CellProfiler measurement tables from a profiling run | one merged single-cell table for later classical profiling | `cellpaint_pipeline.profiling_native` |
-| [`run-pycytominer`](run_pycytominer.md) | single-cell measurements | analysis-ready classical profile tables such as aggregated and feature-selected outputs | `pycytominer` |
-| [`summarize-classical-profiles`](summarize_classical_profiles.md) | classical profile tables from pycytominer | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
+| [`cp-extract-measurements`](cp_extract_measurements.md) | raw Cell Painting images plus profiling configuration | CellProfiler measurement tables such as `Image.csv`, `Cells.csv`, `Cytoplasm.csv`, and `Nuclei.csv` | `CellProfiler` |
+| [`cp-build-single-cell-table`](cp_build_single_cell_table.md) | CellProfiler measurement tables | one merged single-cell table for downstream analysis | `cellpaint_pipeline.profiling_native` |
+| [`cyto-aggregate-profiles`](cyto_aggregate_profiles.md) | a single-cell table | an aggregated classical profile table | `pycytominer` |
+| [`cyto-annotate-profiles`](cyto_annotate_profiles.md) | an aggregated profile table | a metadata-annotated profile table | `pycytominer` |
+| [`cyto-normalize-profiles`](cyto_normalize_profiles.md) | an annotated profile table | a normalized profile table | `pycytominer` |
+| [`cyto-select-profile-features`](cyto_select_profile_features.md) | a normalized profile table | a feature-selected profile table | `pycytominer` |
+| [`cyto-summarize-classical-profiles`](cyto_summarize_classical_profiles.md) | one or more classical profile tables | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
 
 ### Segmentation
 
 | Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`run-segmentation-masks`](run_segmentation_masks.md) | raw Cell Painting images plus segmentation configuration | a segmentation workflow root with masks, labels, outlines, previews, and object tables | `CellProfiler` |
-| [`export-single-cell-crops`](export_single_cell_crops.md) | a completed segmentation workflow root | masked or unmasked single-cell crop stacks plus a crop manifest | `cellpaint_pipeline.segmentation_native` |
+| [`cp-prepare-segmentation-inputs`](cp_prepare_segmentation_inputs.md) | image metadata plus segmentation settings | the load-data table used by segmentation | `cellpaint_pipeline.segmentation_native` |
+| [`cp-extract-segmentation-artifacts`](cp_extract_segmentation_artifacts.md) | a segmentation load-data table plus the selected segmentation `.cppipe` | masks, labels, outlines, and segmentation measurement tables | `CellProfiler` |
+| [`cp-generate-segmentation-previews`](cp_generate_segmentation_previews.md) | segmentation inputs or a segmentation workflow root | preview PNGs for quick review | `Pillow`, `numpy` |
+| [`crop-export-single-cell-crops`](crop_export_single_cell_crops.md) | a completed segmentation workflow root | masked or unmasked single-cell crop stacks plus a crop manifest | `cellpaint_pipeline.segmentation_native` |
 
-### DeepProfiler
+### Deep Features
 
 | Skill key | Main input | Main result | Main tools |
 | --- | --- | --- | --- |
-| [`prepare-deepprofiler-project`](prepare_deepprofiler_project.md) | a segmentation workflow root or crop export root | a runnable DeepProfiler project directory with the expected config and metadata layout | DeepProfiler export and project helpers |
-| [`run-deepprofiler`](run_deepprofiler.md) | a prepared DeepProfiler project | collected DeepProfiler feature tables at single-cell and aggregated levels | `DeepProfiler`, `pandas`, `pyarrow` |
-| [`summarize-deepprofiler-profiles`](summarize_deepprofiler_profiles.md) | DeepProfiler feature tables | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
-
-## Individual Skill Pages
-
-Each skill has its **own page**.
-
-Each page explains:
-
-- what the skill does
-- when to use it
-- how a human user runs it
-- how an agent should map requests onto it
-- what outputs to expect
+| [`dp-export-deep-feature-inputs`](dp_export_deep_feature_inputs.md) | segmentation outputs or crop exports | DeepProfiler-ready metadata and location files | DeepProfiler export helpers |
+| [`dp-build-deep-feature-project`](dp_build_deep_feature_project.md) | a prepared deep-feature input bundle | a runnable DeepProfiler project directory | DeepProfiler project helpers |
+| [`dp-run-deep-feature-model`](dp_run_deep_feature_model.md) | a prepared DeepProfiler project | raw DeepProfiler feature files | `DeepProfiler` |
+| [`dp-collect-deep-features`](dp_collect_deep_features.md) | a completed DeepProfiler project or run directory | single-cell and aggregated deep-feature tables | `pandas`, `pyarrow` |
+| [`dp-summarize-deep-features`](dp_summarize_deep_features.md) | collected deep-feature tables | a readable summary bundle with metadata and PCA outputs | `pandas`, `numpy` |
 
 ## Skill Pages
 
 ```{toctree}
 :maxdepth: 1
 
-inspect_cellpainting_data
-download_cellpainting_data
-run_cellprofiler_profiling
-export_single_cell_measurements
-run_pycytominer
-summarize_classical_profiles
-run_segmentation_masks
-export_single_cell_crops
-prepare_deepprofiler_project
-run_deepprofiler
-summarize_deepprofiler_profiles
+data_inspect_availability
+data_plan_download
+data_download
+cp_extract_measurements
+cp_build_single_cell_table
+cyto_aggregate_profiles
+cyto_annotate_profiles
+cyto_normalize_profiles
+cyto_select_profile_features
+cyto_summarize_classical_profiles
+cp_prepare_segmentation_inputs
+cp_extract_segmentation_artifacts
+cp_generate_segmentation_previews
+crop_export_single_cell_crops
+dp_export_deep_feature_inputs
+dp_build_deep_feature_project
+dp_run_deep_feature_model
+dp_collect_deep_features
+dp_summarize_deep_features
 ```
 
 ## Related Pages
 
+- [Quick Start](../quick_start/index.md)
 - [CLI](../cli/index.md)
 - [OpenClaw](../openclaw/index.md)
-- [Quick Start](../quick_start/index.md)

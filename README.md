@@ -33,70 +33,40 @@ The public skill catalog is grouped by concrete user tasks.
 
 | Skill | Main result |
 | --- | --- |
-| `inspect-cellpainting-data` | inspect configured sources and write a data-access summary |
-| `download-cellpainting-data` | download one dataset slice into a local cache |
+| `data-inspect-availability` | inspect configured sources and write an availability summary |
+| `data-plan-download` | resolve a download request into a saved download plan |
+| `data-download` | download one dataset slice into a local cache |
 
 ### Profiling
 
 | Skill | Main result |
 | --- | --- |
-| `run-cellprofiler-profiling` | write CellProfiler measurement tables |
-| `export-single-cell-measurements` | merge CellProfiler tables into one single-cell measurements table |
-| `run-pycytominer` | write aggregated, annotated, normalized, and feature-selected outputs |
-| `summarize-classical-profiles` | turn classical profile outputs into readable summaries and PCA views |
+| `cp-extract-measurements` | write CellProfiler measurement tables |
+| `cp-build-single-cell-table` | merge CellProfiler tables into one single-cell measurements table |
+| `cyto-aggregate-profiles` | aggregate single-cell measurements into classical profiles |
+| `cyto-annotate-profiles` | attach metadata to aggregated profiles |
+| `cyto-normalize-profiles` | normalize annotated profiles |
+| `cyto-select-profile-features` | write the feature-selected classical profile table |
+| `cyto-summarize-classical-profiles` | turn classical profile outputs into readable summaries and PCA views |
 
 ### Segmentation
 
 | Skill | Main result |
 | --- | --- |
-| `run-segmentation-masks` | write segmentation masks, labels, outlines, object tables, and sample previews |
-| `export-single-cell-crops` | export masked or unmasked single-cell crop stacks |
+| `cp-prepare-segmentation-inputs` | prepare the load-data table used by segmentation |
+| `cp-extract-segmentation-artifacts` | write segmentation masks, labels, outlines, and object tables |
+| `cp-generate-segmentation-previews` | write preview PNGs for quick segmentation review |
+| `crop-export-single-cell-crops` | export masked or unmasked single-cell crop stacks |
 
-### DeepProfiler
+### Deep Features
 
 | Skill | Main result |
 | --- | --- |
-| `prepare-deepprofiler-project` | prepare a runnable DeepProfiler project directory |
-| `run-deepprofiler` | run the DeepProfiler path and return collected feature tables |
-| `summarize-deepprofiler-profiles` | turn DeepProfiler outputs into readable summaries and PCA views |
-
-## CellProfiler `.cppipe` Support
-
-CellPainting-Claw exposes a **config-driven CellProfiler `.cppipe` selection layer**.
-
-Users can:
-
-- choose a bundled `.cppipe` template
-- point to a custom `.cppipe` path
-- inspect the effective selection before a longer run
-- validate the selection from Python or CLI
-
-The project config accepts a `cellprofiler` block such as:
-
-```json
-{
-  "cellprofiler": {
-    "profiling_template": "profiling-analysis",
-    "segmentation_template": "segmentation-base",
-    "custom_profiling_cppipe_path": null,
-    "custom_segmentation_cppipe_path": null
-  }
-}
-```
-
-Current phase-1 behavior:
-
-- segmentation consumes the configured `.cppipe` selection at runtime
-- profiling exposes the same template listing, selection, and validation helpers
-- custom segmentation overrides are treated as ready-to-run mask-export pipelines
-
-Useful inspection commands:
-
-```bash
-cellpainting-claw list-cppipe-templates --config configs/project_config.demo.json
-cellpainting-claw show-cppipe-selection --config configs/project_config.demo.json --kind all
-cellpainting-claw validate-cppipe-config --config configs/project_config.demo.json
-```
+| `dp-export-deep-feature-inputs` | build DeepProfiler-ready metadata and location files |
+| `dp-build-deep-feature-project` | assemble a runnable DeepProfiler project directory |
+| `dp-run-deep-feature-model` | run the DeepProfiler model and write raw feature files |
+| `dp-collect-deep-features` | collect raw feature files into tabular outputs |
+| `dp-summarize-deep-features` | turn DeepProfiler outputs into readable summaries and PCA views |
 
 ## Quick Start
 
@@ -119,14 +89,7 @@ Look at the skill catalog and inspect one task:
 
 ```bash
 cellpainting-skills list
-cellpainting-skills describe --skill run-segmentation-masks
-```
-
-Optionally inspect the effective `.cppipe` selection:
-
-```bash
-cellpainting-claw show-cppipe-selection --config "$CONFIG" --kind segmentation
-cellpainting-claw validate-cppipe-config --config "$CONFIG"
+cellpainting-skills describe --skill cp-extract-segmentation-artifacts
 ```
 
 Run one skill:
@@ -134,8 +97,19 @@ Run one skill:
 ```bash
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill run-segmentation-masks \
+  --skill cp-extract-segmentation-artifacts \
   --output-dir outputs/demo_segmentation
+```
+
+Run a follow-up skill from the segmentation result:
+
+```bash
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill crop-export-single-cell-crops \
+  --workflow-root outputs/demo_segmentation \
+  --crop-mode masked \
+  --output-dir outputs/demo_crops
 ```
 
 ## Python API Example
@@ -147,11 +121,11 @@ import cellpainting_skills as cps
 config = ProjectConfig.from_json("configs/project_config.demo.json")
 result = cps.run_pipeline_skill(
     config,
-    "run-segmentation-masks",
+    "cp-extract-segmentation-artifacts",
     output_dir="outputs/demo_segmentation",
 )
 print(result.ok)
-print(result.primary_outputs["summary_path"])
+print(result.primary_outputs["workflow_root"])
 ```
 
 ## Agent And OpenClaw Integration

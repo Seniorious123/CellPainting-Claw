@@ -56,6 +56,13 @@ class NativePycytominerResult:
     feature_selected_column_count: int
 
 
+@dataclass(frozen=True)
+class NativeProfileTableResult:
+    output_path: Path
+    row_count: int
+    column_count: int
+
+
 def build_image_manifest_native(
     config: ProjectConfig,
     output_path: Path | None = None,
@@ -272,6 +279,45 @@ def run_pycytominer_native(
     single_cell_path: Path | None = None,
     plate_map_path: Path | None = None,
 ) -> NativePycytominerResult:
+    resolved_paths = _resolve_pycytominer_stage_paths(config, output_dir=output_dir)
+    aggregate_result = run_pycytominer_aggregate_native(
+        config,
+        output_path=resolved_paths['aggregated_path'],
+        single_cell_path=single_cell_path,
+    )
+    annotate_result = run_pycytominer_annotate_native(
+        config,
+        output_path=resolved_paths['annotated_path'],
+        aggregated_path=aggregate_result.output_path,
+        plate_map_path=plate_map_path,
+    )
+    normalize_result = run_pycytominer_normalize_native(
+        config,
+        output_path=resolved_paths['normalized_path'],
+        annotated_path=annotate_result.output_path,
+    )
+    feature_select_result = run_pycytominer_feature_select_native(
+        config,
+        output_path=resolved_paths['feature_selected_path'],
+        normalized_path=normalize_result.output_path,
+    )
+    return NativePycytominerResult(
+        aggregated_path=aggregate_result.output_path,
+        annotated_path=annotate_result.output_path,
+        normalized_path=normalize_result.output_path,
+        feature_selected_path=feature_select_result.output_path,
+        aggregated_row_count=aggregate_result.row_count,
+        aggregated_column_count=aggregate_result.column_count,
+        annotated_row_count=annotate_result.row_count,
+        annotated_column_count=annotate_result.column_count,
+        normalized_row_count=normalize_result.row_count,
+        normalized_column_count=normalize_result.column_count,
+        feature_selected_row_count=feature_select_result.row_count,
+        feature_selected_column_count=feature_select_result.column_count,
+    )
+
+
+def _import_pycytominer_runtime():
     try:
         import numpy as np
         import numpy.typing as np_typing
@@ -283,34 +329,48 @@ def run_pycytominer_native(
         raise RuntimeError(
             'pandas, pyarrow, numpy, scipy, and pycytominer are required in the active CellPainting-Claw runtime for native run-pycytominer.'
         ) from exc
+    return pd, aggregate, normalize, feature_select
+
+
+def _resolve_pycytominer_stage_paths(
+    config: ProjectConfig,
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Path]:
+    paths_payload = config.load_profiling_backend_payload()['paths']
+    if output_dir is not None:
+        resolved_output_dir = output_dir.resolve()
+        return {
+            'aggregated_path': resolved_output_dir / Path(paths_payload['aggregated_output_parquet']).name,
+            'annotated_path': resolved_output_dir / Path(paths_payload['annotated_output_parquet']).name,
+            'normalized_path': resolved_output_dir / Path(paths_payload['normalized_output_parquet']).name,
+            'feature_selected_path': resolved_output_dir / Path(paths_payload['feature_selected_output_parquet']).name,
+        }
+    return {
+        'aggregated_path': config.resolve_profiling_backend_path(paths_payload['aggregated_output_parquet']),
+        'annotated_path': config.resolve_profiling_backend_path(paths_payload['annotated_output_parquet']),
+        'normalized_path': config.resolve_profiling_backend_path(paths_payload['normalized_output_parquet']),
+        'feature_selected_path': config.resolve_profiling_backend_path(paths_payload['feature_selected_output_parquet']),
+    }
+
+
+def run_pycytominer_aggregate_native(
+    config: ProjectConfig,
+    *,
+    output_path: Path | None = None,
+    single_cell_path: Path | None = None,
+) -> NativeProfileTableResult:
+    pd, aggregate, _, _ = _import_pycytominer_runtime()
 
     backend_payload = config.load_profiling_backend_payload()
     paths_payload = backend_payload['paths']
     pycytominer_payload = backend_payload['pycytominer']
-
-    single_cell_path = single_cell_path.resolve() if single_cell_path is not None else config.resolve_profiling_backend_path(paths_payload['single_cell_output_csv_gz'])
-    plate_map_path = plate_map_path.resolve() if plate_map_path is not None else config.resolve_profiling_backend_path(paths_payload['plate_map_csv'])
-    if output_dir is not None:
-        resolved_output_dir = output_dir.resolve()
-        aggregated_path = resolved_output_dir / Path(paths_payload['aggregated_output_parquet']).name
-        annotated_path = resolved_output_dir / Path(paths_payload['annotated_output_parquet']).name
-        normalized_path = resolved_output_dir / Path(paths_payload['normalized_output_parquet']).name
-        feature_selected_path = resolved_output_dir / Path(paths_payload['feature_selected_output_parquet']).name
-    else:
-        aggregated_path = config.resolve_profiling_backend_path(paths_payload['aggregated_output_parquet'])
-        annotated_path = config.resolve_profiling_backend_path(paths_payload['annotated_output_parquet'])
-        normalized_path = config.resolve_profiling_backend_path(paths_payload['normalized_output_parquet'])
-        feature_selected_path = config.resolve_profiling_backend_path(paths_payload['feature_selected_output_parquet'])
-
-    for required in [single_cell_path, plate_map_path]:
-        if not required.exists():
-            raise FileNotFoundError(f'Missing required input for native run-pycytominer: {required}')
-
-    for path in [aggregated_path, annotated_path, normalized_path, feature_selected_path]:
-        path.parent.mkdir(parents=True, exist_ok=True)
-
-    single_cell_df = pd.read_csv(single_cell_path)
-
+    resolved_single_cell_path = single_cell_path.resolve() if single_cell_path is not None else config.resolve_profiling_backend_path(paths_payload['single_cell_output_csv_gz'])
+    aggregated_path = output_path.resolve() if output_path is not None else _resolve_pycytominer_stage_paths(config)['aggregated_path']
+    if not resolved_single_cell_path.exists():
+        raise FileNotFoundError(f'Missing required input for native run-pycytominer aggregate: {resolved_single_cell_path}')
+    aggregated_path.parent.mkdir(parents=True, exist_ok=True)
+    single_cell_df = pd.read_csv(resolved_single_cell_path)
     aggregate(
         population_df=single_cell_df,
         strata=pycytominer_payload['aggregate']['strata'],
@@ -321,15 +381,60 @@ def run_pycytominer_native(
         compute_object_count=pycytominer_payload['aggregate']['compute_object_count'],
         object_feature=pycytominer_payload['aggregate']['object_feature'],
     )
-
     aggregate_df = pd.read_parquet(aggregated_path)
-    plate_map_df = pd.read_csv(plate_map_path)
+    return NativeProfileTableResult(
+        output_path=aggregated_path,
+        row_count=int(len(aggregate_df)),
+        column_count=int(len(aggregate_df.columns)),
+    )
+
+
+def run_pycytominer_annotate_native(
+    config: ProjectConfig,
+    *,
+    output_path: Path | None = None,
+    aggregated_path: Path | None = None,
+    plate_map_path: Path | None = None,
+) -> NativeProfileTableResult:
+    pd, _, _, _ = _import_pycytominer_runtime()
+    backend_payload = config.load_profiling_backend_payload()
+    paths_payload = backend_payload['paths']
+    pycytominer_payload = backend_payload['pycytominer']
+    resolved_aggregated_path = aggregated_path.resolve() if aggregated_path is not None else _resolve_pycytominer_stage_paths(config)['aggregated_path']
+    resolved_plate_map_path = plate_map_path.resolve() if plate_map_path is not None else config.resolve_profiling_backend_path(paths_payload['plate_map_csv'])
+    annotated_path = output_path.resolve() if output_path is not None else _resolve_pycytominer_stage_paths(config)['annotated_path']
+    for required in [resolved_aggregated_path, resolved_plate_map_path]:
+        if not required.exists():
+            raise FileNotFoundError(f'Missing required input for native run-pycytominer annotate: {required}')
+    annotated_path.parent.mkdir(parents=True, exist_ok=True)
+    aggregate_df = pd.read_parquet(resolved_aggregated_path)
+    plate_map_df = pd.read_csv(resolved_plate_map_path)
     join_columns = pycytominer_payload['annotate']['join_on_columns']
     annotated_df = aggregate_df.merge(plate_map_df, on=join_columns, how='left', validate='many_to_one')
     annotated_df.to_parquet(annotated_path, index=False)
+    return NativeProfileTableResult(
+        output_path=annotated_path,
+        row_count=int(len(annotated_df)),
+        column_count=int(len(annotated_df.columns)),
+    )
 
+
+def run_pycytominer_normalize_native(
+    config: ProjectConfig,
+    *,
+    output_path: Path | None = None,
+    annotated_path: Path | None = None,
+) -> NativeProfileTableResult:
+    pd, _, normalize, _ = _import_pycytominer_runtime()
+    backend_payload = config.load_profiling_backend_payload()
+    pycytominer_payload = backend_payload['pycytominer']
+    resolved_annotated_path = annotated_path.resolve() if annotated_path is not None else _resolve_pycytominer_stage_paths(config)['annotated_path']
+    normalized_path = output_path.resolve() if output_path is not None else _resolve_pycytominer_stage_paths(config)['normalized_path']
+    if not resolved_annotated_path.exists():
+        raise FileNotFoundError(f'Missing required input for native run-pycytominer normalize: {resolved_annotated_path}')
+    normalized_path.parent.mkdir(parents=True, exist_ok=True)
     normalize(
-        profiles=str(annotated_path),
+        profiles=str(resolved_annotated_path),
         features='infer',
         meta_features='infer',
         samples=pycytominer_payload['normalize']['samples'],
@@ -337,9 +442,30 @@ def run_pycytominer_native(
         output_file=str(normalized_path),
         output_type='parquet',
     )
+    normalized_df = pd.read_parquet(normalized_path)
+    return NativeProfileTableResult(
+        output_path=normalized_path,
+        row_count=int(len(normalized_df)),
+        column_count=int(len(normalized_df.columns)),
+    )
 
+
+def run_pycytominer_feature_select_native(
+    config: ProjectConfig,
+    *,
+    output_path: Path | None = None,
+    normalized_path: Path | None = None,
+) -> NativeProfileTableResult:
+    pd, _, _, feature_select = _import_pycytominer_runtime()
+    backend_payload = config.load_profiling_backend_payload()
+    pycytominer_payload = backend_payload['pycytominer']
+    resolved_normalized_path = normalized_path.resolve() if normalized_path is not None else _resolve_pycytominer_stage_paths(config)['normalized_path']
+    feature_selected_path = output_path.resolve() if output_path is not None else _resolve_pycytominer_stage_paths(config)['feature_selected_path']
+    if not resolved_normalized_path.exists():
+        raise FileNotFoundError(f'Missing required input for native run-pycytominer feature selection: {resolved_normalized_path}')
+    feature_selected_path.parent.mkdir(parents=True, exist_ok=True)
     feature_select(
-        profiles=str(normalized_path),
+        profiles=str(resolved_normalized_path),
         features='infer',
         operation=pycytominer_payload['feature_select']['operations'],
         na_cutoff=pycytominer_payload['feature_select']['na_cutoff'],
@@ -347,22 +473,11 @@ def run_pycytominer_native(
         output_file=str(feature_selected_path),
         output_type='parquet',
     )
-
-    normalized_df = pd.read_parquet(normalized_path)
     feature_selected_df = pd.read_parquet(feature_selected_path)
-    return NativePycytominerResult(
-        aggregated_path=aggregated_path,
-        annotated_path=annotated_path,
-        normalized_path=normalized_path,
-        feature_selected_path=feature_selected_path,
-        aggregated_row_count=int(len(aggregate_df)),
-        aggregated_column_count=int(len(aggregate_df.columns)),
-        annotated_row_count=int(len(annotated_df)),
-        annotated_column_count=int(len(annotated_df.columns)),
-        normalized_row_count=int(len(normalized_df)),
-        normalized_column_count=int(len(normalized_df.columns)),
-        feature_selected_row_count=int(len(feature_selected_df)),
-        feature_selected_column_count=int(len(feature_selected_df.columns)),
+    return NativeProfileTableResult(
+        output_path=feature_selected_path,
+        row_count=int(len(feature_selected_df)),
+        column_count=int(len(feature_selected_df.columns)),
     )
 
 

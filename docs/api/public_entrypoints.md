@@ -50,7 +50,7 @@ Example:
 import cellpainting_claw as cp
 
 config = cp.ProjectConfig.from_json("configs/project_config.demo.json")
-result = cp.run_pipeline_skill(config, "run-segmentation-masks")
+result = cp.run_pipeline_skill(config, "cp-extract-segmentation-artifacts")
 print(result.ok)
 ```
 

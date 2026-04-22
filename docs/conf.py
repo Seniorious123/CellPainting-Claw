@@ -25,7 +25,14 @@ source_suffix = {
     '.rst': 'restructuredtext',
 }
 master_doc = 'index'
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = [
+    '_build',
+    'Thumbs.db',
+    '.DS_Store',
+    'export/**',
+    'skill_catalog_draft.md',
+    'cppipe_customization_design.md',
+]
 templates_path = ['_templates']
 
 autodoc_member_order = 'bysource'

@@ -44,6 +44,10 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--load-data-csv-path", default=None, help="Optional explicit load-data CSV path.")
     run_parser.add_argument("--manifest-path", default=None, help="Optional explicit manifest CSV path for validation-like skills.")
     run_parser.add_argument("--object-table-path", default=None, help="Optional explicit CellProfiler object table CSV path.")
+    run_parser.add_argument("--single-cell-path", default=None, help="Optional explicit single-cell table path for pycytominer skills.")
+    run_parser.add_argument("--aggregated-path", default=None, help="Optional explicit aggregated profile table path for pycytominer annotation or downstream stages.")
+    run_parser.add_argument("--annotated-path", default=None, help="Optional explicit annotated profile table path for pycytominer normalization or downstream stages.")
+    run_parser.add_argument("--normalized-path", default=None, help="Optional explicit normalized profile table path for pycytominer feature selection.")
     run_parser.add_argument("--feature-selected-path", default=None, help="Optional explicit feature-selected profile table path for summarize-classical-profiles.")
     run_parser.add_argument("--single-cell-parquet-path", default=None, help="Optional explicit DeepProfiler single-cell parquet path for summarize-deepprofiler-profiles.")
     run_parser.add_argument("--well-aggregated-parquet-path", default=None, help="Optional explicit DeepProfiler well-level parquet path for summarize-deepprofiler-profiles.")
@@ -119,6 +123,10 @@ def main(argv: list[str] | None = None) -> int:
         load_data_csv_path=Path(args.load_data_csv_path).expanduser().resolve() if args.load_data_csv_path else None,
         manifest_path=Path(args.manifest_path).expanduser().resolve() if args.manifest_path else None,
         object_table_path=Path(args.object_table_path).expanduser().resolve() if args.object_table_path else None,
+        single_cell_path=Path(args.single_cell_path).expanduser().resolve() if args.single_cell_path else None,
+        aggregated_path=Path(args.aggregated_path).expanduser().resolve() if args.aggregated_path else None,
+        annotated_path=Path(args.annotated_path).expanduser().resolve() if args.annotated_path else None,
+        normalized_path=Path(args.normalized_path).expanduser().resolve() if args.normalized_path else None,
         feature_selected_path=Path(args.feature_selected_path).expanduser().resolve() if args.feature_selected_path else None,
         single_cell_parquet_path=Path(args.single_cell_parquet_path).expanduser().resolve() if args.single_cell_parquet_path else None,
         well_aggregated_parquet_path=Path(args.well_aggregated_parquet_path).expanduser().resolve() if args.well_aggregated_parquet_path else None,

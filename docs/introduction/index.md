@@ -8,7 +8,7 @@ The main idea is simple: **humans should be able to call the documented skills d
 
 CellPainting-Claw covers several connected parts of practical Cell Painting work.
 
-| Capability | Packages or tools | What it is used for |
+| Capability | Packages or tools | Primary role |
 | --- | --- | --- |
 | Data access | `boto3`, `quilt3`, `cpgdata` | finding datasets and downloading local inputs |
 | Measurement extraction | `CellProfiler` | profiling tables, segmentation masks, outlines, and object measurements |
@@ -55,12 +55,12 @@ The public skill catalog is organized around concrete outputs rather than one fi
 
 Each skill is meant to do **one practical piece of work** and leave behind a result that later skills, scripts, or agent requests can reuse.
 
-| Skill family | Public skills | What they produce |
+| Skill family | Public skills | Main outputs |
 | --- | --- | --- |
-| Data access | `inspect-cellpainting-data`, `download-cellpainting-data` | discovery summaries and local dataset downloads |
-| Profiling | `run-cellprofiler-profiling`, `export-single-cell-measurements`, `run-pycytominer`, `summarize-classical-profiles` | CellProfiler tables, single-cell tables, classical profiles, and readable profile summaries |
-| Segmentation | `run-segmentation-masks`, `export-single-cell-crops` | masks, previews, and crop exports |
-| DeepProfiler | `prepare-deepprofiler-project`, `run-deepprofiler`, `summarize-deepprofiler-profiles` | runnable DeepProfiler projects, collected feature tables, and readable DeepProfiler summaries |
+| Data access | `data-inspect-availability`, `data-plan-download`, `data-download` | availability summaries, download plans, and local dataset downloads |
+| Profiling | `cp-extract-measurements`, `cp-build-single-cell-table`, `cyto-aggregate-profiles`, `cyto-annotate-profiles`, `cyto-normalize-profiles`, `cyto-select-profile-features`, `cyto-summarize-classical-profiles` | CellProfiler tables, single-cell tables, classical profiles, and readable profile summaries |
+| Segmentation | `cp-prepare-segmentation-inputs`, `cp-extract-segmentation-artifacts`, `cp-generate-segmentation-previews`, `crop-export-single-cell-crops` | segmentation input tables, masks, previews, and crop exports |
+| Deep features | `dp-export-deep-feature-inputs`, `dp-build-deep-feature-project`, `dp-run-deep-feature-model`, `dp-collect-deep-features`, `dp-summarize-deep-features` | DeepProfiler-ready inputs, runnable projects, collected feature tables, and readable deep-feature summaries |
 
 ## Boundaries
 

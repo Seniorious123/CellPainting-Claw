@@ -17,7 +17,7 @@ This section documents the **Python toolkit surface** of CellPainting-Claw.
 
 It does **not** duplicate the Skills or CLI pages. Instead, it explains the small set of Python entrypoints that matter when you want to call the toolkit directly from code.
 
-## What This Section Is For
+## Section Purpose
 
 Use the API section when you want to answer questions such as:
 
@@ -46,7 +46,7 @@ Use `cellpainting_skills` when you want:
 
 - the **task layer**
 - stable skill names
-- simple Python calls such as `run-segmentation-masks`
+- simple Python calls such as `cp-extract-segmentation-artifacts`
 - a cleaner bridge from automation or agent requests into validated toolkit actions
 
 In most cases, users should understand the [Skills](../skills/index.md) page first and then come here only when they need direct Python entrypoints.
@@ -57,11 +57,11 @@ For most users, the Python-side entry model is small.
 
 | Entry style | Use it when | Typical example |
 | --- | --- | --- |
-| skill | you want a stable named task | `run_pipeline_skill(config, "run-segmentation-masks")` |
+| skill | you want a stable named task | `run_pipeline_skill(config, "cp-extract-segmentation-artifacts")` |
 | direct helper family | you want lower-level control | `.cppipe` helpers, data-access helpers, suite runners |
 | broad combined entry | you intentionally want one larger combined run | `run_end_to_end_pipeline(...)` |
 
-## What This API Section Covers
+## Section Scope
 
 This section stays intentionally short.
 
