@@ -13,7 +13,7 @@ author = 'OpenAI Codex'
 release = '0.1.0'
 
 extensions = [
-    'myst_parser',
+    'myst_nb',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
@@ -21,8 +21,9 @@ extensions = [
 ]
 
 source_suffix = {
-    '.md': 'myst',
     '.rst': 'restructuredtext',
+    '.md': 'myst-nb',
+    '.ipynb': 'myst-nb',
 }
 master_doc = 'index'
 exclude_patterns = [
@@ -54,6 +55,7 @@ myst_enable_extensions = [
     'fieldlist',
 ]
 myst_heading_anchors = 3
+nb_execution_mode = 'off'
 
 html_theme = 'furo'
 html_title = 'CellPainting-Claw'
