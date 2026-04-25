@@ -1,14 +1,13 @@
 # Quick Start
 
-This page shows the **shortest practical way** to understand CellPainting-Claw as a toolkit built around modular skills.
+This page shows the shortest reproducible demo path in the repository.
 
-The goal is not to run every part of the toolkit at once. The goal is to:
+The demo uses the bundled synthetic assets under `demo/` and runs two documented skills:
 
-- confirm that the package is installed
-- see the public skill catalog
-- inspect one skill
-- run one skill on the bundled demo config
-- run one follow-up skill from the output of the first one
+- `cp-extract-segmentation-artifacts`
+- `cp-generate-segmentation-previews`
+
+This is the public demo path because it is the part that has been re-run and verified against the current packaged assets.
 
 ## 1. Install
 
@@ -36,63 +35,79 @@ This config points to the demo assets included under `demo/`.
 cellpainting-skills list
 ```
 
-This is the fastest way to see the current public task model.
+This is the fastest way to see the current public skill catalog.
 
 ## 4. Inspect A Skill
 
-Describe the segmentation skill:
+Inspect the segmentation skill:
 
 ```bash
 cellpainting-skills describe --skill cp-extract-segmentation-artifacts
 ```
 
-This shows what the skill is for and how it fits into the public task catalog.
+This shows the task definition, expected inputs, and typical outputs.
 
-## 5. Run A Skill
+## 5. Run Segmentation On The Demo Assets
 
-Run the segmentation artifact skill on the demo config:
+Run the segmentation artifact skill on the bundled demo config:
 
 ```bash
-RUN_ROOT=outputs/demo_segmentation
+SEG_ROOT=demo/workspace/outputs/quick_start_segmentation
 
 cellpainting-skills run \
   --config "$CONFIG" \
   --skill cp-extract-segmentation-artifacts \
-  --output-dir "$RUN_ROOT"
+  --output-dir "$SEG_ROOT"
 ```
 
-Skill effect:
+This skill:
 
-- runs the segmentation CellProfiler path selected by the project config
-- writes the segmentation outputs that later skills can reuse
-- uses the repository-provided segmentation `.cppipe` unless the config overrides it
+- runs the packaged CellProfiler-based segmentation path
+- writes a workflow root that later skills can reuse
+- uses the repository-provided `.cppipe` selection from the demo config
 
-Typical outputs include:
+Key outputs include:
 
-- `cellprofiler_masks/`
-- `Image.csv`
-- `Cells.csv`
-- `Nuclei.csv`
-- `labels/`
-- `outlines/`
-- `sample_previews_png/`
+- `load_data_for_segmentation.csv`
+- `CPJUMP1_analysis_mask_export.cppipe`
+- `cellprofiler_masks/Image.csv`
+- `cellprofiler_masks/Cells.csv`
+- `cellprofiler_masks/Nuclei.csv`
+- `cellprofiler_masks/labels/`
+- `cellprofiler_masks/outlines/`
+- `segmentation_summary.json`
+- `pipeline_skill_manifest.json`
 
 ## 6. Run A Follow-Up Skill
 
-Use the workflow root from the previous step and export single-cell crops:
+Use the workflow root from the previous step and render preview PNGs:
 
 ```bash
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill crop-export-single-cell-crops \
-  --workflow-root "$RUN_ROOT" \
-  --crop-mode masked \
-  --output-dir "$RUN_ROOT/crops"
+  --skill cp-generate-segmentation-previews \
+  --workflow-root "$SEG_ROOT" \
+  --output-dir demo/workspace/outputs/quick_start_previews
 ```
 
-This is the main idea behind the skill catalog: one skill produces a concrete output, and later skills can build on that output.
+This follow-up skill reads the segmentation workflow root and writes field-level preview PNGs under `sample_previews_png/`.
 
-## 7. Python Example
+## 7. Demo Page
+
+A full recorded run based on the bundled synthetic assets is documented separately in [Demo](../demo/index.md).
+
+That page covers a complete skill-driven path:
+
+- segmentation artifacts
+- preview generation
+- single-cell crop export
+- DeepProfiler input export
+- DeepProfiler project assembly
+- DeepProfiler inference
+- feature collection
+- summary outputs
+
+## 8. Python Example
 
 ```python
 from cellpainting_claw import ProjectConfig
@@ -102,16 +117,22 @@ config = ProjectConfig.from_json("configs/project_config.demo.json")
 result = cps.run_pipeline_skill(
     config,
     "cp-extract-segmentation-artifacts",
-    output_dir="outputs/demo_segmentation",
+    output_dir="demo/workspace/outputs/python_demo_segmentation",
 )
 print(result.ok)
-print(result.primary_outputs["workflow_root"])
+print(result.primary_outputs["image_table_path"])
+print(result.primary_outputs["summary_path"])
 ```
 
-## 8. Next Pages
+## 9. Natural-Language Path
+
+If you want to run the same skills through an agent instead of calling them directly, continue to [OpenClaw](../openclaw/index.md).
+
+## 10. Next Pages
 
 After this first run, the most useful next pages are:
 
+- [Demo](../demo/index.md) for a complete recorded run
 - [Skills](../skills/index.md) for the full skill catalog
 - [CLI](../cli/index.md) for command groups and intended use
 - [OpenClaw](../openclaw/index.md) for natural-language and agent-mediated execution

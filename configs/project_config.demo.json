@@ -1,6 +1,6 @@
 {
   "project_name": "cellpainting_claw_demo",
-  "python_executable": "python",
+  "python_executable": "",
   "profiling_backend_root": "../demo/backend/profiling_backend",
   "profiling_backend_config": "configs/pipeline_config.json",
   "segmentation_backend_root": "../demo/backend/segmentation_backend",

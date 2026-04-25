@@ -41,140 +41,95 @@ A reliable order is:
 
 That order separates toolkit problems from OpenClaw-side problems.
 
-## Minimal OpenClaw Demo
+## Minimal OpenClaw Flow
 
-This demo is meant to show the **full OpenClaw path** from startup to a routed skill call.
+This page shows how to use the same public skills through natural-language requests.
 
-### Step 1. Provider Configuration
+Unlike [Quick Start](../quick_start/index.md), this page is not a recorded provider-free demo. OpenClaw requires a configured model provider, so the steps below describe the supported usage path once that provider setup is in place.
 
-Purpose:
+### Provider Setup
 
-- tell OpenClaw which model provider it should use
-- provide the credentials and base URL needed for that provider
+Choose the setup directory that matches your host:
 
-Using one of the repository's OpenClaw setup paths, prepare the provider configuration:
+- `integrations/openclaw/autodl/` for AutoDL-like hosts without nested Docker
+- `integrations/openclaw/docker/` for standard Linux hosts with Docker support
+
+In that directory:
 
 ```bash
-cd integrations/openclaw/<your-setup>
 cp provider.env.example provider.env
 # edit provider.env
 ./configure_openai_compatible_provider.sh
 ```
 
-Step behavior:
+This step writes the provider configuration that OpenClaw will use for model access.
 
-- reads your provider settings from `provider.env`
-- writes the OpenClaw-side provider configuration used by the gateway
+### Gateway And TUI
 
-Success criteria:
-
-- the command finishes without an error
-- the configured provider is ready for the later gateway start
-
-### Step 2. Gateway
-
-Purpose:
-
-- start the OpenClaw gateway itself
-- start the local CellPainting-Claw MCP server that OpenClaw will call underneath
-
-Command:
+Start the gateway first:
 
 ```bash
 ./run_openclaw_gateway.sh
 ```
 
-Step behavior:
-
-- launches the OpenClaw gateway
-- launches the local CellPainting-Claw MCP server
-- keeps the bridge between OpenClaw and the toolkit available for later requests
-- uses the wrapper scripts from the setup path you chose earlier
-
-Success criteria:
-
-- the gateway stays running instead of exiting immediately
-- the logs show that the gateway and MCP side have both started cleanly
-
-### Step 3. Terminal Client
-
-Purpose:
-
-- open the interface where the user will type natural-language requests
-
-Command:
+Then open the terminal client in a second shell:
 
 ```bash
 ./run_openclaw_tui.sh
 ```
 
-Step behavior:
+The gateway keeps the OpenClaw side and the local CellPainting-Claw MCP server connected. The TUI is where you type the request.
 
-- opens the OpenClaw terminal client
-- connects that client to the running gateway session
+### Example Request 1: Segmentation
 
-Success criteria:
-
-- the TUI opens normally
-- you can type a request into the session instead of seeing an immediate connection error
-
-### Step 4. Natural-Language Request
-
-Purpose:
-
-- ask for a real pipeline task in plain language
-
-Example prompt:
+Prompt:
 
 ```text
-Run the segmentation mask export with config configs/project_config.demo.json and write outputs to outputs/demo_segmentation.
+Run segmentation on configs/project_config.demo.json and write the results to demo/workspace/outputs/openclaw_demo_segmentation.
 ```
 
-Request interpretation:
+OpenClaw should route this request to:
 
-- the task objective is segmentation mask export
-- the config file is `configs/project_config.demo.json`
-- the requested output location is `outputs/demo_segmentation`
-
-Internal routing:
-
-- OpenClaw receives the natural-language request
-- the agent recognizes this as a segmentation-mask request
-- the request is routed to the skill `cp-extract-segmentation-artifacts`
-- that skill calls the same validated segmentation path used by the CLI and Python API
-
-Success criteria:
-
-- the agent returns a result instead of failing at the provider, gateway, or MCP level
-- the request behaves like a routed toolkit task rather than a free-form chat answer
+- `cp-extract-segmentation-artifacts`
 
 Expected outputs:
 
-- `cellprofiler_masks/`
-- `Image.csv`
-- `Cells.csv`
-- `Nuclei.csv`
-- `labels/`
-- `outlines/`
+- `load_data_for_segmentation.csv`
+- `CPJUMP1_analysis_mask_export.cppipe`
+- `cellprofiler_masks/Image.csv`
+- `cellprofiler_masks/Cells.csv`
+- `cellprofiler_masks/Nuclei.csv`
+- `cellprofiler_masks/labels/`
+- `cellprofiler_masks/outlines/`
+- `segmentation_summary.json`
+
+### Example Request 2: Preview Generation
+
+Prompt:
+
+```text
+Generate segmentation preview PNGs from demo/workspace/outputs/openclaw_demo_segmentation and write them to demo/workspace/outputs/openclaw_demo_previews.
+```
+
+OpenClaw should route this request to:
+
+- `cp-generate-segmentation-previews`
+
+Expected outputs:
+
 - `sample_previews_png/`
+- `pipeline_skill_manifest.json`
 
-### Step 5. Result Check
+### What This Demonstrates
 
-Purpose:
+The OpenClaw path is not a separate workflow. It is the same public skill catalog used through a natural-language interface.
 
-- confirm that the request reached the underlying toolkit and produced real outputs
+In practice:
 
-Checks:
-
-- the OpenClaw session should report a task result, not only conversational text
-- the requested output location should contain the segmentation artifacts
-- those artifacts should match the normal outputs of `cp-extract-segmentation-artifacts`
-
-Confirmed behavior:
-
-- OpenClaw can understand a task request in natural language
-- OpenClaw can route that request onto the correct documented skill
-- the same toolkit path used elsewhere in the project is still the one doing the work underneath
+- the user states the task in plain language
+- OpenClaw maps that request onto a documented skill
+- the skill runs through the same toolkit underneath
+- the output files are the same kind of files you would get from direct CLI use
 
 ## Crop Export Example
 
@@ -216,12 +171,7 @@ The important point is that the request should describe the **task you want done
 
 ## Setup Paths
 
-The repository maintains two main setup paths:
-
-- `integrations/openclaw/autodl/` for AutoDL-like hosts without nested Docker
-- `integrations/openclaw/docker/` for standard Linux hosts with Docker support
-
-For current OpenClaw releases, prefer the **TUI path** rather than the ACP client path.
+For current OpenClaw releases, prefer the TUI path rather than the ACP client path.
 
 ## AutoDL Path
 

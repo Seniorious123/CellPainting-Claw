@@ -15,13 +15,20 @@ The demo bundle is designed for **public validation of the toolkit surface**. It
 Recommended public demo commands from the repository root:
 
 ```bash
-cellpainting-claw run-profiling --config configs/project_config.demo.json --backend native --script-key build-image-manifest
-cellpainting-claw run-profiling --config configs/project_config.demo.json --backend native --script-key validate-inputs
-cellpainting-claw run-profiling --config configs/project_config.demo.json --backend native --script-key export-cellprofiler-to-singlecell
-cellpainting-claw run-profiling --config configs/project_config.demo.json --backend native --script-key run-pycytominer
-cellpainting-claw run-segmentation --config configs/project_config.demo.json --backend native --script-key prepare-load-data
-cellpainting-claw run-segmentation --config configs/project_config.demo.json --backend native --script-key build-mask-export-pipeline
-cellpainting-claw run-segmentation --config configs/project_config.demo.json --backend native --script-key generate-sample-previews --overwrite
-cellpainting-claw run-segmentation --config configs/project_config.demo.json --backend native --script-key extract-single-cell-crops --mode masked
-cellpainting-claw run-segmentation --config configs/project_config.demo.json --backend native --script-key generate-png-previews --mode masked
+CONFIG=configs/project_config.demo.json
+SEG_ROOT=demo/workspace/outputs/demo_segmentation
+PREVIEW_ROOT=demo/workspace/outputs/demo_previews
+
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill cp-extract-segmentation-artifacts \
+  --output-dir "$SEG_ROOT"
+
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill cp-generate-segmentation-previews \
+  --workflow-root "$SEG_ROOT" \
+  --output-dir "$PREVIEW_ROOT"
 ```
+
+The current public demo path is intentionally narrow: segmentation first, then preview generation from the produced workflow root. This is the part of the packaged demo assets that is currently re-run and documented in the public RTD pages.

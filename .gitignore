@@ -11,6 +11,7 @@ cache/
 exports/
 outputs
 dist/
+demo/tmp_illum/
 integrations/openclaw/autodl/state/
 integrations/openclaw/autodl/provider.env
 integrations/openclaw/docker/.env

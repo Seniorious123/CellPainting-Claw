@@ -89,6 +89,7 @@ Start with these pages:
 
 - [Introduction](introduction/index.md)
 - [Quick Start](quick_start/index.md)
+- [Demo](demo/index.md)
 - [Skills](skills/index.md)
 - [CLI](cli/index.md)
 - [OpenClaw](openclaw/index.md)
@@ -115,6 +116,14 @@ installation/index
 :hidden:
 
 quick_start/index
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Demo
+:hidden:
+
+demo/index
 ```
 
 ```{toctree}
