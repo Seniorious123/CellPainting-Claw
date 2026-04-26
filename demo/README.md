@@ -12,23 +12,27 @@ It is intentionally small and self-contained. The demo bundle includes:
 
 The demo bundle is designed for **public validation of the toolkit surface**. It does not represent a biological dataset and is not intended for scientific interpretation.
 
-Recommended public demo commands from the repository root:
+Recommended public demo entry points from the repository root:
 
 ```bash
 CONFIG=configs/project_config.demo.json
-SEG_ROOT=demo/workspace/outputs/demo_segmentation
-PREVIEW_ROOT=demo/workspace/outputs/demo_previews
+DATA_ROOT=demo/workspace/outputs/quick_start_data
+RUN_ROOT=demo/workspace/outputs/quick_start_run
+
+cellpainting-skills run \
+  --config "$CONFIG" \
+  --skill data-inspect-availability \
+  --output-dir "$DATA_ROOT/01_inspect"
 
 cellpainting-skills run \
   --config "$CONFIG" \
   --skill cp-extract-segmentation-artifacts \
-  --output-dir "$SEG_ROOT"
-
-cellpainting-skills run \
-  --config "$CONFIG" \
-  --skill cp-generate-segmentation-previews \
-  --workflow-root "$SEG_ROOT" \
-  --output-dir "$PREVIEW_ROOT"
+  --output-dir "$RUN_ROOT/01_segmentation"
 ```
 
-The current public demo path is intentionally narrow: segmentation first, then preview generation from the produced workflow root. This is the part of the packaged demo assets that is currently re-run and documented in the public RTD pages.
+The public documentation now uses this demo backend in two ways:
+
+- data-access skills for Gallery inspection, planning, and bounded downloads
+- local workflow skills for segmentation, crop export, and DeepProfiler runs
+
+The downstream workflow pages still use the repo-local demo backend because it is a validated local workspace that can be reproduced in public documentation without relying on a large external download.
