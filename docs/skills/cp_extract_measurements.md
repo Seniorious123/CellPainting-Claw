@@ -15,10 +15,12 @@ Use this skill when you want CellProfiler to extract per-image and per-object me
 
 The images can come from the repository demo assets, from a previous data-download step, or from user-provided inputs. The profiling `.cppipe` is provided by the repository by default unless the config overrides it.
 
+In the public demo checkout, this skill may reuse bundled CellProfiler measurement tables when the original profiling backend script is not packaged with the repository.
+
 ## Outputs
 
 - `Image.csv`: per-image measurements and metadata
-- `Cells.csv`, `Cytoplasm.csv`, `Nuclei.csv`: object-level measurement tables
+- `Cells.csv` and `Nuclei.csv`, plus `Cytoplasm.csv` when that compartment table is present in the selected profiling pipeline: object-level measurement tables
 - profiling run logs and workflow outputs
 - `pipeline_skill_manifest.json`: the recorded skill run metadata
 

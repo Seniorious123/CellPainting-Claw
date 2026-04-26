@@ -866,21 +866,52 @@ def _run_inspect_cellpainting_data(context: SkillRuntimeContext) -> PipelineSkil
 
 
 def _run_cellprofiler_profiling(context: SkillRuntimeContext) -> PipelineSkillResult:
-    execution = run_profiling_script(context.config, 'run-official-cellprofiler')
     backend_payload = context.config.load_profiling_backend_payload()
     paths_payload = backend_payload['paths']
+    image_table_path = context.config.resolve_profiling_backend_path(paths_payload['image_table_csv'])
+    cells_table_path = context.config.resolve_profiling_backend_path(paths_payload['cells_table_csv'])
+    cytoplasm_table_path = context.config.resolve_profiling_backend_path(paths_payload['cytoplasm_table_csv'])
+    nuclei_table_path = context.config.resolve_profiling_backend_path(paths_payload['nuclei_table_csv'])
+    script_path = context.config.profiling_backend_root / 'scripts' / '07_run_official_cellprofiler.py'
+
+    try:
+        execution = run_profiling_script(context.config, 'run-official-cellprofiler')
+        details = _execution_result_to_dict(execution)
+        ok = execution.returncode == 0
+        log_path = execution.log_path
+    except FileNotFoundError as exc:
+        bundled_tables = [image_table_path, cells_table_path, nuclei_table_path]
+        if not all(path.exists() for path in bundled_tables):
+            raise
+        details = {
+            'mode': 'bundled-demo-outputs',
+            'reason': (
+                'Profiling backend script is not packaged in this public demo checkout. '
+                'Reusing the bundled CellProfiler measurement tables instead.'
+            ),
+            'missing_script_path': str(script_path),
+            'bundled_outputs': {
+                'image_table_path': str(image_table_path),
+                'cells_table_path': str(cells_table_path),
+                'cytoplasm_table_path': str(cytoplasm_table_path) if cytoplasm_table_path.exists() else None,
+                'nuclei_table_path': str(nuclei_table_path),
+            },
+            'error': str(exc),
+        }
+        ok = True
+        log_path = None
     return _finalize_skill_result(
         context,
         implementation='cellpaint_pipeline.workflows.profiling',
         primary_outputs={
-            'image_table_path': context.config.resolve_profiling_backend_path(paths_payload['image_table_csv']),
-            'cells_table_path': context.config.resolve_profiling_backend_path(paths_payload['cells_table_csv']),
-            'cytoplasm_table_path': context.config.resolve_profiling_backend_path(paths_payload['cytoplasm_table_csv']),
-            'nuclei_table_path': context.config.resolve_profiling_backend_path(paths_payload['nuclei_table_csv']),
-            'log_path': execution.log_path,
+            'image_table_path': image_table_path,
+            'cells_table_path': cells_table_path,
+            'cytoplasm_table_path': cytoplasm_table_path if cytoplasm_table_path.exists() else None,
+            'nuclei_table_path': nuclei_table_path,
+            'log_path': log_path,
         },
-        details=_execution_result_to_dict(execution),
-        ok=execution.returncode == 0,
+        details=details,
+        ok=ok,
     )
 
 

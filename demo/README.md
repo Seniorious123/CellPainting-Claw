@@ -17,7 +17,7 @@ Recommended public demo entry points from the repository root:
 ```bash
 CONFIG=configs/project_config.demo.json
 DATA_ROOT=demo/workspace/outputs/quick_start_data
-RUN_ROOT=demo/workspace/outputs/quick_start_run
+RUN_ROOT=demo/workspace/outputs/quick_start_classical
 
 cellpainting-skills run \
   --config "$CONFIG" \
@@ -26,13 +26,13 @@ cellpainting-skills run \
 
 cellpainting-skills run \
   --config "$CONFIG" \
-  --skill cp-extract-segmentation-artifacts \
-  --output-dir "$RUN_ROOT/01_segmentation"
+  --skill cp-extract-measurements \
+  --output-dir "$RUN_ROOT/01_measurements"
 ```
 
 The public documentation now uses this demo backend in two ways:
 
 - data-access skills for Gallery inspection, planning, and bounded downloads
-- local workflow skills for segmentation, crop export, and DeepProfiler runs
+- classical profiling skills for CellProfiler tables, single-cell export, and pycytominer outputs
 
-The downstream workflow pages still use the repo-local demo backend because it is a validated local workspace that can be reproduced in public documentation without relying on a large external download.
+The profiling demo backend currently packages a minimal validated measurement result set directly in the repository. In the public demo checkout, `cp-extract-measurements` therefore reuses these bundled tables when the original backend script is not present.
