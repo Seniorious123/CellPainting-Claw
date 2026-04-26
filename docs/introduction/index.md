@@ -79,6 +79,6 @@ Its role is to make those tools easier to configure, run, and expose through a s
 After this page, the most useful next pages are:
 
 - [Skills](../skills/index.md)
-- [Quick Start](../quick_start/index.md)
+- [Quick Start](../quick_start/index.ipynb)
 - [CLI](../cli/index.md)
 - [OpenClaw](../openclaw/index.md)

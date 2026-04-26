@@ -96,4 +96,4 @@ This is also where advanced inspection commands remain available when needed.
 
 - [Skills](../skills/index.md)
 - [OpenClaw](../openclaw/index.md)
-- [Quick Start](../quick_start/index.md)
+- [Quick Start](../quick_start/index.ipynb)

@@ -45,7 +45,7 @@ That order separates toolkit problems from OpenClaw-side problems.
 
 This page shows how to use the same public skills through natural-language requests.
 
-Unlike [Quick Start](../quick_start/index.md), this page is not a recorded provider-free demo. OpenClaw requires a configured model provider, so the steps below describe the supported usage path once that provider setup is in place.
+Unlike [Quick Start](../quick_start/index.ipynb), this page is not a recorded provider-free demo. OpenClaw requires a configured model provider, so the steps below describe the supported usage path once that provider setup is in place.
 
 ### Provider Setup
 
@@ -230,4 +230,4 @@ Common failure classes are:
 
 - [Skills](../skills/index.md)
 - [CLI](../cli/index.md)
-- [Quick Start](../quick_start/index.md)
+- [Quick Start](../quick_start/index.ipynb)

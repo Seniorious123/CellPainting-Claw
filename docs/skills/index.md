@@ -89,6 +89,6 @@ dp_summarize_deep_features
 
 ## Related Pages
 
-- [Quick Start](../quick_start/index.md)
+- [Quick Start](../quick_start/index.ipynb)
 - [CLI](../cli/index.md)
 - [OpenClaw](../openclaw/index.md)

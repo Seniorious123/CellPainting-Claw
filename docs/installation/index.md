@@ -78,7 +78,7 @@ If both the CLI and imports work, the package layer is installed correctly.
 
 After installation, the shortest practical next page is:
 
-- [Quick Start](../quick_start/index.md)
+- [Quick Start](../quick_start/index.ipynb)
 
 From there, you can continue into:
 
