@@ -4,6 +4,14 @@ OpenClaw is the **natural-language entry point** for CellPainting-Claw.
 
 Use it when you want to describe a task in plain language and let an agent route that request onto the documented skills.
 
+## Start Here
+
+For the first concrete agent-facing example, start with:
+
+- [Segmentation Demo](segmentation_demo.md)
+
+That page shows one archived agent-style trace for three segmentation skills, together with the recorded result figures.
+
 ## Role Of OpenClaw
 
 In normal use, OpenClaw should do one thing well:
@@ -231,3 +239,10 @@ Common failure classes are:
 - [Skills](../skills/index.md)
 - [CLI](../cli/index.md)
 - [Quick Start](../quick_start/index.ipynb)
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+segmentation_demo
+```
