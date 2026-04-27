@@ -1,6 +1,6 @@
 ---
 name: cellpaint-pipeline
-description: Use the validated Cell Painting pipeline library through stable CLI, public API, and optional MCP entrypoints.
+description: Use the validated Cell Painting pipeline library through the current CellPainting-Skills catalog and supporting CLI surfaces.
 ---
 
 # Cell Painting Pipeline
@@ -9,12 +9,12 @@ Use this skill when the user wants to discover, run, or summarize the standardiz
 
 ## Goal
 
-Translate natural-language requests into stable `CellPainting-Claw` entrypoints rather than custom shell chains.
+Translate natural-language requests into the current documented skills rather than custom shell chains or older compatibility aliases.
 
-## Base command
+## Preferred CLI
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw
+$PYTHON_BIN -m cellpainting_skills
 ```
 
 ## Preferred order
@@ -22,40 +22,86 @@ $PYTHON_BIN -m cellpainting_claw
 1. Discovery
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw list-mcp-tools
-$PYTHON_BIN -m cellpainting_claw show-public-api-contract
-$PYTHON_BIN -m cellpainting_claw list-pipeline-skills
+$PYTHON_BIN -m cellpainting_skills list
+$PYTHON_BIN -m cellpainting_skills describe --skill <skill-key>
 ```
 
-2. Task-oriented execution
+2. Skill execution
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-segmentation
+cd $REPO_ROOT
+$PYTHON_BIN -m cellpainting_skills run \
+  --config $REPO_ROOT/configs/project_config.example.json \
+  --skill <skill-key> \
+  --output-dir <output-dir>
 ```
 
-3. Stable public API dispatch
+3. Use `cellpainting_claw` only when the user explicitly needs a lower-level or broader interface
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config $REPO_ROOT/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
+$PYTHON_BIN -m cellpainting_claw <command> ...
 ```
 
-## Useful skill keys
+## Current skill examples
 
-- `plan-data-access`
-- `download-data`
-- `run-classical-profiling`
-- `run-segmentation`
-- `prepare-deepprofiler-inputs`
-- `run-deepprofiler`
+Segmentation:
+
+- `cp-prepare-segmentation-inputs`
+- `cp-extract-segmentation-artifacts`
+- `cp-generate-segmentation-previews`
+
+Classical profiling:
+
+- `cp-extract-measurements`
+- `cp-build-single-cell-table`
+- `cyto-aggregate-profiles`
+- `cyto-annotate-profiles`
+- `cyto-normalize-profiles`
+- `cyto-select-profile-features`
+- `cyto-summarize-classical-profiles`
+
+Deep features:
+
+- `dp-export-deep-feature-inputs`
+- `dp-build-deep-feature-project`
+- `dp-run-deep-feature-model`
+- `dp-collect-deep-features`
+- `dp-summarize-deep-features`
+
+Data access:
+
+- `data-inspect-availability`
+- `data-plan-download`
+- `data-download`
+
+## Routing guidance
+
+Prefer the fine-grained public skill that directly matches the user's task.
+
+Examples:
+
+- if the user wants the segmentation load-data table, choose `cp-prepare-segmentation-inputs`
+- if the user wants masks, labels, outlines, or segmentation tables, choose `cp-extract-segmentation-artifacts`
+- if the user wants quick visual checks, choose `cp-generate-segmentation-previews`
+
+Do not default to older high-level compatibility names such as `run-segmentation`, `run-classical-profiling`, or `run-deepprofiler` unless the user explicitly asks for those legacy workflow aliases.
 
 ## Reporting expectations
 
 For each run, report:
 
-- command or entrypoint used
+- exact skill key used
+- exact command used
 - config path
 - output directory
-- whether artifacts include masks, pycytominer outputs, or DeepProfiler outputs
+- the main files or directories written
+- the next likely skill when the task naturally leads to another step
+
+## Working directory rule
+
+Run CellPainting skill commands from `$REPO_ROOT`.
+
+This matters because the demo and example configs resolve backend data paths relative to the repository layout. If the current shell is inside the OpenClaw workspace, prepend `cd $REPO_ROOT` before running the skill command.
 
 ## Optional MCP route
 
@@ -65,10 +111,15 @@ If the host is configured to use MCP, start the server with:
 $REPO_ROOT/integrations/openclaw/start_cellpaint_mcp_http.sh
 ```
 
-Then prefer the MCP tools that mirror the same public surfaces:
+Then prefer MCP discovery only to decide which current skill to run. The actual task should still be framed around the same fine-grained public skill catalog.
 
-- `list_public_api_entrypoints`
-- `show_public_api_contract`
-- `list_pipeline_skills`
-- `run_pipeline_skill`
-- `run_public_api_entrypoint`
+## Config guidance
+
+Treat the project config as the source of truth for:
+
+- backend roots
+- workspace and output roots
+- selected `.cppipe` templates
+- runtime settings
+
+Do not invent paths or template names when the config can provide them.

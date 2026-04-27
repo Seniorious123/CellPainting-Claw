@@ -9,22 +9,24 @@ Important local paths:
 Preferred CLI form:
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw <command> ...
+$PYTHON_BIN -m cellpainting_skills <command> ...
 ```
 
 Preferred discovery commands:
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw list-mcp-tools
-$PYTHON_BIN -m cellpainting_claw show-public-api-contract
-$PYTHON_BIN -m cellpainting_claw list-pipeline-skills
+$PYTHON_BIN -m cellpainting_skills list
+$PYTHON_BIN -m cellpainting_skills describe --skill <skill-key>
 ```
 
 Preferred execution commands:
 
 ```bash
-$PYTHON_BIN -m cellpainting_claw run-pipeline-skill --config $REPO_ROOT/configs/project_config.example.json --skill run-segmentation
-$PYTHON_BIN -m cellpainting_claw run-public-api-entrypoint --config $REPO_ROOT/configs/project_config.example.json --entrypoint run_end_to_end_pipeline
+cd $REPO_ROOT
+$PYTHON_BIN -m cellpainting_skills run \
+  --config $REPO_ROOT/configs/project_config.example.json \
+  --skill <skill-key> \
+  --output-dir <output-dir>
 ```
 
 Optional MCP mode:
@@ -32,3 +34,23 @@ Optional MCP mode:
 ```bash
 $REPO_ROOT/integrations/openclaw/start_cellpaint_mcp_http.sh
 ```
+
+Preferred segmentation skill keys:
+
+- `cp-prepare-segmentation-inputs`
+- `cp-extract-segmentation-artifacts`
+- `cp-generate-segmentation-previews`
+
+Preferred classical profiling skill keys:
+
+- `cp-extract-measurements`
+- `cp-build-single-cell-table`
+- `cyto-aggregate-profiles`
+- `cyto-annotate-profiles`
+- `cyto-normalize-profiles`
+- `cyto-select-profile-features`
+- `cyto-summarize-classical-profiles`
+
+Avoid defaulting to older compatibility aliases such as `run-segmentation`, `run-classical-profiling`, or `run-deepprofiler` when a current fine-grained skill exists.
+
+Run skill commands from `$REPO_ROOT`, not from the OpenClaw workspace subdirectory.
