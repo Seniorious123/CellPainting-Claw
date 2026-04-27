@@ -1,24 +1,54 @@
 # `cp-prepare-segmentation-inputs`
 
-`cp-prepare-segmentation-inputs` prepares the load-data table used by the segmentation pipeline.
+`cp-prepare-segmentation-inputs` writes the `load_data_for_segmentation.csv` file that the segmentation pipeline will read.
 
-## Purpose
+This skill does **not** run CellProfiler yet. Its job is to assemble the field list, channel file paths, and illumination references needed by the segmentation step.
 
-Use this skill when you want to confirm which fields will be sent into segmentation before running CellProfiler.
+## Main Result
 
-## Inputs
+The main result is one segmentation input table:
 
-- image metadata
+- `load_data_for_segmentation.csv`
+
+Each row in that table represents one field that will be sent into segmentation. In practice, this is the point where the project turns “which wells and sites should I segment?” into a concrete run description.
+
+## Main Input
+
+This skill reads:
+
 - a project config
+- image metadata resolved from the configured demo or user workspace
 - optional plate, well, or site filters
 - an optional output directory
 
-The image metadata can be provided by the repository for demo runs or by the user for custom runs.
+## Config Fields Used
 
-## Outputs
+For this skill, the config mainly provides:
 
-- `load_data_for_segmentation.csv`: the load-data table used by segmentation
-- `pipeline_skill_manifest.json`: the recorded skill run metadata
+- the backend roots where the raw Cell Painting images and illumination assets live
+- the workspace and default output roots
+- any dataset-specific defaults already encoded in the project setup
+
+The important distinction is:
+
+- the config tells the skill **where to find the inputs**
+- this skill writes the table that tells the next segmentation step **which fields to run**
+
+## Files Written
+
+Files written by this skill:
+
+- `load_data_for_segmentation.csv`: one row per segmentation field, including channel filenames, channel paths, and illumination references
+- `pipeline_skill_manifest.json`: a machine-readable record of the skill run
+
+## Recorded Demo Result
+
+In the repository demo, this step prepares **two fields**:
+
+- plate `BR00000001`, well `A01`, site `1`
+- plate `BR00000001`, well `A02`, site `1`
+
+That recorded demo table is the direct input for the next skill, [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md).
 
 ## Direct Use
 
@@ -34,10 +64,10 @@ cellpainting-skills run \
 Example request:
 
 ```text
-Prepare the segmentation inputs for configs/project_config.demo.json and write the load-data table under outputs/segmentation_inputs.
+Prepare the segmentation inputs for configs/project_config.demo.json and write the segmentation load-data table under outputs/segmentation_inputs.
 ```
 
-## Related Skills
+## Next Skills
 
 - [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)
 - [cp-generate-segmentation-previews](cp_generate_segmentation_previews.md)
