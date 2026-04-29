@@ -191,6 +191,8 @@ The recorded run produced the following nuclei outline image:
 
 ![A01 nuclei outlines](../_static/agent_demo_segmentation/outline_A01_nuclei.png)
 
+Caption: Nuclei outline output for demo field `BR00000001 / A01 / site 1`, written by `cp-extract-segmentation-artifacts`.
+
 ## Next Skills
 
 - [cp-generate-segmentation-previews](cp_generate_segmentation_previews.md)

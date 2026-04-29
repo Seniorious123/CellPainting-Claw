@@ -129,11 +129,11 @@ This recorded run wrote:
 - `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A01_s1_sample.png`
 - `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A02_s1_sample.png`
 
-## Demo Images
+## Demo Image
 
 ![A01 sample preview](../_static/agent_demo_segmentation/preview_A01.png)
 
-![A02 sample preview](../_static/agent_demo_segmentation/preview_A02.png)
+Caption: RGB sample preview for demo field `BR00000001 / A01 / site 1`, written by `cp-generate-segmentation-previews` for quick visual QC.
 
 ## Related Skills
 
