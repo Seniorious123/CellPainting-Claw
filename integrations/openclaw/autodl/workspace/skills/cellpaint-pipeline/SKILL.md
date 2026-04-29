@@ -14,7 +14,14 @@ Translate natural-language requests into the current documented skills rather th
 ## Preferred CLI
 
 ```bash
-$PYTHON_BIN -m cellpainting_skills
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills
+```
+
+If the executable path changes, fall back to:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills
 ```
 
 ## Preferred order
@@ -22,15 +29,25 @@ $PYTHON_BIN -m cellpainting_skills
 1. Discovery
 
 ```bash
-$PYTHON_BIN -m cellpainting_skills list
-$PYTHON_BIN -m cellpainting_skills describe --skill <skill-key>
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills list
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills describe --skill <skill-key>
 ```
 
 2. Skill execution
 
 ```bash
 cd $REPO_ROOT
-$PYTHON_BIN -m cellpainting_skills run \
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
+  --config $REPO_ROOT/configs/project_config.example.json \
+  --skill <skill-key> \
+  --output-dir <output-dir>
+```
+
+Fallback execution form if the executable path changes:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills run \
   --config $REPO_ROOT/configs/project_config.example.json \
   --skill <skill-key> \
   --output-dir <output-dir>

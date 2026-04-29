@@ -1,78 +1,93 @@
 # `cp-generate-segmentation-previews`
 
-`cp-generate-segmentation-previews` writes lightweight preview PNGs for quick visual review.
+`cp-generate-segmentation-previews` writes lightweight field-level preview PNGs.
 
-This skill is for the stage where the user or agent does **not** want to rerun the full segmentation export, but does want to check the fields visually before continuing.
+This skill is useful when you want to check the segmentation source images visually without rerunning the heavier segmentation export.
 
-## Main Result
+## Purpose
 
-The main result is one directory of preview PNGs:
+Use this skill when you want:
 
-- `sample_previews_png/`
+- quick PNG previews for the selected segmentation fields
+- a fast visual check before moving on to crops or DeepProfiler preparation
+- a lightweight inspection step after [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md) or [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)
 
-These preview images are a fast inspection layer. They help confirm that the expected fields are being read and that the segmentation source images look reasonable before moving on to crops or deeper downstream analysis.
+## Inputs
 
-## Main Input
+This skill reads:
 
-This skill reads either:
-
-- prepared segmentation inputs from [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md), or
-- a completed segmentation workflow root from [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)
-
-It also reads:
-
-- preview settings from the project config or explicit user options
+- a project config such as `configs/project_config.demo.json`
+- prepared segmentation inputs or a valid segmentation workflow root
+- the source channel paths needed to render the preview RGB images
 - an optional output directory
 
-## Config Fields Used
+For the demo config, this skill depends on the same raw Cell Painting image layout used by the segmentation steps above.
 
-For this skill, the config mainly provides:
+## Outputs
 
-- the source channel layout used to render the preview images
-- the workspace and output roots
-- any default image-selection behavior already encoded in the project setup
+This skill writes:
 
-In normal use, the simplest path is to point this skill at a segmentation workflow root that was already produced by `cp-extract-segmentation-artifacts`.
+- `sample_previews_png/`
+  One preview PNG per selected field.
+- `pipeline_skill_manifest.json`
+  The machine-readable run record for this skill invocation.
 
-## Files Written
+## Recorded Agent Demo
 
-Files written by this skill:
+The repository includes a real OpenClaw session for this step:
 
-- `sample_previews_png/`: one preview PNG per selected field
-- `pipeline_skill_manifest.json`: a machine-readable record of the skill run
+- session id: `segdemo-local-v7-previews`
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7`
 
-## Recorded Demo Result
-
-In the recorded repository demo, this skill writes **two preview PNGs**:
-
-- one for well `A01`
-- one for well `A02`
-
-The recorded manifest shows:
-
-- `generated_count = 2`
-- `field_count = 2`
-- `skipped_existing = 0`
-
-## Direct Use
-
-```bash
-cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill cp-generate-segmentation-previews \
-  --workflow-root outputs/demo_segmentation \
-  --output-dir outputs/segmentation_previews
-```
-
-## Agent Use
-
-Example request:
+### User Request
 
 ```text
-Generate segmentation preview PNGs from outputs/demo_segmentation and save them under outputs/segmentation_previews.
+From /root/pipeline/CellPainting-Claw, generate the segmentation preview images for /root/pipeline/CellPainting-Claw/configs/project_config.demo.json and write the results under /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7. Use the current segmentation preview skill, run it from the repository root, and then tell me which skill you used, which command you ran, and which preview files were written.
 ```
 
-## Previous And Next Skills
+### Agent Tool Call
+
+```bash
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
+  --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json \
+  --skill cp-generate-segmentation-previews \
+  --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7
+```
+
+The successful run was issued with `workdir=/root/pipeline/CellPainting-Claw`. In this demo setup, running from the repository root matters because the configured demo image paths are resolved relative to the repository layout.
+
+### Observed Result
+
+```json
+{
+  "skill_key": "cp-generate-segmentation-previews",
+  "details": {
+    "generated_count": 2,
+    "skipped_existing": 0,
+    "field_count": 2
+  },
+  "ok": true
+}
+```
+
+This real run wrote:
+
+- `sample_previews_png/BR00000001_A01_s1_sample.png`
+- `sample_previews_png/BR00000001_A02_s1_sample.png`
+- `pipeline_skill_manifest.json`
+
+## Recorded Preview Images
+
+![A01 sample preview](../../demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7/sample_previews_png/BR00000001_A01_s1_sample.png)
+
+![A02 sample preview](../../demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7/sample_previews_png/BR00000001_A02_s1_sample.png)
+
+## Execution Note
+
+During trace capture, a separate OpenClaw session failed when the preview skill was launched from the OpenClaw workspace instead of the repository root. That failure was path-related rather than algorithm-related. For the demo config, keep the run rooted at `/root/pipeline/CellPainting-Claw`.
+
+## Related Skills
 
 - [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md)
 - [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)

@@ -6,24 +6,41 @@ Important local paths:
 - example config: `$REPO_ROOT/configs/project_config.example.json`
 - Python interpreter: `$PYTHON_BIN`
 
-Preferred CLI form:
+Preferred CLI form in this AutoDL runtime:
 
 ```bash
-$PYTHON_BIN -m cellpainting_skills <command> ...
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills <command> ...
+```
+
+Fallback form if the executable path changes:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills <command> ...
 ```
 
 Preferred discovery commands:
 
 ```bash
-$PYTHON_BIN -m cellpainting_skills list
-$PYTHON_BIN -m cellpainting_skills describe --skill <skill-key>
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills list
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills describe --skill <skill-key>
 ```
 
 Preferred execution commands:
 
 ```bash
 cd $REPO_ROOT
-$PYTHON_BIN -m cellpainting_skills run \
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
+  --config $REPO_ROOT/configs/project_config.example.json \
+  --skill <skill-key> \
+  --output-dir <output-dir>
+```
+
+Fallback execution form if the executable path changes:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills run \
   --config $REPO_ROOT/configs/project_config.example.json \
   --skill <skill-key> \
   --output-dir <output-dir>

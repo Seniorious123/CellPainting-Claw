@@ -1,82 +1,125 @@
 # `cp-extract-segmentation-artifacts`
 
-`cp-extract-segmentation-artifacts` is the skill that actually runs the segmentation branch and writes the main artifact set.
+`cp-extract-segmentation-artifacts` is the segmentation execution step.
 
-If `cp-prepare-segmentation-inputs` describes **which fields to run**, this skill performs the next step: it resolves the segmentation `.cppipe`, runs the segmentation backend, and writes masks, labels, outlines, and object tables.
+It takes the prepared field list, resolves the segmentation `.cppipe`, runs the CellProfiler-based segmentation backend, and writes the artifact bundle that downstream tools can reuse.
 
-## Main Result
+## Purpose
 
-The main result is one completed segmentation output bundle.
+Use this skill when you want:
 
-That bundle typically includes:
+- segmentation tables such as `Image.csv`, `Cells.csv`, and `Nuclei.csv`
+- label images for segmented nuclei and cells
+- outline PNGs for quick inspection
+- a reusable segmentation workflow root for crops or DeepProfiler preparation
 
-- segmentation measurement tables
-- exported label images
-- exported outline images
-- mask-export outputs from the CellProfiler segmentation run
-
-## Main Input
+## Inputs
 
 This skill reads:
 
-- a segmentation load-data table from [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md), or default segmentation inputs resolved from the config
-- the segmentation `.cppipe` selected by the config
-- runtime settings for the mask-export run
+- a project config such as `configs/project_config.demo.json`
+- the segmentation input table written by [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md), or default segmentation inputs resolved from the config
+- the segmentation `.cppipe` template or override selected by the config
+- the configured raw-image and illumination assets
 - an optional output directory
 
-## Config Fields Used
+In the demo setup, the config selects the bundled segmentation template and derives a mask-export-ready `.cppipe` at runtime.
 
-For this skill, the config mainly determines:
+## Outputs
 
-- which segmentation backend root to use
-- which segmentation `.cppipe` template or custom override to select
-- where the workspace and output directories live
-- which runtime settings to use for the mask-export execution
+This skill writes:
 
-In the demo config, the default segmentation path uses the bundled `segmentation-base` template and derives a mask-export-ready pipeline at runtime.
+- `load_data_for_segmentation.csv`
+  The exact field list used by this run.
+- `CPJUMP1_analysis_mask_export.cppipe`
+  The pipeline file used for execution.
+- `cellprofiler_masks/Image.csv`
+  Field-level measurements from the segmentation run.
+- `cellprofiler_masks/Cells.csv`
+  Cell-level measurements.
+- `cellprofiler_masks/Nuclei.csv`
+  Nuclei-level measurements.
+- `cellprofiler_masks/labels/`
+  Label TIFF files for segmented nuclei and cells.
+- `cellprofiler_masks/outlines/`
+  Outline PNGs for quick visual review.
+- `segmentation_summary.json`
+  A compact summary of the completed run.
+- `pipeline_skill_manifest.json`
+  The machine-readable run record for this skill invocation.
 
-## Files Written
+## Recorded Agent Demo
 
-Files commonly written by this skill:
+The repository includes a real OpenClaw session for this step:
 
-- `load_data_for_segmentation.csv`: the concrete field list used for this run
-- `CPJUMP1_analysis_mask_export.cppipe`: the pipeline file used for execution
-- `cellprofiler_masks/Image.csv`: field-level segmentation measurements
-- `cellprofiler_masks/Cells.csv`: cell-level segmentation measurements
-- `cellprofiler_masks/Nuclei.csv`: nuclei-level segmentation measurements
-- `cellprofiler_masks/labels/`: label images for segmented objects
-- `cellprofiler_masks/outlines/`: outline PNGs for quick visual inspection
-- `segmentation_summary.json`: a compact summary of the segmentation run
-- `pipeline_skill_manifest.json`: a machine-readable record of the skill run
+- session id: `segdemo-local-v6-extract`
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6`
 
-## Recorded Demo Result
-
-In the recorded repository demo, this skill runs on **two fields** and writes:
-
-- one derived `.cppipe` file
-- `Image.csv`, `Cells.csv`, and `Nuclei.csv`
-- label images for wells `A01` and `A02`
-- outline PNGs for wells `A01` and `A02`
-- a successful execution record with `returncode = 0`
-
-This is the skill that creates the segmentation outputs later reused by preview generation, crop export, and the DeepProfiler path.
-
-## Direct Use
-
-```bash
-cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill cp-extract-segmentation-artifacts \
-  --output-dir outputs/demo_segmentation
-```
-
-## Agent Use
-
-Example request:
+### User Request
 
 ```text
-Run segmentation with configs/project_config.demo.json and write the masks, labels, outlines, and segmentation tables under outputs/demo_segmentation.
+Run the segmentation artifact extraction for /root/pipeline/CellPainting-Claw/configs/project_config.demo.json and write the results under /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6. Then tell me which skill you used, which command you ran, and which main files or directories were written.
 ```
+
+### Agent Tool Call
+
+```bash
+cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
+  --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json \
+  --skill cp-extract-segmentation-artifacts \
+  --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6
+```
+
+### Observed Result
+
+```json
+{
+  "skill_key": "cp-extract-segmentation-artifacts",
+  "details": {
+    "load_data": {
+      "row_count": 2,
+      "plate_count": 1,
+      "well_count": 2,
+      "site_count": 2
+    },
+    "pipeline": {
+      "module_count": 37,
+      "selected_via": "template",
+      "execution_mode": "derive-mask-export"
+    },
+    "execution": {
+      "returncode": 0
+    }
+  },
+  "ok": true
+}
+```
+
+This real run wrote:
+
+- `Image.csv`, `Cells.csv`, `Nuclei.csv`, `Cytoplasm.csv`, and `Experiment.csv`
+- two nuclei label TIFFs and two cell label TIFFs
+- two nuclei outline PNGs and two cell outline PNGs
+- one derived `.cppipe`
+- one successful `segmentation_summary.json`
+
+## Demo Files
+
+The recorded demo files for this step include:
+
+- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/segmentation_summary.json`
+- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/Image.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/Cells.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/Nuclei.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
+- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A02_s1--cell_outlines.png`
+
+## Recorded Outline Examples
+
+![A01 cell outlines](../../demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png)
+
+![A02 cell outlines](../../demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A02_s1--cell_outlines.png)
 
 ## Next Skills
 

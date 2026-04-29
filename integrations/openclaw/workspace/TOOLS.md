@@ -9,21 +9,38 @@ Important local paths:
 Preferred CLI form:
 
 ```bash
-$PYTHON_BIN -m cellpainting_skills <command> ...
+cellpainting-skills <command> ...
+```
+
+If the `cellpainting-skills` executable is not available in the current shell, use:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills <command> ...
 ```
 
 Preferred discovery commands:
 
 ```bash
-$PYTHON_BIN -m cellpainting_skills list
-$PYTHON_BIN -m cellpainting_skills describe --skill <skill-key>
+cellpainting-skills list
+cellpainting-skills describe --skill <skill-key>
 ```
 
 Preferred execution commands:
 
 ```bash
 cd $REPO_ROOT
-$PYTHON_BIN -m cellpainting_skills run \
+cellpainting-skills run \
+  --config $REPO_ROOT/configs/project_config.example.json \
+  --skill <skill-key> \
+  --output-dir <output-dir>
+```
+
+Fallback execution form if only the module path is available:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills run \
   --config $REPO_ROOT/configs/project_config.example.json \
   --skill <skill-key> \
   --output-dir <output-dir>

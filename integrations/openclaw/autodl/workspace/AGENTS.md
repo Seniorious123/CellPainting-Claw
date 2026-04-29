@@ -15,6 +15,22 @@ Your job is to route user requests to the stable library interfaces instead of r
 
 ## Preferred commands
 
+Prefer task-level skills first:
+
+```bash
+cd $REPO_ROOT
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills list
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills describe --skill <skill-key>
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config $REPO_ROOT/configs/project_config.example.json --skill <skill-key> --output-dir <output-dir>
+```
+
+If the executable path changes, use:
+
+```bash
+cd $REPO_ROOT
+PYTHONPATH=$REPO_ROOT/src $PYTHON_BIN -m cellpainting_skills <command> ...
+```
+
 Use the `cellpainting-claw` interpreter directly:
 
 ```bash

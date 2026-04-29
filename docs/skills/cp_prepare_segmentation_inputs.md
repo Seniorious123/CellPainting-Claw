@@ -1,71 +1,87 @@
 # `cp-prepare-segmentation-inputs`
 
-`cp-prepare-segmentation-inputs` writes the `load_data_for_segmentation.csv` file that the segmentation pipeline will read.
+`cp-prepare-segmentation-inputs` writes the segmentation input table before any CellProfiler segmentation run begins.
 
-This skill does **not** run CellProfiler yet. Its job is to assemble the field list, channel file paths, and illumination references needed by the segmentation step.
+This is the step that turns a project config into a concrete field list. In the demo setup, it resolves which plate, well, and site will be segmented, and it writes the channel paths that the next segmentation step will read.
 
-## Main Result
+## Purpose
 
-The main result is one segmentation input table:
+Use this skill when you want to:
 
-- `load_data_for_segmentation.csv`
+- confirm which fields will be sent into segmentation
+- inspect the segmentation input table before a longer run
+- hand a clean field list to [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)
 
-Each row in that table represents one field that will be sent into segmentation. In practice, this is the point where the project turns “which wells and sites should I segment?” into a concrete run description.
-
-## Main Input
+## Inputs
 
 This skill reads:
 
-- a project config
-- image metadata resolved from the configured demo or user workspace
+- a project config such as `configs/project_config.demo.json`
+- the configured raw-image and illumination roots
 - optional plate, well, or site filters
 - an optional output directory
 
-## Config Fields Used
+In plain language, the config tells the skill where the raw Cell Painting images live and which demo assets belong to the current run.
 
-For this skill, the config mainly provides:
+## Outputs
 
-- the backend roots where the raw Cell Painting images and illumination assets live
-- the workspace and default output roots
-- any dataset-specific defaults already encoded in the project setup
+This skill writes:
 
-The important distinction is:
+- `load_data_for_segmentation.csv`
+  The field-level input table for segmentation. Each row names one field and includes the channel filenames and path columns needed by the segmentation pipeline.
+- `pipeline_skill_manifest.json`
+  The machine-readable run record for this skill invocation.
 
-- the config tells the skill **where to find the inputs**
-- this skill writes the table that tells the next segmentation step **which fields to run**
+## Recorded Agent Demo
 
-## Files Written
+The repository includes a real OpenClaw session for this step:
 
-Files written by this skill:
+- session id: `segdemo-local-v8-prepare`
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8`
 
-- `load_data_for_segmentation.csv`: one row per segmentation field, including channel filenames, channel paths, and illumination references
-- `pipeline_skill_manifest.json`: a machine-readable record of the skill run
-
-## Recorded Demo Result
-
-In the repository demo, this step prepares **two fields**:
-
-- plate `BR00000001`, well `A01`, site `1`
-- plate `BR00000001`, well `A02`, site `1`
-
-That recorded demo table is the direct input for the next skill, [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md).
-
-## Direct Use
-
-```bash
-cellpainting-skills run \
-  --config configs/project_config.demo.json \
-  --skill cp-prepare-segmentation-inputs \
-  --output-dir outputs/segmentation_inputs
-```
-
-## Agent Use
-
-Example request:
+### User Request
 
 ```text
-Prepare the segmentation inputs for configs/project_config.demo.json and write the segmentation load-data table under outputs/segmentation_inputs.
+From /root/pipeline/CellPainting-Claw, prepare the segmentation inputs for /root/pipeline/CellPainting-Claw/configs/project_config.demo.json and write the results under /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8. Use the current segmentation input skill, run it from the repository root, and then tell me which skill you used, which command you ran, and how many rows, wells, and sites were included.
 ```
+
+### Agent Tool Call
+
+```bash
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
+  --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json \
+  --skill cp-prepare-segmentation-inputs \
+  --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8
+```
+
+### Observed Result
+
+```json
+{
+  "skill_key": "cp-prepare-segmentation-inputs",
+  "details": {
+    "row_count": 2,
+    "plate_count": 1,
+    "well_count": 2,
+    "site_count": 2
+  },
+  "ok": true
+}
+```
+
+The generated table covers:
+
+- plate `BR00000001`
+- well `A01`, site `1`
+- well `A02`, site `1`
+
+## Demo Files
+
+The recorded demo files for this step are:
+
+- `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8/load_data_for_segmentation.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8/pipeline_skill_manifest.json`
 
 ## Next Skills
 

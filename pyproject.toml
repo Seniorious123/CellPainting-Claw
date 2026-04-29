@@ -43,6 +43,7 @@ test = [
 ]
 docs = [
   "sphinx>=8,<9",
+  "myst-nb>=1,<2",
   "myst-parser>=3,<5",
   "furo>=2024.8.6",
 ]
