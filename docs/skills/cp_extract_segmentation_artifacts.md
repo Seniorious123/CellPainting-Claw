@@ -48,84 +48,71 @@ This skill writes:
 - `pipeline_skill_manifest.json`
   The machine-readable run record for this skill invocation.
 
-## Recorded Agent Demo
+## Agent Demo
 
-The repository includes a real OpenClaw session for this step:
+This page is based on a real OpenClaw turn recorded in the main session transcript:
 
-- session id: `segdemo-local-v6-extract`
+- session id: `93f63e09-7c61-4f40-8bb7-e75ae56068aa`
+- turn timestamp: `2026-04-29 18:21 GMT+8`
+- model: `vibe/gpt-5-mini`
 
-### User Request
+### Request
 
 ```text
-Please run segmentation on the demo Cell Painting fields and give me the usual outputs I would inspect afterward, including the object tables, labels, and outlines.
+Please run segmentation on the demo Cell Painting images and save the main outputs I would normally review afterward.
 ```
 
-### Recorded Execution Setup
+### Routing
 
-For this recorded demo run, the agent used:
+The observed routing sequence was:
 
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6`
-- repository root: `/root/pipeline/CellPainting-Claw`
+- the agent first inspected the skill catalog
+- it compared `cp-extract-segmentation-artifacts` with `cp-generate-segmentation-previews`
+- it chose `cp-extract-segmentation-artifacts` as the primary response to the request
+- it launched the extraction run
+- while the run was still active, it polled the process and inspected the output tree
+- once the first review artifacts were present, it answered with the concrete files already available
 
-### Agent Tool Call
+### Observed Tool Call
+
+The raw transcript used absolute checkout paths. The command below is the same call normalized to `$REPO_ROOT`:
 
 ```bash
-cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
-  --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json \
+cd $REPO_ROOT
+/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
+  --config $REPO_ROOT/configs/project_config.demo.json \
   --skill cp-extract-segmentation-artifacts \
-  --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6
+  --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run
 ```
 
 ### Observed Result
 
-```json
-{
-  "skill_key": "cp-extract-segmentation-artifacts",
-  "details": {
-    "load_data": {
-      "row_count": 2,
-      "plate_count": 1,
-      "well_count": 2,
-      "site_count": 2
-    },
-    "pipeline": {
-      "module_count": 37,
-      "selected_via": "template",
-      "execution_mode": "derive-mask-export"
-    },
-    "execution": {
-      "returncode": 0
-    }
-  },
-  "ok": true
-}
-```
+The agent reported the review-ready files that were already present when it answered:
 
-This real run wrote:
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/review_run`
+- load-data rows: `2`
+- wells: `2`
+- site values: `1`
 
-- `Image.csv`, `Cells.csv`, `Nuclei.csv`, `Cytoplasm.csv`, and `Experiment.csv`
-- two nuclei label TIFFs and two cell label TIFFs
-- two nuclei outline PNGs and two cell outline PNGs
-- one derived `.cppipe`
-- one successful `segmentation_summary.json`
+## Files Written
 
-## Demo Files
+The recorded turn confirmed these files in the output tree:
 
-The recorded demo files for this step include:
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/load_data_for_segmentation.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/segmentation_workflow_config.json`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/CPJUMP1_analysis_mask_export.cppipe`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/load_data_for_segmentation.absolute.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--cell_labels.tiff`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--nuclei_labels.tiff`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
+- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--nuclei_outlines.png`
 
-- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/segmentation_summary.json`
-- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/Image.csv`
-- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/Cells.csv`
-- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/Nuclei.csv`
-- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
-- `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A02_s1--cell_outlines.png`
+## Demo Image
 
-## Recorded Outline Examples
+The recorded run produced the following outline image:
 
-![A01 cell outlines](../../demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png)
-
-![A02 cell outlines](../../demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6/cellprofiler_masks/outlines/BR00000001_A02_s1--cell_outlines.png)
+![A01 cell outlines](../_static/agent_demo_segmentation/outline_A01_cell.png)
 
 ## Next Skills
 

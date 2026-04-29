@@ -32,33 +32,39 @@ This skill writes:
 - `pipeline_skill_manifest.json`
   The machine-readable run record for this skill invocation.
 
-## Recorded Agent Demo
+## Agent Demo
 
-The repository includes a real OpenClaw session for this step:
+This page is based on a real OpenClaw run:
 
-- session id: `segdemo-local-v8-prepare`
+- session id: `biosegdemo-prepare-v8`
+- model: `vibe/gpt-5-mini`
 
-### User Request
+### Request
 
 ```text
-I want to segment the demo Cell Painting images, but before running segmentation I want to check which fields will be included. Please prepare the segmentation input table and tell me how many wells and sites are going to be processed.
+Which demo wells and image fields are available for segmentation?
 ```
 
-### Recorded Execution Setup
+### Routing
 
-For this recorded demo run, the agent used:
+The observed routing sequence was:
 
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8`
-- repository root: `/root/pipeline/CellPainting-Claw`
+- the agent first tried to load `cellpaint-pipeline/SKILL.md` from a bundled OpenClaw path
+- that read failed with `ENOENT`
+- the agent then loaded the workspace copy under `integrations/openclaw/autodl/workspace/skills/cellpaint-pipeline/SKILL.md`
+- from that skill file, it chose `cp-prepare-segmentation-inputs`
+- after the skill finished, it inspected the generated CSV to report the exact plate, well, and site inventory
 
-### Agent Tool Call
+### Observed Tool Call
+
+The raw transcript used absolute checkout paths. The command below is the same call normalized to `$REPO_ROOT`:
 
 ```bash
+cd $REPO_ROOT
 /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
-  --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json \
+  --config $REPO_ROOT/configs/project_config.demo.json \
   --skill cp-prepare-segmentation-inputs \
-  --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8
+  --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation
 ```
 
 ### Observed Result
@@ -66,6 +72,7 @@ For this recorded demo run, the agent used:
 ```json
 {
   "skill_key": "cp-prepare-segmentation-inputs",
+  "category": "segmentation",
   "details": {
     "row_count": 2,
     "plate_count": 1,
@@ -76,18 +83,20 @@ For this recorded demo run, the agent used:
 }
 ```
 
-The generated table covers:
+The generated table covered:
 
 - plate `BR00000001`
 - well `A01`, site `1`
 - well `A02`, site `1`
 
-## Demo Files
+The agent then read the CSV rows and reported the same two field records back to the user instead of guessing from directory names.
 
-The recorded demo files for this step are:
+## Files Written
 
-- `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8/load_data_for_segmentation.csv`
-- `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8/pipeline_skill_manifest.json`
+This recorded run wrote:
+
+- `demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv`
+- `demo/workspace/outputs/agent_demo_segmentation/pipeline_skill_manifest.json`
 
 ## Next Skills
 

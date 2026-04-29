@@ -32,42 +32,49 @@ This skill writes:
 - `pipeline_skill_manifest.json`
   The machine-readable run record for this skill invocation.
 
-## Recorded Agent Demo
+## Agent Demo
 
-The repository includes a real OpenClaw session for this step:
+This page is based on a real OpenClaw turn recorded in the main session transcript:
 
-- session id: `segdemo-local-v7-previews`
+- session id: `93f63e09-7c61-4f40-8bb7-e75ae56068aa`
+- turn timestamp: `2026-04-29 18:25 GMT+8`
+- model: `vibe/gpt-5-mini`
 
-### User Request
+### Request
 
 ```text
-Please make quick preview images for the demo Cell Painting fields so I can visually check that the segmentation inputs look reasonable before going further.
+Please make a few quick preview images from the demo Cell Painting inputs so I can visually check that the images look right before going further.
 ```
 
-### Recorded Execution Setup
+### Routing
 
-For this recorded demo run, the agent used:
+The observed routing sequence was:
 
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7`
-- repository root: `/root/pipeline/CellPainting-Claw`
+- the agent matched the request directly to `cp-generate-segmentation-previews`
+- it used the existing segmentation workflow root from `demo/workspace/outputs/agent_demo_segmentation/review_run`
+- it ran the preview skill
+- it polled the background process
+- it listed the generated PNG files before replying
 
-### Agent Tool Call
+### Observed Tool Call
+
+The raw transcript used absolute checkout paths. The command below is the same call normalized to `$REPO_ROOT`:
 
 ```bash
+cd $REPO_ROOT
 /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
-  --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json \
+  --config $REPO_ROOT/configs/project_config.demo.json \
   --skill cp-generate-segmentation-previews \
-  --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7
+  --workflow-root $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run \
+  --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_previews
 ```
-
-The successful run was issued with `workdir=/root/pipeline/CellPainting-Claw`. In this demo setup, running from the repository root matters because the configured demo image paths are resolved relative to the repository layout.
 
 ### Observed Result
 
 ```json
 {
   "skill_key": "cp-generate-segmentation-previews",
+  "category": "segmentation",
   "details": {
     "generated_count": 2,
     "skipped_existing": 0,
@@ -77,21 +84,20 @@ The successful run was issued with `workdir=/root/pipeline/CellPainting-Claw`. I
 }
 ```
 
-This real run wrote:
+## Files Written
 
-- `sample_previews_png/BR00000001_A01_s1_sample.png`
-- `sample_previews_png/BR00000001_A02_s1_sample.png`
-- `pipeline_skill_manifest.json`
+This recorded run wrote:
 
-## Recorded Preview Images
+- `demo/workspace/outputs/agent_demo_segmentation/review_previews/pipeline_skill_manifest.json`
+- `demo/workspace/outputs/agent_demo_segmentation/review_previews/segmentation_source_config.json`
+- `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A01_s1_sample.png`
+- `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A02_s1_sample.png`
 
-![A01 sample preview](../../demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7/sample_previews_png/BR00000001_A01_s1_sample.png)
+## Demo Images
 
-![A02 sample preview](../../demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7/sample_previews_png/BR00000001_A02_s1_sample.png)
+![A01 sample preview](../_static/agent_demo_segmentation/preview_A01.png)
 
-## Execution Note
-
-During trace capture, a separate OpenClaw session failed when the preview skill was launched from the OpenClaw workspace instead of the repository root. That failure was path-related rather than algorithm-related. For the demo config, keep the run rooted at `/root/pipeline/CellPainting-Claw`.
+![A02 sample preview](../_static/agent_demo_segmentation/preview_A02.png)
 
 ## Related Skills
 

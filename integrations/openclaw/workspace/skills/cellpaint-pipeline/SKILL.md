@@ -99,6 +99,9 @@ Examples:
 - if the user wants the segmentation load-data table, choose `cp-prepare-segmentation-inputs`
 - if the user wants masks, labels, outlines, or segmentation tables, choose `cp-extract-segmentation-artifacts`
 - if the user wants quick visual checks, choose `cp-generate-segmentation-previews`
+- if the user asks which wells, sites, fields, or image rows are included in a segmentation run, choose `cp-prepare-segmentation-inputs` and run it instead of manually probing the repository tree
+
+For segmentation-scope questions, do not try to infer the answer by listing ad hoc directories such as guessed `demo/wells` or `demo/image_fields` paths. The supported way to answer that question is to execute `cp-prepare-segmentation-inputs` and report its row, well, and site counts together with the generated load-data table.
 
 Do not default to older high-level compatibility names such as `run-segmentation`, `run-classical-profiling`, or `run-deepprofiler` unless the user explicitly asks for those legacy workflow aliases.
 
@@ -139,3 +142,11 @@ Treat the project config as the source of truth for:
 - runtime settings
 
 Do not invent paths or template names when the config can provide them.
+
+## Demo request guidance
+
+If the user explicitly asks about the repository demo or demo Cell Painting data:
+
+- prefer `configs/project_config.demo.json`
+- prefer writing demo outputs under `demo/workspace/outputs/agent_demo_segmentation/`
+- keep the request natural in user-facing reporting, but keep the execution anchored to the demo config and demo output tree
