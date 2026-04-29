@@ -155,7 +155,9 @@ This prep output is for segmentation only; it produces the load-data table, not 
 This recorded run wrote:
 
 - `demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv`
+  The field-level segmentation input table. Each row corresponds to one image field and records the channel paths that the segmentation pipeline will read next.
 - `demo/workspace/outputs/agent_demo_segmentation/pipeline_skill_manifest.json`
+  The machine-readable run record for this skill invocation, including the skill name, output location, and status metadata.
 
 ## Next Skills
 

@@ -125,9 +125,13 @@ These are field-level RGB previews for a quick visual QC pass before continuing.
 This recorded run wrote:
 
 - `demo/workspace/outputs/agent_demo_segmentation/review_previews/pipeline_skill_manifest.json`
+  The machine-readable run record for this preview-generation invocation.
 - `demo/workspace/outputs/agent_demo_segmentation/review_previews/segmentation_source_config.json`
+  The source-workflow reference showing which segmentation run the previews were generated from.
 - `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A01_s1_sample.png`
+  The RGB sample preview for demo field `A01`, written for quick visual QC.
 - `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A02_s1_sample.png`
+  The RGB sample preview for demo field `A02`, written for quick visual QC.
 
 ## Demo Image
 

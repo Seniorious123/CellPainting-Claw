@@ -177,13 +177,21 @@ This run is producing **segmentation masks/labels/outlines and object-level segm
 The recorded turn confirmed these files in the output tree:
 
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/load_data_for_segmentation.csv`
+  The segmentation input table reused for this run, listing the image fields and channel paths that were processed.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/segmentation_workflow_config.json`
+  The resolved workflow configuration snapshot for this specific segmentation run.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/CPJUMP1_analysis_mask_export.cppipe`
+  The CellProfiler pipeline file used to execute the segmentation branch for this run.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/load_data_for_segmentation.absolute.csv`
+  The absolute-path version of the load-data table passed into CellProfiler.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--cell_labels.tiff`
+  The cell label image for one demo field. Pixel values identify segmented cell objects.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--nuclei_labels.tiff`
+  The nuclei label image for the same field. Pixel values identify segmented nuclei.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
+  The cell outline rendering exported for quick visual inspection of cell boundaries.
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--nuclei_outlines.png`
+  The nuclei outline rendering exported for quick visual inspection of nucleus boundaries.
 
 ## Demo Image
 
