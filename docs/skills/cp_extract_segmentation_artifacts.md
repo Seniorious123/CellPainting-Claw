@@ -138,6 +138,40 @@ The agent reported the review-ready files that were already present when it answ
 - wells: `2`
 - site values: `1`
 
+## Recorded Reply
+
+```text
+The segmentation job is still finishing its second field, but the main artifacts already exist and are the ones you’d typically review. I’ll give you the concrete paths now rather than making you wait for the tail end.[[reply_to_current]] I ran the stable segmentation skill **`cp-extract-segmentation-artifacts`** on the demo config:
+
+- **Config used:** `/root/pipeline/CellPainting-Claw/configs/project_config.demo.json`
+- **Output directory:** `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run`
+
+Main outputs you would normally review afterward are already present:
+
+- **Load-data table:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/load_data_for_segmentation.csv`
+- **Absolute-path load-data table:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/load_data_for_segmentation.absolute.csv`
+- **Cell labels:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--cell_labels.tiff`
+- **Nuclei labels:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--nuclei_labels.tiff`
+- **Cell outlines:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
+- **Nuclei outlines:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--nuclei_outlines.png`
+- **Segmentation pipeline config snapshot:**  
+  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/segmentation_workflow_config.json`
+
+From the written load-data table:
+
+- **rows:** 2
+- **wells:** 2
+- **sites:** 1
+
+This run is producing **segmentation masks/labels/outlines and object-level segmentation artifacts**, not pycytominer-style well-level profiles or DeepProfiler tables.
+```
+
 ## Files Written
 
 The recorded turn confirmed these files in the output tree:

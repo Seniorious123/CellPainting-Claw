@@ -101,6 +101,25 @@ Two field-level RGB preview PNGs were generated for a quick visual QC pass befor
 }
 ```
 
+## Recorded Reply
+
+```text
+[[reply_to_current]] Done — I generated quick preview PNGs using **`cp-generate-segmentation-previews`**.
+
+**Output directory**
+- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png`
+
+**Preview images**
+- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A01_s1_sample.png`
+- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A02_s1_sample.png`
+
+**Summary**
+- Generated preview images: **2**
+- Fields included: **2**
+
+These are field-level RGB previews for a quick visual QC pass before continuing.
+```
+
 ## Files Written
 
 This recorded run wrote:

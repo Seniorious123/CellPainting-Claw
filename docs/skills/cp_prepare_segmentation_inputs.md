@@ -119,6 +119,37 @@ The generated table covered:
 - well `A01`, site `1`
 - well `A02`, site `1`
 
+## Recorded Reply
+
+```text
+[[reply_to_current]] For the demo segmentation input set, the available image fields are:
+
+- Plate: `BR00000001`
+- Wells: `A01`, `A02`
+- Site/field: `1` for each well
+
+So the demo segmentation scope is exactly 2 image rows:
+
+1. `BR00000001 / A01 / site 1`
+2. `BR00000001 / A02 / site 1`
+
+I verified this by running the supported segmentation-prep entrypoint:
+
+- Entrypoint: `cp-prepare-segmentation-inputs`
+- Config: `/root/pipeline/CellPainting-Claw/configs/project_config.demo.json`
+- Output dir: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation`
+- Main file: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv`
+
+Summary from that run:
+
+- row count: `2`
+- plate count: `1`
+- well count: `2`
+- site count: `2` total rows, but only one site value: `1` in each row
+
+This prep output is for segmentation only; it produces the load-data table, not masks yet. If you want, I can next run `cp-extract-segmentation-artifacts` and report the actual segmentation masks/outlines produced for those two demo fields.
+```
+
 ## Files Written
 
 This recorded run wrote:
