@@ -187,9 +187,9 @@ The recorded turn confirmed these files in the output tree:
 
 ## Demo Image
 
-The recorded run produced the following outline image:
+The recorded run produced the following nuclei outline image:
 
-![A01 cell outlines](../_static/agent_demo_segmentation/outline_A01_cell.png)
+![A01 nuclei outlines](../_static/agent_demo_segmentation/outline_A01_nuclei.png)
 
 ## Next Skills
 
