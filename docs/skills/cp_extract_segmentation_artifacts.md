@@ -62,27 +62,70 @@ This page is based on a real OpenClaw turn recorded in the main session transcri
 Please run segmentation on the demo Cell Painting images and save the main outputs I would normally review afterward.
 ```
 
-### Routing
+## Structured Trace
 
-The observed routing sequence was:
+```text
+user_input:
+Please run segmentation on the demo Cell Painting images and save the main outputs I would normally review afterward.
 
-- the agent first inspected the skill catalog
-- it compared `cp-extract-segmentation-artifacts` with `cp-generate-segmentation-previews`
-- it chose `cp-extract-segmentation-artifacts` as the primary response to the request
-- it launched the extraction run
-- while the run was still active, it polled the process and inspected the output tree
-- once the first review artifacts were present, it answered with the concrete files already available
+planner_step_1:
+intent:
+Recover the local CellPainting routing instructions for segmentation output requests.
+tool_calls:
+- read("~/.openclaw/lib/node_modules/openclaw/skills/cellpaint-pipeline/SKILL.md")
+observed_result:
+- ENOENT: bundled OpenClaw skill path did not exist on this host
 
-### Observed Tool Call
+planner_step_2:
+intent:
+Inspect the local skill catalog and compare the segmentation artifact skill with the preview-only skill.
+tool_calls:
+- exec("cd $REPO_ROOT && cellpainting-skills list && cellpainting-skills describe --skill cp-extract-segmentation-artifacts && cellpainting-skills describe --skill cp-generate-segmentation-previews")
+- process.poll("swift-lobster")
+observed_result:
+- cp-extract-segmentation-artifacts described as the skill that writes masks, labels, outlines, and segmentation tables
+- cp-generate-segmentation-previews described as preview-only
+- process completed successfully
 
-The raw transcript used absolute checkout paths. The command below is the same call normalized to `$REPO_ROOT`:
+planner_step_3:
+intent:
+Run the segmentation artifact skill and then attempt the preview export from the same workflow root.
+tool_calls:
+- exec("cd $REPO_ROOT && cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-extract-segmentation-artifacts --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run && printf '---PREVIEWS---' && cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-generate-segmentation-previews --workflow-root $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run/preview_export")
+- process.poll("clear-pine")
+observed_result:
+- segmentation process started
+- CellProfiler execution logs appeared for the two demo image rows
+- reply was prepared before the chained preview export had finished
 
-```bash
-cd $REPO_ROOT
-/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
-  --config $REPO_ROOT/configs/project_config.demo.json \
-  --skill cp-extract-segmentation-artifacts \
-  --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run
+planner_step_4:
+intent:
+Inspect the output tree directly and report the first review-ready segmentation artifacts without waiting for the tail end of the run.
+tool_calls:
+- exec("find $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run -maxdepth 3 -type f | sort | sed -n '1,120p'")
+observed_result:
+- derived .cppipe present
+- load-data CSV present
+- absolute-path load-data CSV present
+- label TIFFs present
+- outline PNGs present
+- segmentation workflow config present
+
+planner_step_5:
+intent:
+Read the generated load-data table and summarize rows, wells, and sites for the final reply.
+tool_calls:
+- exec("python ... read review_run/load_data_for_segmentation.csv and print rows, wells, sites")
+- process.poll("tidal-seaslug")
+observed_result:
+- rows = 2
+- wells = 2
+- site values = 1
+
+final_answer_snapshot:
+The main review artifacts are already present under review_run, including the load-data table,
+absolute-path load-data table, cell and nuclei label TIFFs, cell and nuclei outline PNGs,
+and the derived segmentation workflow config.
 ```
 
 ### Observed Result

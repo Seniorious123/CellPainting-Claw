@@ -46,27 +46,44 @@ This page is based on a real OpenClaw turn recorded in the main session transcri
 Please make a few quick preview images from the demo Cell Painting inputs so I can visually check that the images look right before going further.
 ```
 
-### Routing
+## Structured Trace
 
-The observed routing sequence was:
+```text
+user_input:
+Please make a few quick preview images from the demo Cell Painting inputs so I can visually check that the images look right before going further.
 
-- the agent matched the request directly to `cp-generate-segmentation-previews`
-- it used the existing segmentation workflow root from `demo/workspace/outputs/agent_demo_segmentation/review_run`
-- it ran the preview skill
-- it polled the background process
-- it listed the generated PNG files before replying
+planner_step_1:
+intent:
+Run the preview-only segmentation skill against the existing demo workflow root.
+tool_calls:
+- exec("cd $REPO_ROOT && cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-generate-segmentation-previews --workflow-root $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_previews")
+observed_result:
+- process started successfully
+- background session = clear-mist
 
-### Observed Tool Call
+planner_step_2:
+intent:
+Poll the background run and recover the structured preview result object.
+tool_calls:
+- process.poll("clear-mist")
+observed_result:
+- skill_key = cp-generate-segmentation-previews
+- generated_count = 2
+- skipped_existing = 0
+- field_count = 2
+- sample_previews_dir = demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png
 
-The raw transcript used absolute checkout paths. The command below is the same call normalized to `$REPO_ROOT`:
+planner_step_3:
+intent:
+List the generated PNG files and report them back to the user.
+tool_calls:
+- exec("find $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png -maxdepth 2 -type f | sort")
+observed_result:
+- BR00000001_A01_s1_sample.png
+- BR00000001_A02_s1_sample.png
 
-```bash
-cd $REPO_ROOT
-/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
-  --config $REPO_ROOT/configs/project_config.demo.json \
-  --skill cp-generate-segmentation-previews \
-  --workflow-root $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run \
-  --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_previews
+final_answer_snapshot:
+Two field-level RGB preview PNGs were generated for a quick visual QC pass before continuing.
 ```
 
 ### Observed Result

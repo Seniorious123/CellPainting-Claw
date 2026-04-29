@@ -45,26 +45,56 @@ This page is based on a real OpenClaw run:
 Which demo wells and image fields are available for segmentation?
 ```
 
-### Routing
+## Structured Trace
 
-The observed routing sequence was:
+```text
+user_input:
+Which demo wells and image fields are available for segmentation?
 
-- the agent first tried to load `cellpaint-pipeline/SKILL.md` from a bundled OpenClaw path
-- that read failed with `ENOENT`
-- the agent then loaded the workspace copy under `integrations/openclaw/autodl/workspace/skills/cellpaint-pipeline/SKILL.md`
-- from that skill file, it chose `cp-prepare-segmentation-inputs`
-- after the skill finished, it inspected the generated CSV to report the exact plate, well, and site inventory
+planner_step_1:
+intent:
+Resolve the current CellPainting skill surface instead of guessing from repository directories.
+tool_calls:
+- read("~/.openclaw/lib/node_modules/openclaw/skills/cellpaint-pipeline/SKILL.md")
+observed_result:
+- ENOENT: bundled OpenClaw skill path did not exist on this host
 
-### Observed Tool Call
+planner_step_2:
+intent:
+Load the workspace skill file and recover the documented routing rule for segmentation-scope questions.
+tool_calls:
+- exec("pwd && ls -la .../workspace/skills/cellpaint-pipeline && sed -n '1,220p' .../workspace/skills/cellpaint-pipeline/SKILL.md")
+observed_result:
+- workspace skill file loaded successfully
+- routing guidance pointed to cp-prepare-segmentation-inputs for questions about wells, sites, fields, or image rows
 
-The raw transcript used absolute checkout paths. The command below is the same call normalized to `$REPO_ROOT`:
+planner_step_3:
+intent:
+Run the documented segmentation-prep skill against the demo config and write the real load-data table.
+tool_calls:
+- exec("cd $REPO_ROOT && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-prepare-segmentation-inputs --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation")
+observed_result:
+- skill_key = cp-prepare-segmentation-inputs
+- row_count = 2
+- plate_count = 1
+- well_count = 2
+- site_count = 2
+- load_data_path = demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv
 
-```bash
-cd $REPO_ROOT
-/root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run \
-  --config $REPO_ROOT/configs/project_config.demo.json \
-  --skill cp-prepare-segmentation-inputs \
-  --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation
+planner_step_4:
+intent:
+Read the generated CSV and report the exact field inventory back to the user.
+tool_calls:
+- exec("python ... read load_data_for_segmentation.csv and print rows, wells, sites, and field records")
+observed_result:
+- plate = BR00000001
+- wells = A01, A02
+- site value = 1 for both rows
+- exact image rows = 2
+
+final_answer_snapshot:
+The demo segmentation scope contains two image rows:
+BR00000001 / A01 / site 1 and BR00000001 / A02 / site 1.
 ```
 
 ### Observed Result
@@ -88,8 +118,6 @@ The generated table covered:
 - plate `BR00000001`
 - well `A01`, site `1`
 - well `A02`, site `1`
-
-The agent then read the CSV rows and reported the same two field records back to the user instead of guessing from directory names.
 
 ## Files Written
 
