@@ -37,14 +37,20 @@ This skill writes:
 The repository includes a real OpenClaw session for this step:
 
 - session id: `segdemo-local-v8-prepare`
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8`
 
 ### User Request
 
 ```text
-From /root/pipeline/CellPainting-Claw, prepare the segmentation inputs for /root/pipeline/CellPainting-Claw/configs/project_config.demo.json and write the results under /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8. Use the current segmentation input skill, run it from the repository root, and then tell me which skill you used, which command you ran, and how many rows, wells, and sites were included.
+I want to segment the demo Cell Painting images, but before running segmentation I want to check which fields will be included. Please prepare the segmentation input table and tell me how many wells and sites are going to be processed.
 ```
+
+### Recorded Execution Setup
+
+For this recorded demo run, the agent used:
+
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_v8`
+- repository root: `/root/pipeline/CellPainting-Claw`
 
 ### Agent Tool Call
 

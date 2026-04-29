@@ -37,14 +37,20 @@ This skill writes:
 The repository includes a real OpenClaw session for this step:
 
 - session id: `segdemo-local-v7-previews`
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7`
 
 ### User Request
 
 ```text
-From /root/pipeline/CellPainting-Claw, generate the segmentation preview images for /root/pipeline/CellPainting-Claw/configs/project_config.demo.json and write the results under /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7. Use the current segmentation preview skill, run it from the repository root, and then tell me which skill you used, which command you ran, and which preview files were written.
+Please make quick preview images for the demo Cell Painting fields so I can visually check that the segmentation inputs look reasonable before going further.
 ```
+
+### Recorded Execution Setup
+
+For this recorded demo run, the agent used:
+
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/03_generate_previews_v7`
+- repository root: `/root/pipeline/CellPainting-Claw`
 
 ### Agent Tool Call
 

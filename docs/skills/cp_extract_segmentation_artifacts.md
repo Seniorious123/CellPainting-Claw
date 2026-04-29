@@ -53,14 +53,20 @@ This skill writes:
 The repository includes a real OpenClaw session for this step:
 
 - session id: `segdemo-local-v6-extract`
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6`
 
 ### User Request
 
 ```text
-Run the segmentation artifact extraction for /root/pipeline/CellPainting-Claw/configs/project_config.demo.json and write the results under /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6. Then tell me which skill you used, which command you ran, and which main files or directories were written.
+Please run segmentation on the demo Cell Painting fields and give me the usual outputs I would inspect afterward, including the object tables, labels, and outlines.
 ```
+
+### Recorded Execution Setup
+
+For this recorded demo run, the agent used:
+
+- config: `configs/project_config.demo.json`
+- output directory: `demo/workspace/outputs/agent_demo_segmentation/02_extract_artifacts_v6`
+- repository root: `/root/pipeline/CellPainting-Claw`
 
 ### Agent Tool Call
 
