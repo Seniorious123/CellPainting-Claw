@@ -193,13 +193,15 @@ The recorded turn confirmed these files in the output tree:
 - `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--nuclei_outlines.png`
   The nuclei outline rendering exported for quick visual inspection of nucleus boundaries.
 
-## Demo Image
+## Representative Figure
 
-The recorded run produced the following nuclei outline image:
+The recorded OpenClaw turn above used the bundled two-field demo. That trace is kept as the real agent example for this page.
 
-![A01 nuclei outlines](../_static/agent_demo_segmentation/outline_A01_nuclei.png)
+For a more realistic view of what this skill writes, the same `cp-extract-segmentation-artifacts` entrypoint was also run on one larger public JUMP field. The figure below comes from that separate real-FOV skill run and is included here as a representative segmentation artifact example.
 
-Caption: Nuclei outline output for demo field `BR00000001 / A01 / site 1`, written by `cp-extract-segmentation-artifacts`.
+![Representative real-FOV segmentation output](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
+
+Caption: Representative output from `cp-extract-segmentation-artifacts` on public field `BR00117035 / A01 / site 1`. Left to right: the full pseudocolor field, the selected dense crop, the same crop with nuclei outlines, and the same crop with cell outlines.
 
 ## Next Skills
 
