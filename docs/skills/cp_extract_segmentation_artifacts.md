@@ -201,7 +201,18 @@ For a more realistic view of what this skill writes, the same `cp-extract-segmen
 
 ![Representative real-FOV segmentation output](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
 
-Caption: Representative output from `cp-extract-segmentation-artifacts` on public field `BR00117035 / A01 / site 1`. Left to right: the full pseudocolor field, the selected dense crop, the same crop with nuclei outlines, and the same crop with cell outlines.
+Panels in this figure show:
+
+- `A`
+  The full pseudocolor image field. The yellow box marks the region chosen for closer inspection.
+- `B`
+  The selected crop from that field, shown without segmentation overlays.
+- `C`
+  The same crop with nucleus boundaries overlaid. This corresponds to the nuclei segmentation written by the skill.
+- `D`
+  The same crop with whole-cell boundaries overlaid. This corresponds to the cell segmentation written by the skill.
+
+Caption: Representative output from `cp-extract-segmentation-artifacts` on public field `BR00117035 / A01 / site 1`.
 
 ## Next Skills
 
