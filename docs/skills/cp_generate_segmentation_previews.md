@@ -12,6 +12,12 @@ Use this skill when you want:
 - a fast visual check before moving on to crops or DeepProfiler preparation
 - a lightweight inspection step after [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md) or [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)
 
+## Main Outcome
+
+After this skill finishes, you have quick preview images that let you visually confirm the selected fields before doing heavier downstream work.
+
+This is a QC step. It does not create segmentation masks or single-cell crops.
+
 ## Inputs
 
 This skill reads:
@@ -25,12 +31,7 @@ For the demo config, this skill depends on the same raw Cell Painting image layo
 
 ## Outputs
 
-This skill writes:
-
-- `sample_previews_png/`
-  One preview PNG per selected field.
-- `pipeline_skill_manifest.json`
-  The machine-readable run record for this skill invocation.
+The main result of this skill is a small set of field-level preview images for quick QC.
 
 ## Agent Demo
 
@@ -106,32 +107,12 @@ Two field-level RGB preview PNGs were generated for a quick visual QC pass befor
 ```text
 [[reply_to_current]] Done — I generated quick preview PNGs using **`cp-generate-segmentation-previews`**.
 
-**Output directory**
-- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png`
-
-**Preview images**
-- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A01_s1_sample.png`
-- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A02_s1_sample.png`
-
 **Summary**
 - Generated preview images: **2**
 - Fields included: **2**
 
 These are field-level RGB previews for a quick visual QC pass before continuing.
 ```
-
-## Files Written
-
-This recorded run wrote:
-
-- `demo/workspace/outputs/agent_demo_segmentation/review_previews/pipeline_skill_manifest.json`
-  The machine-readable run record for this preview-generation invocation.
-- `demo/workspace/outputs/agent_demo_segmentation/review_previews/segmentation_source_config.json`
-  The source-workflow reference showing which segmentation run the previews were generated from.
-- `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A01_s1_sample.png`
-  The RGB sample preview for demo field `A01`, written for quick visual QC.
-- `demo/workspace/outputs/agent_demo_segmentation/review_previews/sample_previews_png/BR00000001_A02_s1_sample.png`
-  The RGB sample preview for demo field `A02`, written for quick visual QC.
 
 ## Demo Image
 

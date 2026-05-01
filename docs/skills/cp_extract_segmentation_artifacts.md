@@ -8,10 +8,21 @@ It takes the prepared field list, resolves the segmentation `.cppipe`, runs the 
 
 Use this skill when you want:
 
-- segmentation tables such as `Image.csv`, `Cells.csv`, and `Nuclei.csv`
-- label images for segmented nuclei and cells
-- outline PNGs for quick inspection
-- a reusable segmentation workflow root for crops or DeepProfiler preparation
+- segmented nuclei
+- segmented whole cells
+- quick review images to inspect whether the boundaries look reasonable
+- reusable object definitions for later crop and feature-extraction steps
+
+## Main Outcome
+
+After this skill finishes, the image field is no longer just raw pixels. The run has identified nuclei and whole cells as distinct objects that downstream steps can reuse.
+
+In practice, this is the step that gives you:
+
+- segmented nuclei
+- segmented whole cells
+- quick review images to check whether the boundaries look reasonable
+- object-level results that later crop and feature-extraction steps can build on
 
 ## Inputs
 
@@ -27,26 +38,12 @@ In the demo setup, the config selects the bundled segmentation template and deri
 
 ## Outputs
 
-This skill writes:
+The main user-facing results are:
 
-- `load_data_for_segmentation.csv`
-  The exact field list used by this run.
-- `CPJUMP1_analysis_mask_export.cppipe`
-  The pipeline file used for execution.
-- `cellprofiler_masks/Image.csv`
-  Field-level measurements from the segmentation run.
-- `cellprofiler_masks/Cells.csv`
-  Cell-level measurements.
-- `cellprofiler_masks/Nuclei.csv`
-  Nuclei-level measurements.
-- `cellprofiler_masks/labels/`
-  Label TIFF files for segmented nuclei and cells.
-- `cellprofiler_masks/outlines/`
-  Outline PNGs for quick visual review.
-- `segmentation_summary.json`
-  A compact summary of the completed run.
-- `pipeline_skill_manifest.json`
-  The machine-readable run record for this skill invocation.
+- nuclei segmentation
+- whole-cell segmentation
+- review-ready outline images
+- object-level segmentation tables for downstream analysis
 
 ## Agent Demo
 
@@ -130,38 +127,19 @@ and the derived segmentation workflow config.
 
 ### Observed Result
 
-The agent reported the review-ready files that were already present when it answered:
-
-- config: `configs/project_config.demo.json`
-- output directory: `demo/workspace/outputs/agent_demo_segmentation/review_run`
-- load-data rows: `2`
-- wells: `2`
-- site values: `1`
+The agent confirmed that segmentation had already produced the review-ready results for the two demo fields.
 
 ## Recorded Reply
 
 ```text
-The segmentation job is still finishing its second field, but the main artifacts already exist and are the ones you’d typically review. I’ll give you the concrete paths now rather than making you wait for the tail end.[[reply_to_current]] I ran the stable segmentation skill **`cp-extract-segmentation-artifacts`** on the demo config:
-
-- **Config used:** `/root/pipeline/CellPainting-Claw/configs/project_config.demo.json`
-- **Output directory:** `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run`
+The segmentation job is still finishing its second field, but the main review outputs already exist, so I can summarize the result without waiting for the tail end.[[reply_to_current]] I ran the stable segmentation skill **`cp-extract-segmentation-artifacts`** on the demo config.
 
 Main outputs you would normally review afterward are already present:
 
-- **Load-data table:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/load_data_for_segmentation.csv`
-- **Absolute-path load-data table:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/load_data_for_segmentation.absolute.csv`
-- **Cell labels:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--cell_labels.tiff`
-- **Nuclei labels:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--nuclei_labels.tiff`
-- **Cell outlines:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
-- **Nuclei outlines:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--nuclei_outlines.png`
-- **Segmentation pipeline config snapshot:**  
-  `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/review_run/segmentation_workflow_config.json`
+- nuclei labels
+- cell labels
+- nuclei outlines
+- cell outlines
 
 From the written load-data table:
 
@@ -169,29 +147,8 @@ From the written load-data table:
 - **wells:** 2
 - **sites:** 1
 
-This run is producing **segmentation masks/labels/outlines and object-level segmentation artifacts**, not pycytominer-style well-level profiles or DeepProfiler tables.
+This run is producing **segmentation masks, labels, outlines, and object-level segmentation artifacts**, not pycytominer-style well-level profiles or DeepProfiler tables.
 ```
-
-## Files Written
-
-The recorded turn confirmed these files in the output tree:
-
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/load_data_for_segmentation.csv`
-  The segmentation input table reused for this run, listing the image fields and channel paths that were processed.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/segmentation_workflow_config.json`
-  The resolved workflow configuration snapshot for this specific segmentation run.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/CPJUMP1_analysis_mask_export.cppipe`
-  The CellProfiler pipeline file used to execute the segmentation branch for this run.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/load_data_for_segmentation.absolute.csv`
-  The absolute-path version of the load-data table passed into CellProfiler.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--cell_labels.tiff`
-  The cell label image for one demo field. Pixel values identify segmented cell objects.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/labels/BR00000001_A01_s1--nuclei_labels.tiff`
-  The nuclei label image for the same field. Pixel values identify segmented nuclei.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--cell_outlines.png`
-  The cell outline rendering exported for quick visual inspection of cell boundaries.
-- `demo/workspace/outputs/agent_demo_segmentation/review_run/cellprofiler_masks/outlines/BR00000001_A01_s1--nuclei_outlines.png`
-  The nuclei outline rendering exported for quick visual inspection of nucleus boundaries.
 
 ## Representative Figure
 
@@ -200,6 +157,12 @@ The recorded OpenClaw turn above used the bundled two-field demo. That trace is 
 For a more realistic view of what this skill writes, the same `cp-extract-segmentation-artifacts` entrypoint was also run on one larger public JUMP field. The figure below comes from that separate real-FOV skill run and is included here as a representative segmentation artifact example.
 
 ![Representative real-FOV segmentation output](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
+
+What this figure is meant to show:
+
+- the selected field contains many distinct cells
+- nuclei and whole-cell boundaries are different segmentation layers
+- this step defines the objects that later crop and feature-extraction steps will reuse
 
 Panels in this figure show:
 

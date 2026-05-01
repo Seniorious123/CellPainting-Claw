@@ -1,8 +1,8 @@
 # `cp-prepare-segmentation-inputs`
 
-`cp-prepare-segmentation-inputs` writes the segmentation input table before any CellProfiler segmentation run begins.
+`cp-prepare-segmentation-inputs` resolves which image fields will enter segmentation.
 
-This is the step that turns a project config into a concrete field list. In the demo setup, it resolves which plate, well, and site will be segmented, and it writes the channel paths that the next segmentation step will read.
+This is the planning step before any CellProfiler segmentation run begins. In the demo setup, it determines which plate, well, and site will be segmented next.
 
 ## Purpose
 
@@ -11,6 +11,12 @@ Use this skill when you want to:
 - confirm which fields will be sent into segmentation
 - inspect the segmentation input table before a longer run
 - hand a clean field list to [cp-extract-segmentation-artifacts](cp_extract_segmentation_artifacts.md)
+
+## Main Outcome
+
+After this skill finishes, you know exactly which image fields will go into segmentation.
+
+This is a planning step, not an image-generation step. It does not produce masks, outlines, or single-cell crops yet.
 
 ## Inputs
 
@@ -25,12 +31,12 @@ In plain language, the config tells the skill where the raw Cell Painting images
 
 ## Outputs
 
-This skill writes:
+The main result of this skill is a resolved segmentation scope:
 
-- `load_data_for_segmentation.csv`
-  The field-level input table for segmentation. Each row names one field and includes the channel filenames and path columns needed by the segmentation pipeline.
-- `pipeline_skill_manifest.json`
-  The machine-readable run record for this skill invocation.
+- which plate will be used
+- which wells will be used
+- which sites or image fields will be used
+- which image channels the next segmentation step will read
 
 ## Agent Demo
 
@@ -113,7 +119,7 @@ BR00000001 / A01 / site 1 and BR00000001 / A02 / site 1.
 }
 ```
 
-The generated table covered:
+The resolved segmentation scope covered:
 
 - plate `BR00000001`
 - well `A01`, site `1`
@@ -133,12 +139,7 @@ So the demo segmentation scope is exactly 2 image rows:
 1. `BR00000001 / A01 / site 1`
 2. `BR00000001 / A02 / site 1`
 
-I verified this by running the supported segmentation-prep entrypoint:
-
-- Entrypoint: `cp-prepare-segmentation-inputs`
-- Config: `/root/pipeline/CellPainting-Claw/configs/project_config.demo.json`
-- Output dir: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation`
-- Main file: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv`
+I verified this by running the supported segmentation-prep entrypoint `cp-prepare-segmentation-inputs`.
 
 Summary from that run:
 
@@ -147,17 +148,8 @@ Summary from that run:
 - well count: `2`
 - site count: `2` total rows, but only one site value: `1` in each row
 
-This prep output is for segmentation only; it produces the load-data table, not masks yet. If you want, I can next run `cp-extract-segmentation-artifacts` and report the actual segmentation masks/outlines produced for those two demo fields.
+This prep output is for segmentation planning only. It tells you which fields will be segmented next, but it does not create masks yet. The next step is `cp-extract-segmentation-artifacts`.
 ```
-
-## Files Written
-
-This recorded run wrote:
-
-- `demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv`
-  The field-level segmentation input table. Each row corresponds to one image field and records the channel paths that the segmentation pipeline will read next.
-- `demo/workspace/outputs/agent_demo_segmentation/pipeline_skill_manifest.json`
-  The machine-readable run record for this skill invocation, including the skill name, output location, and status metadata.
 
 ## Next Skills
 
