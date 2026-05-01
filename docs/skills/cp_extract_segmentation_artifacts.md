@@ -125,31 +125,6 @@ absolute-path load-data table, cell and nuclei label TIFFs, cell and nuclei outl
 and the derived segmentation workflow config.
 ```
 
-### Observed Result
-
-The agent confirmed that segmentation had already produced the review-ready results for the two demo fields.
-
-## Recorded Reply
-
-```text
-The segmentation job is still finishing its second field, but the main review outputs already exist, so I can summarize the result without waiting for the tail end.[[reply_to_current]] I ran the stable segmentation skill **`cp-extract-segmentation-artifacts`** on the demo config.
-
-Main outputs you would normally review afterward are already present:
-
-- nuclei labels
-- cell labels
-- nuclei outlines
-- cell outlines
-
-From the written load-data table:
-
-- **rows:** 2
-- **wells:** 2
-- **sites:** 1
-
-This run is producing **segmentation masks, labels, outlines, and object-level segmentation artifacts**, not pycytominer-style well-level profiles or DeepProfiler tables.
-```
-
 ## Representative Figure
 
 The recorded OpenClaw turn above used the bundled two-field demo. That trace is kept as the real agent example for this page.
@@ -176,6 +151,31 @@ Panels in this figure show:
   The same crop with whole-cell boundaries overlaid. This corresponds to the cell segmentation written by the skill.
 
 Caption: Representative output from `cp-extract-segmentation-artifacts` on public field `BR00117035 / A01 / site 1`.
+
+### Observed Result
+
+The agent confirmed that segmentation had already produced the review-ready results for the two demo fields.
+
+## Recorded Reply
+
+```text
+The segmentation job is still finishing its second field, but the main review outputs already exist, so I can summarize the result without waiting for the tail end.[[reply_to_current]] I ran the stable segmentation skill **`cp-extract-segmentation-artifacts`** on the demo config.
+
+Main outputs you would normally review afterward are already present:
+
+- nuclei labels
+- cell labels
+- nuclei outlines
+- cell outlines
+
+From the written load-data table:
+
+- **rows:** 2
+- **wells:** 2
+- **sites:** 1
+
+This run is producing **segmentation masks, labels, outlines, and object-level segmentation artifacts**, not pycytominer-style well-level profiles or DeepProfiler tables.
+```
 
 ## Next Skills
 
