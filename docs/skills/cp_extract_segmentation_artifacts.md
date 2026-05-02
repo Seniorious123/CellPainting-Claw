@@ -22,7 +22,7 @@ In practice, this is the step that gives you:
 - segmented nuclei
 - segmented whole cells
 - quick review images to check whether the boundaries look reasonable
-- object-level results that later crop and feature-extraction steps can build on
+- cell-level results that later crop and feature-extraction steps can build on
 
 ## Inputs
 
@@ -43,7 +43,7 @@ The main user-facing results are:
 - nuclei segmentation
 - whole-cell segmentation
 - review-ready outline images
-- object-level segmentation tables for downstream analysis
+- cell-level segmentation tables for downstream analysis
 
 ## Agent Demo
 
