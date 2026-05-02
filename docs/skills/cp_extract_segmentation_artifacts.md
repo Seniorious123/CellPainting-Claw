@@ -47,89 +47,91 @@ The main user-facing results are:
 
 ## Agent Demo
 
-This page is based on a real OpenClaw turn recorded in the main session transcript:
+This page is based on a real local OpenClaw run recorded against the completed real-FOV segmentation result:
 
-- session id: `93f63e09-7c61-4f40-8bb7-e75ae56068aa`
-- turn timestamp: `2026-04-29 18:21 GMT+8`
+- run label: `real-fov-segmentation-v2`
+- turn timestamp: `2026-05-02 13:29 GMT+8`
 - model: `vibe/gpt-5-mini`
 
 ### Request
 
 ```text
-Please run segmentation on the demo Cell Painting images and save the main outputs I would normally review afterward.
+Using configs/project_config.real_fov_demo.json and the completed workflow root
+demo/real_fov_workspace/outputs/real_fov_segmentation, summarize the segmentation
+result I would review afterward. Tell me which skill produced these outputs, what
+the main segmentation result is, which visual result is available for review, and
+what that visual result means biologically. Do not rerun a new workflow root if
+the completed outputs already exist; inspect the existing completed result.
 ```
 
 ## Structured Trace
 
 ```text
 user_input:
-Please run segmentation on the demo Cell Painting images and save the main outputs I would normally review afterward.
+Using configs/project_config.real_fov_demo.json and the completed workflow root
+demo/real_fov_workspace/outputs/real_fov_segmentation, summarize the segmentation
+result I would review afterward. Tell me which skill produced these outputs, what
+the main segmentation result is, which visual result is available for review, and
+what that visual result means biologically. Do not rerun a new workflow root if
+the completed outputs already exist; inspect the existing completed result.
 
 planner_step_1:
 intent:
-Recover the local CellPainting routing instructions for segmentation output requests.
+Inspect the completed real-FOV segmentation output tree before deciding whether a
+new segmentation run is necessary.
 tool_calls:
-- read("~/.openclaw/lib/node_modules/openclaw/skills/cellpaint-pipeline/SKILL.md")
+- exec("find demo/real_fov_workspace/outputs/real_fov_segmentation -maxdepth 3 -type f | sort")
 observed_result:
-- ENOENT: bundled OpenClaw skill path did not exist on this host
+- completed real-FOV output tree already contained:
+  - `Image.csv`
+  - `Cells.csv`
+  - `Nuclei.csv`
+  - cell and nuclei label TIFFs
+  - cell and nuclei outline PNGs
+  - `segmentation_summary.json`
 
 planner_step_2:
 intent:
-Inspect the local skill catalog and compare the segmentation artifact skill with the preview-only skill.
+Confirm which skill originally produced this completed output root.
 tool_calls:
-- exec("cd $REPO_ROOT && cellpainting-skills list && cellpainting-skills describe --skill cp-extract-segmentation-artifacts && cellpainting-skills describe --skill cp-generate-segmentation-previews")
-- process.poll("swift-lobster")
+- read("demo/real_fov_workspace/outputs/real_fov_segmentation/pipeline_skill_manifest.json")
 observed_result:
-- cp-extract-segmentation-artifacts described as the skill that writes masks, labels, outlines, and segmentation tables
-- cp-generate-segmentation-previews described as preview-only
-- process completed successfully
+- manifest confirmed:
+  - skill key = `cp-extract-segmentation-artifacts`
+  - category = `segmentation`
+  - returncode = `0`
 
 planner_step_3:
 intent:
-Run the segmentation artifact skill and then attempt the preview export from the same workflow root.
+Summarize the completed segmentation result quantitatively from the existing object tables.
 tool_calls:
-- exec("cd $REPO_ROOT && cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-extract-segmentation-artifacts --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run && printf '---PREVIEWS---' && cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-generate-segmentation-previews --workflow-root $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run/preview_export")
-- process.poll("clear-pine")
+- exec("python ... read Image.csv, Cells.csv, Nuclei.csv, Cytoplasm.csv and report row and object counts")
 observed_result:
-- segmentation process started
-- CellProfiler execution logs appeared for the two demo image rows
-- reply was prepared before the chained preview export had finished
+- `Image.csv` rows = `1`
+- `Cells.csv` objects = `69`
+- `Nuclei.csv` objects = `69`
+- `Cytoplasm.csv` objects = `69`
 
 planner_step_4:
 intent:
-Inspect the output tree directly and report the first review-ready segmentation artifacts without waiting for the tail end of the run.
+Explain which visual segmentation artifacts are available for review.
 tool_calls:
-- exec("find $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation/review_run -maxdepth 3 -type f | sort | sed -n '1,120p'")
+- read("demo/real_fov_workspace/outputs/real_fov_segmentation/segmentation_summary.json")
 observed_result:
-- derived .cppipe present
-- load-data CSV present
-- absolute-path load-data CSV present
-- label TIFFs present
-- outline PNGs present
-- segmentation workflow config present
-
-planner_step_5:
-intent:
-Read the generated load-data table and summarize rows, wells, and sites for the final reply.
-tool_calls:
-- exec("python ... read review_run/load_data_for_segmentation.csv and print rows, wells, sites")
-- process.poll("tidal-seaslug")
-observed_result:
-- rows = 2
-- wells = 2
-- site values = 1
+- review-ready visual artifacts available:
+  - `cell_outlines.png`
+  - `nuclei_outlines.png`
+  - raw label TIFFs for cells and nuclei
 
 final_answer_snapshot:
-The main review artifacts are already present under review_run, including the load-data table,
-absolute-path load-data table, cell and nuclei label TIFFs, cell and nuclei outline PNGs,
-and the derived segmentation workflow config.
+The completed real-FOV result came from `cp-extract-segmentation-artifacts` and
+produced a successful single-field segmentation with 69 matched nucleus/cell/cytoplasm
+objects plus review-ready cell and nuclei outline images.
 ```
 
 ## Representative Figure
 
-The recorded OpenClaw turn above used the bundled two-field demo. That trace is kept as the real agent example for this page.
-
-For a more realistic view of what this skill writes, the same `cp-extract-segmentation-artifacts` entrypoint was also run on one larger public JUMP field. The figure below comes from that separate real-FOV skill run and is included here as a representative segmentation artifact example.
+The OpenClaw trace above and the figure below now refer to the same completed real-FOV segmentation result.
 
 ![Representative real-FOV segmentation output](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
 
@@ -154,27 +156,40 @@ Caption: Representative output from `cp-extract-segmentation-artifacts` on publi
 
 ### Observed Result
 
-The agent confirmed that segmentation had already produced the review-ready results for the two demo fields.
+The agent confirmed that the completed real-FOV output already contained the review-ready segmentation result for one field.
 
 ## Recorded Reply
 
 ```text
-The segmentation job is still finishing its second field, but the main review outputs already exist, so I can summarize the result without waiting for the tail end.[[reply_to_current]] I ran the stable segmentation skill **`cp-extract-segmentation-artifacts`** on the demo config.
+[[reply_to_current]] I inspected the existing completed result under:
 
-Main outputs you would normally review afterward are already present:
+- `demo/real_fov_workspace/outputs/real_fov_segmentation`
 
-- nuclei labels
-- cell labels
-- nuclei outlines
+and did **not** rerun the workflow.
+
+The outputs were produced by the stable segmentation skill:
+
+- **`cp-extract-segmentation-artifacts`**
+
+This completed run produced a successful single-field segmentation result for:
+
+- **1 row**
+- **1 plate**
+- **1 well**
+- **1 site**
+
+The object tables show:
+
+- **69 cells**
+- **69 nuclei**
+- **69 cytoplasm objects**
+
+The main visual review outputs are:
+
 - cell outlines
+- nuclei outlines
 
-From the written load-data table:
-
-- **rows:** 2
-- **wells:** 2
-- **sites:** 1
-
-This run is producing **segmentation masks, labels, outlines, and object-level segmentation artifacts**, not pycytominer-style well-level profiles or DeepProfiler tables.
+Biologically, these review images tell you whether nucleus-centered cell boundaries are being placed in a plausible way and whether neighboring cells are being separated cleanly enough for downstream single-cell analysis.
 ```
 
 ## Next Skills
