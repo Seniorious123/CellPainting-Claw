@@ -15,7 +15,7 @@ Use this skill when you want:
 
 ## Main Outcome
 
-After this skill finishes, the image field is no longer just raw pixels. The run has identified nuclei and whole cells as distinct objects that downstream steps can reuse.
+After this skill finishes, the image is no longer just raw pixels. The run has identified nuclei and whole cells as distinct objects that downstream steps can reuse.
 
 In practice, this is the step that gives you:
 
@@ -47,7 +47,7 @@ The main user-facing results are:
 
 ## Agent Demo
 
-This page is based on a real local OpenClaw run recorded against the completed segmentation result for one real Cell Painting field:
+This page is based on a real local OpenClaw run recorded against the completed segmentation result for one real Cell Painting image:
 
 - run label: `real-fov-segmentation-v2`
 - turn timestamp: `2026-05-02 13:29 GMT+8`
@@ -77,7 +77,7 @@ the completed outputs already exist; inspect the existing completed result.
 
 planner_step_1:
 intent:
-Inspect the completed segmentation output tree for the real Cell Painting field before deciding whether a
+Inspect the completed segmentation output tree for the real Cell Painting image before deciding whether a
 new segmentation run is necessary.
 tool_calls:
 - exec("find demo/real_fov_workspace/outputs/real_fov_segmentation -maxdepth 3 -type f | sort")
@@ -124,27 +124,27 @@ observed_result:
   - raw label TIFFs for cells and nuclei
 
 final_answer_snapshot:
-The completed result for the real Cell Painting field came from `cp-extract-segmentation-artifacts` and
+The completed result for the real Cell Painting image came from `cp-extract-segmentation-artifacts` and
 produced a successful single-field segmentation with 69 matched nucleus/cell/cytoplasm
 objects plus review-ready cell and nuclei outline images.
 ```
 
 ## Representative Figure
 
-The OpenClaw trace above and the figure below now refer to the same completed segmentation result for one real Cell Painting field.
+The OpenClaw trace above and the figure below now refer to the same completed segmentation result for one real Cell Painting image.
 
-![Representative segmentation output for one real Cell Painting field](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
+![Representative segmentation output for one real Cell Painting image](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
 
 What this figure is meant to show:
 
-- the selected field contains many distinct cells
+- the selected image contains many distinct cells
 - nuclei and whole-cell boundaries are different segmentation layers
 - this step defines the objects that later crop and feature-extraction steps will reuse
 
 Panels in this figure show:
 
 - `A`
-  The full pseudocolor image field. The yellow box marks the region chosen for closer inspection.
+  The full pseudocolor image. The yellow box marks the region chosen for closer inspection.
 - `B`
   The selected crop from that field, shown without segmentation overlays.
 - `C`
@@ -152,11 +152,11 @@ Panels in this figure show:
 - `D`
   The same crop with whole-cell boundaries overlaid. This corresponds to the cell segmentation written by the skill.
 
-Caption: Representative output from `cp-extract-segmentation-artifacts` on public field `BR00117035 / A01 / site 1`.
+Caption: Representative output from `cp-extract-segmentation-artifacts` on public image `BR00117035 / A01 / site 1`.
 
 ### Observed Result
 
-The agent confirmed that the completed output already contained the review-ready segmentation result for one real Cell Painting field.
+The agent confirmed that the completed output already contained the review-ready segmentation result for one real Cell Painting image.
 
 ## Recorded Reply
 
