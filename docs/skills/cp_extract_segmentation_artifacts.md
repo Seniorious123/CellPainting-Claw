@@ -49,66 +49,67 @@ The main user-facing results are:
 
 This page is based on a real local OpenClaw run recorded against the completed segmentation result for one real Cell Painting image:
 
-- turn timestamp: `2026-05-02 19:53 GMT+8`
+- turn timestamp: `2026-05-02 20:42 GMT+8`
 - model: `vibe/gpt-5-mini`
 
 ### Request
 
 ```text
-I already generated a segmentation result under demo/real_fov_workspace/outputs/real_fov_segmentation. Please check whether the nuclei and cell boundaries look biologically reasonable before I use it downstream.
+I already generated a segmentation result under demo/real_fov_workspace/outputs/real_fov_segmentation. Please inspect the outline PNGs and CellProfiler tables there and tell me whether the nuclei and cell boundaries look biologically reasonable.
 ```
 
 ## Structured Trace
 
 ```text
 user_input:
-I already generated a segmentation result under demo/real_fov_workspace/outputs/real_fov_segmentation. Please check whether the nuclei and cell boundaries look biologically reasonable before I use it downstream.
+I already generated a segmentation result under demo/real_fov_workspace/outputs/real_fov_segmentation. Please inspect the outline PNGs and CellProfiler tables there and tell me whether the nuclei and cell boundaries look biologically reasonable.
 
 planner_step_1:
 intent:
-Try the default OpenClaw skill path first, then fall back to direct inspection if that bundled path is unavailable on this host.
+Load the documented Cell Painting routing guidance before inspecting the named outputs.
 tool_calls:
-- read("~/.openclaw/lib/node_modules/openclaw/skills/cellpaint-pipeline/SKILL.md")
+- read("integrations/openclaw/autodl/workspace/skills/cellpaint-pipeline/SKILL.md")
 observed_result:
-- bundled OpenClaw skill path was missing on this host
-- the agent switched to direct inspection of the user-named segmentation output folder
+- the workspace skill file loaded successfully
+- routing guidance confirmed that masks, labels, outlines, and segmentation tables belong to the segmentation artifact skill
 
 planner_step_2:
 intent:
-Inspect the named output folder and confirm which segmentation artifacts are already present.
+Inspect the named output folder and confirm that the requested outline PNGs and CellProfiler tables are present.
 tool_calls:
-- exec("find demo/real_fov_workspace/outputs/real_fov_segmentation -maxdepth 3 | head -300")
+- exec("find .../real_fov_segmentation -maxdepth 3 \\( -iname '*.png' -o -iname '*.csv' -o -iname '*.txt' -o -iname '*.sqlite' -o -iname '*.db' \\) | sort")
+- exec("python ... walk the output tree and summarize key files")
 observed_result:
 - the named folder already contained:
   - outline PNGs
-  - label TIFFs
   - `Image.csv`
   - `Cells.csv`
   - `Nuclei.csv`
   - `Cytoplasm.csv`
-  - `segmentation_summary.json`
-  - `pipeline_skill_manifest.json`
+  - `load_data_for_segmentation.csv`
+  - label TIFFs
+  - the usual segmentation summary files
 
 planner_step_3:
 intent:
-Read the segmentation summary and the main CellProfiler tables before judging the outline images.
+Inspect the CellProfiler tables for object counts and parent-child consistency.
 tool_calls:
-- read("demo/real_fov_workspace/outputs/real_fov_segmentation/segmentation_summary.json")
 - read("demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/Image.csv")
 - read("demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/Nuclei.csv")
 - read("demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/Cells.csv")
 observed_result:
-- the segmentation summary loaded successfully
-- the CSV headers were too large for direct read output
-- the agent decided to compute a compact quantitative summary instead of dumping raw tables
+- the main tables reported `69` nuclei, `69` cells, and `69` cytoplasm objects
+- `Children_Nuclei_Count = 1` for all cells
+- no obvious parent-child mismatch appeared in the exported tables
 
 planner_step_4:
 intent:
-Combine direct outline inspection with compact quantitative QC from the CellProfiler outputs.
+Combine direct outline inspection with compact morphology summaries from the exported segmentation tables.
 tool_calls:
 - read("demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/outlines/BR00117035_A01_s1--nuclei_outlines.png")
 - read("demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/outlines/BR00117035_A01_s1--cell_outlines.png")
-- exec("python ... summarize Image.csv, Cells.csv, Nuclei.csv, Cytoplasm.csv")
+- exec("python ... inspect outline image dimensions")
+- exec("python ... summarize nuclei and cell morphology metrics from the tables")
 observed_result:
 - outline images loaded successfully
 - compact quantitative QC showed:
@@ -117,10 +118,12 @@ observed_result:
   - `69` cytoplasm objects
   - nucleus median area `1157 px`
   - cell median area `4432 px`
-- the agent judged the result likely usable downstream for one field, with normal caution around crowded regions
+  - nucleus median solidity `0.974`
+  - cell median solidity `0.794`
+- the agent judged the result biologically reasonable overall for this field, with expected caveats for crowded regions and outline-only review
 
 final_answer_snapshot:
-The named segmentation result under `demo/real_fov_workspace/outputs/real_fov_segmentation` looked biologically reasonable overall and likely usable downstream as a first-pass single-field segmentation.
+The named segmentation result looked biologically reasonable overall for this field and passed quick-review QC for downstream single-cell profiling.
 ```
 
 ## Representative Figure
@@ -150,45 +153,42 @@ Caption: Representative output from `cp-extract-segmentation-artifacts` on real 
 
 ### Observed Result
 
-The agent inspected the exact output folder named in the request, checked both the exported outline images and the CellProfiler tables, and judged the segmentation likely usable downstream for this one field.
+The agent inspected the exact outline PNGs and CellProfiler tables named in the request and judged the segmentation biologically reasonable overall for this field.
 
 ## Recorded Reply
 
 ```text
-[[reply_to_current]] Overall: **likely usable downstream**, with **reasonable-looking nuclei and cell boundaries for a single field**, but best treated as **pass with a quick visual caveat** rather than perfect segmentation.
+[[reply_to_current]] I inspected the two outline PNGs and the CellProfiler object tables under:
 
-What I checked:
-- output directory: `demo/real_fov_workspace/outputs/real_fov_segmentation`
-- outline images:
-  - `BR00117035_A01_s1--nuclei_outlines.png`
-  - `BR00117035_A01_s1--cell_outlines.png`
-- CellProfiler outputs:
-  - `Image.csv`
-  - `Nuclei.csv`
-  - `Cells.csv`
-  - `segmentation_summary.json`
+- `demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/outlines/`
+- `demo/real_fov_workspace/outputs/real_fov_segmentation/cellprofiler_masks/{Nuclei.csv,Cells.csv,Cytoplasm.csv,Image.csv}`
 
-Quick quantitative QC:
+Short answer: **yes, the segmentation looks broadly biologically reasonable for this field**, with a couple of normal caveats.
+
+What looks good:
 - **69 nuclei**
 - **69 cells**
 - **69 cytoplasm objects**
-- nucleus median area: **1157 px**
-- cell median area: **4432 px**
+- each cell has exactly one nucleus
+- nucleus median area ≈ **1157 px**
+- nucleus median solidity ≈ **0.974**
+- nucleus median form factor ≈ **0.875**
+- cell median area ≈ **4432 px**
+- cell median solidity ≈ **0.794**
+- cell median form factor ≈ **0.402**
 
-What looks good:
-- nuclei outlines appear broadly consistent in size and spacing
-- cell boundaries expand around nuclei in a generally plausible way
-- the 1:1:1 nucleus/cell/cytoplasm mapping is a good sign for downstream profiling
-- object counts are reasonable for one 1080×1080 field
+What I noticed visually:
+- nuclear outlines track discrete compact objects rather than spilling across neighbors
+- cell outlines are more irregular than nuclei, which is expected for propagation-based whole-cell segmentation
+- there is no sign of catastrophic failure such as severe nucleus loss, giant merged masks, or debris-level fragmentation
 
-What still needs caution:
-- crowded touching cells are the most likely place for mistakes
-- some boundaries look watershed-like, which is common but worth spot-checking
-- this is only one field, so it is enough for a local QC pass, not a full-batch validation
+Mild caveats:
+- some cell boundaries are irregular in crowded regions
+- these PNGs are outline-only exports, not overlays on the original DNA or cell-body channels
 
 Practical recommendation:
-- **okay to proceed for exploratory downstream use**
-- add one stronger QC step later by overlaying masks on the raw DNA and cell-body channels
+- **pass for segmentation QC at a quick-review level**
+- suitable for downstream single-cell profiling unless you need very high-fidelity membrane boundaries
 ```
 
 ## Next Skills
