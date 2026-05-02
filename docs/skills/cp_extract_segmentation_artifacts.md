@@ -47,7 +47,7 @@ The main user-facing results are:
 
 ## Agent Demo
 
-This page is based on a real local OpenClaw run recorded against the completed real-FOV segmentation result:
+This page is based on a real local OpenClaw run recorded against the completed segmentation result for one real Cell Painting field:
 
 - run label: `real-fov-segmentation-v2`
 - turn timestamp: `2026-05-02 13:29 GMT+8`
@@ -77,12 +77,12 @@ the completed outputs already exist; inspect the existing completed result.
 
 planner_step_1:
 intent:
-Inspect the completed real-FOV segmentation output tree before deciding whether a
+Inspect the completed segmentation output tree for the real Cell Painting field before deciding whether a
 new segmentation run is necessary.
 tool_calls:
 - exec("find demo/real_fov_workspace/outputs/real_fov_segmentation -maxdepth 3 -type f | sort")
 observed_result:
-- completed real-FOV output tree already contained:
+- completed segmentation output tree already contained:
   - `Image.csv`
   - `Cells.csv`
   - `Nuclei.csv`
@@ -124,16 +124,16 @@ observed_result:
   - raw label TIFFs for cells and nuclei
 
 final_answer_snapshot:
-The completed real-FOV result came from `cp-extract-segmentation-artifacts` and
+The completed result for the real Cell Painting field came from `cp-extract-segmentation-artifacts` and
 produced a successful single-field segmentation with 69 matched nucleus/cell/cytoplasm
 objects plus review-ready cell and nuclei outline images.
 ```
 
 ## Representative Figure
 
-The OpenClaw trace above and the figure below now refer to the same completed real-FOV segmentation result.
+The OpenClaw trace above and the figure below now refer to the same completed segmentation result for one real Cell Painting field.
 
-![Representative real-FOV segmentation output](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
+![Representative segmentation output for one real Cell Painting field](../_static/agent_demo_segmentation/real_fov_segmentation_overview.png)
 
 What this figure is meant to show:
 
@@ -156,7 +156,7 @@ Caption: Representative output from `cp-extract-segmentation-artifacts` on publi
 
 ### Observed Result
 
-The agent confirmed that the completed real-FOV output already contained the review-ready segmentation result for one field.
+The agent confirmed that the completed output already contained the review-ready segmentation result for one real Cell Painting field.
 
 ## Recorded Reply
 
