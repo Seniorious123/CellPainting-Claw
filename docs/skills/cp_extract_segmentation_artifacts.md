@@ -49,7 +49,6 @@ The main user-facing results are:
 
 This page is based on a real local OpenClaw run recorded against the completed segmentation result for one real Cell Painting image:
 
-- run label: `segdemo-local-v9-extract`
 - turn timestamp: `2026-05-02 18:18 GMT+8`
 - model: `vibe/gpt-5-mini`
 
