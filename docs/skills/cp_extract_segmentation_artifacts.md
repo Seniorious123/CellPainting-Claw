@@ -31,7 +31,7 @@ This skill reads:
 - a project config such as `configs/project_config.demo.json`
 - the segmentation input table written by [cp-prepare-segmentation-inputs](cp_prepare_segmentation_inputs.md), or default segmentation inputs resolved from the config
 - the segmentation `.cppipe` template or override selected by the config
-- the configured raw-image and illumination assets
+- the raw Cell Painting images and illumination-correction files from the project config
 - an optional output directory
 
 In the demo setup, the config selects the bundled segmentation template and derives a mask-export-ready `.cppipe` at runtime.
