@@ -15,14 +15,12 @@ Use this skill when you want:
 
 ## Main Outcome
 
-After this skill finishes, the image is no longer just raw pixels. The run has identified nuclei and whole cells as distinct objects that downstream steps can reuse.
-
-In practice, this is the step that gives you:
+This skill produces the reusable segmentation outputs for one image:
 
 - segmented nuclei
 - segmented whole cells
-- quick review images to check whether the boundaries look reasonable
-- cell-level results that later crop and feature-extraction steps can build on
+- review-ready outline images
+- cell-level results for downstream crop and feature-extraction steps
 
 ## Inputs
 
@@ -134,9 +132,9 @@ The OpenClaw trace above and the figure below refer to the same completed segmen
 
 What this figure is meant to show:
 
-- the selected image contains many distinct cells
-- nuclei and whole-cell boundaries are different segmentation layers
-- this step defines the objects that later crop and feature-extraction steps will reuse
+- many distinct cells in one image
+- nuclei and whole-cell boundaries as separate segmentation layers
+- the segmentation objects reused by downstream steps
 
 Panels in this figure show:
 
