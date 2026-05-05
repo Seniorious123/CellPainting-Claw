@@ -8,10 +8,8 @@ It checks which Cell Painting datasets and sources are available through the cur
 
 Use this skill when you want:
 
-- the configured dataset ID and source ID
-- a quick check that the data-access setup is ready
-- a summary of what can currently be discovered through Gallery, Quilt, or CPGData
-- a clear starting point before planning or downloading data
+- see which datasets and sources are available
+- check whether downloadable data can be discovered
 
 ## Main Outcome
 
