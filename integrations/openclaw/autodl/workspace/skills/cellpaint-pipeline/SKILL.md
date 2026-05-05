@@ -123,6 +123,20 @@ Run CellPainting skill commands from `$REPO_ROOT`.
 
 This matters because the demo and example configs resolve backend data paths relative to the repository layout. If the current shell is inside the OpenClaw workspace, prepend `cd $REPO_ROOT` before running the skill command.
 
+## Exec rule
+
+Use the local runtime defaults for command execution.
+
+Do not force `host`, `security`, or `ask` fields in `exec` tool calls unless the user explicitly asks for a different execution mode.
+
+In this AutoDL runtime, the stable path is:
+
+- run commands from `$REPO_ROOT`
+- call the validated `cellpainting-skills` executable directly
+- use normal `exec` plus `process poll` when a run takes longer
+
+Avoid ad hoc inline Python wrappers for basic skill discovery when the documented CLI already provides the needed result.
+
 ## Optional MCP route
 
 If the host is configured to use MCP, start the server with:
