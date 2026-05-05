@@ -2,7 +2,7 @@
 
 `data-inspect-availability` is the inspection step that checks which Cell Painting data sources are configured before any download begins.
 
-It reads the project config, checks the configured discovery backends, and writes a summary that tells you which dataset and source identifiers are active and which discovery routes are currently usable.
+It checks which Cell Painting datasets and sources are available through the current data-access setup, and whether downloadable data can be discovered.
 
 ## Purpose
 
