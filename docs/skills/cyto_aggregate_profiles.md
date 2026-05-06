@@ -2,7 +2,7 @@
 
 `cyto-aggregate-profiles` turns a single-cell table into the first well-level classical profile table.
 
-It is the step that compresses many measured cells from the same well into one summarized profile row.
+It is the step that turns many measured cells from the same well into one summarized well-level profile.
 
 ## Purpose
 
@@ -35,54 +35,45 @@ This skill reads:
 
 ## Agent Demo
 
-This page is based on a real local OpenClaw run against the repository demo config:
+This page is based on a real local OpenClaw turn against the repository demo config:
 
-- session id: `cytoaggregate-local-v1`
-- turn timestamp: `2026-05-05 14:04 UTC`
+- record id: `cytoaggregate-local-v3`
+- recorded on `2026-05-06 13:47 UTC`
 - model: `vibe/gpt-5-mini`
 
 ### Request
 
 ```text
-I already have the single-cell Cell Painting table and want the first classical profile table that summarizes cells at the well level. Please use configs/project_config.demo.json, aggregate the single-cell table into demo/workspace/outputs/agent_demo_cyto_aggregate, and then explain what the aggregated profile contains and why this step is useful biologically.
+I want to turn this single-cell Cell Painting table into a well-level classical profile and understand what one row in that profile represents biologically.
 ```
 
 ## Structured Trace
 
 ```text
 user_input:
-I already have the single-cell Cell Painting table and want the first classical profile table that summarizes cells at the well level. Please use configs/project_config.demo.json, aggregate the single-cell table into demo/workspace/outputs/agent_demo_cyto_aggregate, and then explain what the aggregated profile contains and why this step is useful biologically.
+I want to turn this single-cell Cell Painting table into a well-level classical profile and understand what one row in that profile represents biologically.
 
 planner_step_1:
 intent:
-Load the documented Cell Painting skill routing before choosing the well-level aggregation step.
+Run the well-level aggregation step on the demo single-cell table.
 tool_calls:
-- read("integrations/openclaw/autodl/workspace/skills/cellpaint-pipeline/SKILL.md")
+- exec("cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json --skill cyto-aggregate-profiles --single-cell-path /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_single_cell/single_cell.csv.gz --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_classical_profiles")
+- process.poll("brisk-gulf")
 observed_result:
-- the workspace skill file loaded successfully
-- the routing guidance identified `cyto-aggregate-profiles` as the public step for aggregating single-cell measurements into classical profiles
-
-planner_step_2:
-intent:
-Confirm the documented skill description and then run the aggregation step under the requested demo output directory.
-tool_calls:
-- exec("cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills describe --skill cyto-aggregate-profiles && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json --skill cyto-aggregate-profiles --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_aggregate")
-- process.poll("fresh-claw")
-observed_result:
-- the skill description confirmed that this step aggregates single-cell measurements into classical profiles
 - skill_key = cyto-aggregate-profiles
-- aggregated_path = demo/workspace/outputs/agent_demo_cyto_aggregate/pycytominer/aggregated.parquet
+- aggregated_path = demo/workspace/outputs/agent_demo_classical_profiles/pycytominer/aggregated.parquet
 - row_count = 2
 - column_count = 14
 
-planner_step_3:
+planner_step_2:
 intent:
-Read the aggregated table so the result can be explained concretely.
+Read the aggregated table so the biological meaning of one row can be explained concretely.
 tool_calls:
 - exec("python ... read aggregated.parquet, print shape, columns, and preview rows")
+- process.poll("plaid-valley")
 observed_result:
 - shape = 2 rows x 14 columns
-- the table contained plate and well metadata
+- the two rows were `BR00000001, A01` and `BR00000001, A02`
 - each row summarized one well
 - the feature columns contained aggregated morphology and intensity measurements
 
@@ -113,34 +104,36 @@ The table contained:
 ## Recorded Reply
 
 ```text
-Done.
+I turned the single-cell Cell Painting table into a well-level classical profile using the stable step:
 
-What I ran
-- Skill: `cyto-aggregate-profiles`
-- Config: `/root/pipeline/CellPainting-Claw/configs/project_config.demo.json`
-- Output dir requested: `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_aggregate`
-- Command used:
-  cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json --skill cyto-aggregate-profiles --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_aggregate
+- `cyto-aggregate-profiles`
 
-What was produced
-- Entrypoint ran: `cyto-aggregate-profiles`
-- Main output: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_aggregate/pycytominer/aggregated.parquet`
-- Manifest: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_aggregate/pipeline_skill_manifest.json`
-- Table shape: `2 rows × 14 columns`
+Output
+- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_classical_profiles/pycytominer/aggregated.parquet`
+- 2 rows
+- 14 columns
 
-Artifact type
-- This step produced a pycytominer-style well-level classical profile table
-- It is a well-level summary, not a single-cell table and not segmentation masks
+What one row represents
+- one row = one well
+- the two demo rows are `BR00000001, A01` and `BR00000001, A02`
+- each row is a well-level summary of all single cells measured in that well
 
-What the aggregated profile contains
-- one row per well
-- metadata columns such as plate and well identity
-- aggregated feature values computed from the single-cell measurements in that well
+What that means biologically
+- this is no longer a single-cell table
+- each row is the aggregate phenotype of a well
+- the row combines the cell-level measurements in that well into one representative profile vector
 
-Why this step is useful biologically
-- it turns many cell-level measurements into one per-well morphological fingerprint
-- it reduces single-cell noise before comparing treatments or conditions
-- it provides the standard input for annotation, normalization, and feature-selection steps
+Example contents
+- `Metadata_Object_Count` for how many cells contributed
+- aggregated morphology features
+- aggregated intensity features such as DNA, AGP, and RNA signal
+
+In this demo:
+- 2 single cells contributed to each well profile
+
+Bottom line
+- single-cell table: one row = one cell
+- classical profile table: one row = one well
 ```
 
 ## Next Skills

@@ -1,19 +1,19 @@
 # `data-inspect-availability`
 
-`data-inspect-availability` is the inspection step that checks which Cell Painting data sources are configured before any download begins.
+`data-inspect-availability` is the inspection step that checks which Cell Painting data sources are available before any download begins.
 
-It checks which Cell Painting datasets and sources are available through the current data-access setup, and whether downloadable data can be discovered.
+It tells you which dataset the project is currently pointed at and which discovery routes are ready to use.
 
 ## Purpose
 
 Use this skill when you want:
 
-- see which datasets and sources are available
-- check whether downloadable data can be discovered
+- see which dataset and source the current run is using
+- check whether downloadable data can be found before starting a download
 
 ## Main Outcome
 
-This skill does not download any data. It tells you what this run is currently pointed at and which discovery options are available.
+This skill does not download any data. It tells you what this run is currently pointed at and whether the configured discovery routes are working.
 
 In the demo setup, it confirms:
 
@@ -31,151 +31,104 @@ This skill reads:
 - the data-access settings inside that config
 - an optional output directory
 
-In the demo config, those settings already define the default dataset ID, default source ID, and the configured Gallery, Quilt, and CPGData access points.
+In the demo config, those settings already define the default dataset, default source, and the configured discovery routes.
 
 ## Outputs
 
 This skill writes:
 
 - `data_access_summary.json`
-  The main inspection result. It records the configured dataset and source identifiers, available packages, and discovery results from the configured access backends.
+  The main inspection result. It records the configured dataset, source, and discovery results.
 - `pipeline_skill_manifest.json`
   The run record for this skill invocation.
 
 ## Agent Demo
 
-This page is based on a real local OpenClaw run against the repository demo config:
+This page is based on a real local OpenClaw turn against the repository demo config:
 
-- turn timestamp: `2026-05-04 15:40 UTC`
+- recorded on `2026-05-06 13:31 UTC`
 - model: `vibe/gpt-5-mini`
 
 ### Request
 
 ```text
-Before I download anything, run the configured data-source inspection for configs/project_config.demo.json and write the summary under demo/workspace/outputs/agent_demo_data_access. Then tell me which dataset and source identifiers are configured and what discovery options are currently available.
+Before I download anything, I want to confirm which Cell Painting dataset this demo is pointing to and whether the configured source is actually reachable.
 ```
 
 ## Structured Trace
 
 ```text
 user_input:
-Before I download anything, run the configured data-source inspection for configs/project_config.demo.json and write the summary under demo/workspace/outputs/agent_demo_data_access. Then tell me which dataset and source identifiers are configured and what discovery options are currently available.
+Before I download anything, I want to confirm which Cell Painting dataset this demo is pointing to and whether the configured source is actually reachable.
 
-planner_step_1:
-intent:
-Load the documented Cell Painting skill routing before choosing a data-access skill.
-tool_calls:
-- read("integrations/openclaw/autodl/workspace/skills/cellpaint-pipeline/SKILL.md")
-observed_result:
-- the workspace skill file loaded successfully
-- the routing guidance pointed to `data-inspect-availability` for source-inspection requests before download
-
-planner_step_2:
-intent:
-Confirm the current public skill surface and inspect the documented description for the selected skill.
-tool_calls:
-- exec("cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills list && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills describe --skill data-inspect-availability")
-observed_result:
-- the first two host attempts failed because that OpenClaw session did not have the expected sandbox or node execution route
-- the plain `exec` retry succeeded
-- the current public skill catalog confirmed `data-inspect-availability` as the documented data-source inspection skill
-
-planner_step_3:
-intent:
-Run the documented inspection skill against the named demo config and write the inspection output to the requested folder.
-tool_calls:
-- exec("cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json --skill data-inspect-availability --output-dir /root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_data_access")
-observed_result:
-- skill_key = data-inspect-availability
-- configured dataset = cpg0016-jump
-- configured source = source_4
-- gallery dataset count = 42
-- source count under cpg0016-jump = 14
-- cpgdata prefix count = 5
-- quilt package count = 0
-- summary file written successfully
-
-planner_step_4:
-intent:
-Read the generated inspection summary and turn it into a user-facing answer about what is configured and what discovery routes are available.
-tool_calls:
-- read("/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_data_access/data_access_summary.json")
-observed_result:
-- Gallery discovery was available
-- Quilt discovery support was installed, but this query returned no package names
-- CPGData inventory discovery was available
-- required packages `boto3` and `botocore` were available
+recorded_turn:
+- the saved OpenClaw turn answered this request directly
+- the reply confirmed the configured dataset and source
+- the reply reported that discovery and planning routes were reachable in the current environment
 
 final_answer_snapshot:
-The demo config is currently pointed at dataset cpg0016-jump and source_4, and the configured discovery routes are ready for planning the next download step.
+The demo points to cpg0016-jump / source_4, and the configured source is reachable for discovery and download planning.
 ```
 
 ## Observed Result
 
-The recorded run confirmed that the demo config is currently pointed at:
+The recorded turn confirmed that the demo config is currently pointed at:
 
 - dataset `cpg0016-jump`
 - source `source_4`
 
-The inspection also showed that the configured discovery backends were available:
+The recorded reply also confirmed that the current environment could reach:
 
-- Gallery discovery returned `42` dataset IDs
-- Gallery source discovery returned `14` source IDs under `cpg0016-jump`
-- CPGData inventory discovery returned `5` top-level prefixes
-- Quilt support was installed, and this query returned `0` package names
+- Gallery / S3 listing
+- CPGData inventory discovery
+- the configured Quilt adapter path
+- download planning for the configured dataset/source pair
 
-The required access packages were available:
+The reply explicitly mentioned these installed access tools:
 
 - `boto3`
 - `botocore`
-
-Optional helpers available in the demo environment included:
-
 - `cpgdata`
 - `quilt3`
-- `pycytominer`
+- `aws` CLI
 
 ## Recorded Reply
 
 ```text
-Done.
+I confirmed the demo is configured to point to:
 
-I ran the configured inspection with:
+- Dataset: `cpg0016-jump`
+- Source: `source_4`
 
-- entrypoint: `cellpainting-skills run`
-- skill: `data-inspect-availability`
-- config: `/root/pipeline/CellPainting-Claw/configs/project_config.demo.json`
-- output dir: `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_data_access`
+So the configured default target is:
 
-Main output written:
+- `cpg0016-jump/source_4/`
 
-- `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_data_access/data_access_summary.json`
-- `/root/autodl-tmp/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_data_access/pipeline_skill_manifest.json`
+Is the configured source reachable?
+Yes — the configured source is reachable through the data-access layer I checked.
 
-Configured dataset and source identifiers:
-- default dataset ID: `cpg0016-jump`
-- default source ID: `source_4`
+What I verified
+- the Cell Painting Gallery route is working
+- dataset `cpg0016-jump` is present
+- source `source_4` is present under that dataset
+- a download plan can be created successfully for that dataset/source pair
 
-Configured source backends:
-- Gallery bucket: `cellpainting-gallery`
-- Quilt registry: `s3://cellpainting-gallery`
-- CPGData inventory bucket: `cellpainting-gallery-inventory`
-- CPGData inventory prefix: `cellpainting-gallery/whole_bucket/`
+Access routes
+- Gallery / S3 listing: working
+- cpgdata inventory route: working
+- Quilt adapter: available and did not error in the summary check
 
-Discovery options currently available:
-- Gallery discovery: available
-  - dataset listing worked
-  - source listing for `cpg0016-jump` worked
-- Quilt discovery: available at the package-access layer
-  - `quilt3` is installed
-  - current package listing returned `0` package names
-- CPGData discovery: available
-  - inventory prefix listing worked
+Environment readiness
+- `boto3`
+- `botocore`
+- `cpgdata`
+- `quilt3`
+- `aws` CLI
 
-Environment/access readiness:
-- required packages available: `boto3`, `botocore`
-- optional discovery/download helpers available: `cpgdata`, `quilt3`
-- optional CLI available: `aws`
+Bottom line
+- the demo points to `cpg0016-jump / source_4`
+- the configured source is reachable
+- the environment can discover and plan downloads from it successfully
 ```
 
 ## Next Skills
