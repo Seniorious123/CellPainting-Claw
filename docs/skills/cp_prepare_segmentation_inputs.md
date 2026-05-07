@@ -2,11 +2,11 @@
 
 `cp-prepare-segmentation-inputs` resolves which image fields will enter segmentation.
 
-This is the planning step before any CellProfiler segmentation run begins. In the demo setup, it determines which plate, well, and site will be segmented next.
+It is the planning step before any CellProfiler segmentation run begins.
 
 ## Purpose
 
-Use this skill when you want to:
+Use this skill when you want:
 
 - confirm which fields will be sent into segmentation
 - inspect the segmentation input table before a longer run
@@ -16,7 +16,7 @@ Use this skill when you want to:
 
 After this skill finishes, you know exactly which image fields will go into segmentation.
 
-This is a planning step, not an image-generation step. It does not produce masks, outlines, or single-cell crops yet.
+This is a planning step. It does not produce masks, outlines, or single-cell crops yet.
 
 ## Inputs
 
@@ -27,128 +27,78 @@ This skill reads:
 - optional plate, well, or site filters
 - an optional output directory
 
-In plain language, the config tells the skill where the raw Cell Painting images live and which demo assets belong to the current run.
-
 ## Outputs
 
-The main result of this skill is a resolved segmentation scope:
-
-- which plate will be used
-- which wells will be used
-- which sites or image fields will be used
-- which image channels the next segmentation step will read
+- `load_data_for_segmentation.csv`
+  The field-level segmentation input table.
+- `pipeline_skill_manifest.json`
+  The run record for this skill invocation.
 
 ## Agent Demo
 
-This page is based on a real OpenClaw run:
+This page is based on a real local OpenClaw turn against the repository demo config:
 
-- session id: `biosegdemo-prepare-v8`
+- session id: `segprepare-rerun-v2`
+- recorded on `2026-05-06`
 - model: `vibe/gpt-5-mini`
 
 ### Request
 
 ```text
-Which demo wells and image fields are available for segmentation?
+Before I segment the demo Cell Painting images, I want to confirm exactly which wells and image fields will be included in this run. Please use the demo project config, prepare the segmentation input table, write it under demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_rerun_v2, and summarize the wells and fields that will be processed.
 ```
 
 ## Structured Trace
 
 ```text
 user_input:
-Which demo wells and image fields are available for segmentation?
+Before I segment the demo Cell Painting images, I want to confirm exactly which wells and image fields will be included in this run. Please use the demo project config, prepare the segmentation input table, write it under demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_rerun_v2, and summarize the wells and fields that will be processed.
 
-planner_step_1:
-intent:
-Resolve the current CellPainting skill surface instead of guessing from repository directories.
-tool_calls:
-- read("~/.openclaw/lib/node_modules/openclaw/skills/cellpaint-pipeline/SKILL.md")
-observed_result:
-- ENOENT: bundled OpenClaw skill path did not exist on this host
-
-planner_step_2:
-intent:
-Load the workspace skill file and recover the documented routing rule for segmentation-scope questions.
-tool_calls:
-- exec("pwd && ls -la .../workspace/skills/cellpaint-pipeline && sed -n '1,220p' .../workspace/skills/cellpaint-pipeline/SKILL.md")
-observed_result:
-- workspace skill file loaded successfully
-- routing guidance pointed to cp-prepare-segmentation-inputs for questions about wells, sites, fields, or image rows
-
-planner_step_3:
-intent:
-Run the documented segmentation-prep skill against the demo config and write the real load-data table.
-tool_calls:
-- exec("cd $REPO_ROOT && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config $REPO_ROOT/configs/project_config.demo.json --skill cp-prepare-segmentation-inputs --output-dir $REPO_ROOT/demo/workspace/outputs/agent_demo_segmentation")
-observed_result:
-- skill_key = cp-prepare-segmentation-inputs
-- row_count = 2
-- plate_count = 1
-- well_count = 2
-- site_count = 2
-- load_data_path = demo/workspace/outputs/agent_demo_segmentation/load_data_for_segmentation.csv
-
-planner_step_4:
-intent:
-Read the generated CSV and report the exact field inventory back to the user.
-tool_calls:
-- exec("python ... read load_data_for_segmentation.csv and print rows, wells, sites, and field records")
-observed_result:
-- plate = BR00000001
-- wells = A01, A02
-- site value = 1 for both rows
-- exact image rows = 2
+recorded_turn:
+- the saved OpenClaw turn answered this request directly
+- the reply identified the segmentation-input step used
+- the reply reported the output path of the load-data table
+- the reply summarized the number of wells and fields included
+- the reply listed the exact well/site combinations
 
 final_answer_snapshot:
-The demo segmentation scope contains two image rows:
-BR00000001 / A01 / site 1 and BR00000001 / A02 / site 1.
+The demo segmentation run includes two image fields: BR00000001 / A01 / site 1 and BR00000001 / A02 / site 1.
 ```
 
-### Observed Result
+## Observed Result
 
-```json
-{
-  "skill_key": "cp-prepare-segmentation-inputs",
-  "category": "segmentation",
-  "details": {
-    "row_count": 2,
-    "plate_count": 1,
-    "well_count": 2,
-    "site_count": 2
-  },
-  "ok": true
-}
-```
+The recorded run wrote:
+
+- `load_data_for_segmentation.csv`
+- `pipeline_skill_manifest.json`
 
 The resolved segmentation scope covered:
 
-- plate `BR00000001`
-- well `A01`, site `1`
-- well `A02`, site `1`
+- `1` plate
+- `2` wells
+- `2` image fields
+
+The included fields were:
+
+- `BR00000001 / A01 / site 1`
+- `BR00000001 / A02 / site 1`
 
 ## Recorded Reply
 
 ```text
-[[reply_to_current]] For the demo segmentation input set, the available image fields are:
+Done — I used the stable step **`cp-prepare-segmentation-inputs`** with the demo project config and wrote the segmentation input table under:
 
-- Plate: `BR00000001`
-- Wells: `A01`, `A02`
-- Site/field: `1` for each well
+- `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_rerun_v2`
 
-So the demo segmentation scope is exactly 2 image rows:
+### Output file
+- `demo/workspace/outputs/agent_demo_segmentation/01_prepare_inputs_rerun_v2/load_data_for_segmentation.csv`
 
-1. `BR00000001 / A01 / site 1`
-2. `BR00000001 / A02 / site 1`
+### What will be processed
+This prepared segmentation run includes:
 
-I verified this by running the supported segmentation-prep entrypoint `cp-prepare-segmentation-inputs`.
-
-Summary from that run:
-
-- row count: `2`
-- plate count: `1`
-- well count: `2`
-- site count: `2` total rows, but only one site value: `1` in each row
-
-This prep output is for segmentation planning only. It tells you which fields will be segmented next, but it does not create masks yet. The next step is `cp-extract-segmentation-artifacts`.
+- **1 plate**
+- **2 wells**
+- **2 image fields (rows in the load-data table)**
 ```
 
 ## Next Skills

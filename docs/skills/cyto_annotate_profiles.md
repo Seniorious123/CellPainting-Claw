@@ -2,7 +2,7 @@
 
 `cyto-annotate-profiles` adds experimental metadata to an aggregated classical profile table.
 
-It is the step that turns a numeric well-level profile into a table that can be interpreted in the context of the experiment.
+It is the step that turns a numeric well-level profile into a table that can be interpreted biologically.
 
 ## Purpose
 
@@ -10,13 +10,13 @@ Use this skill when you want:
 
 - treatment labels attached to aggregated profile rows
 - control labels attached before normalization or downstream comparison
-- batch information preserved for later QC and interpretation
+- batch information preserved for later interpretation
 
 ## Main Outcome
 
 After this skill finishes, the aggregated profile rows are no longer just numeric summaries.
 
-They also carry the metadata needed to say what each well represents biologically.
+They also carry the metadata needed to say what each well represents in the experiment.
 
 ## Inputs
 
@@ -35,60 +35,32 @@ This skill reads:
 
 ## Agent Demo
 
-This page is based on a real local OpenClaw run against the repository demo config:
+This page is based on a real local OpenClaw turn against the repository demo config:
 
-- session id: `cytoannotate-local-v1`
-- turn timestamp: `2026-05-05 14:06 UTC`
+- session id: `cytoannotate-rerun-v2`
+- recorded on `2026-05-06`
 - model: `vibe/gpt-5-mini`
 
 ### Request
 
 ```text
-I already have the aggregated Cell Painting profile table and want to add the experimental metadata that makes the wells interpretable. Please use configs/project_config.demo.json, annotate the aggregated profiles into demo/workspace/outputs/agent_demo_cyto_annotate, and then explain what metadata was attached and why this annotation step matters biologically.
+I already have the aggregated Cell Painting profiles for this demo, but I need them to be biologically interpretable. Please use the demo project config, add the experimental metadata, write the result under demo/workspace/outputs/agent_demo_cyto_annotate_rerun_v2, and tell me what metadata were attached to each well.
 ```
 
 ## Structured Trace
 
 ```text
 user_input:
-I already have the aggregated Cell Painting profile table and want to add the experimental metadata that makes the wells interpretable. Please use configs/project_config.demo.json, annotate the aggregated profiles into demo/workspace/outputs/agent_demo_cyto_annotate, and then explain what metadata was attached and why this annotation step matters biologically.
+I already have the aggregated Cell Painting profiles for this demo, but I need them to be biologically interpretable. Please use the demo project config, add the experimental metadata, write the result under demo/workspace/outputs/agent_demo_cyto_annotate_rerun_v2, and tell me what metadata were attached to each well.
 
-planner_step_1:
-intent:
-Load the documented Cell Painting skill routing before choosing the annotation step.
-tool_calls:
-- read("~/.openclaw/lib/node_modules/openclaw/skills/cellpaint-pipeline/SKILL.md")
-observed_result:
-- that packaged path did not exist on this host
-
-planner_step_2:
-intent:
-Recover the workspace skill instructions and then run the stable annotation surface.
-tool_calls:
-- exec("pwd && ls -la .../workspace/skills/cellpaint-pipeline && sed -n '1,240p' .../workspace/skills/cellpaint-pipeline/SKILL.md")
-- exec("cd /root/pipeline/CellPainting-Claw && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills describe --skill cyto-annotate-profiles && echo '===RUN===' && /root/autodl-tmp/miniconda3_envs/lyx_env/bin/cellpainting-skills run --config /root/pipeline/CellPainting-Claw/configs/project_config.demo.json --skill cyto-annotate-profiles --output-dir /root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_annotate")
-- process.poll("vivid-comet")
-observed_result:
-- the workspace skill file loaded successfully
-- the skill description confirmed that this step returns the annotated classical profile table
-- skill_key = cyto-annotate-profiles
-- annotated_path = demo/workspace/outputs/agent_demo_cyto_annotate/pycytominer/annotated.parquet
-- row_count = 2
-- column_count = 17
-
-planner_step_3:
-intent:
-Inspect the annotated table schema and preview rows so the attached metadata can be reported concretely.
-tool_calls:
-- exec("python ... read annotated.parquet, print row count, column count, schema, and preview rows")
-observed_result:
-- annotated columns included Metadata_Treatment, Metadata_ControlType, and Metadata_Batch
-- the two wells were labeled DEMO_A01 and DEMO_A02
-- both wells were marked negative_control
-- both wells were marked demo_batch_01
+recorded_turn:
+- the saved OpenClaw turn answered this request directly
+- the reply identified the stable annotation step used
+- the reply reported the output path of the annotated table
+- the reply listed the metadata columns attached to each well
 
 final_answer_snapshot:
-The annotation step attached treatment, control-type, and batch metadata to the aggregated profile table.
+The annotation step attached plate, well, object-count, treatment, control-type, and batch metadata to the two demo wells.
 ```
 
 ## Observed Result
@@ -98,38 +70,42 @@ A real recorded run for this skill wrote:
 - `pycytominer/annotated.parquet`
 - `pipeline_skill_manifest.json`
 
-The recorded output summary showed:
+The recorded output showed:
 
 - `2` well-level rows
-- `17` columns
-- three metadata columns added on top of the aggregated profile table:
-  - `Metadata_Treatment`
-  - `Metadata_ControlType`
-  - `Metadata_Batch`
+- metadata columns for:
+  - plate
+  - well
+  - object count
+  - treatment
+  - control type
+  - batch
+
+For the demo wells:
+
+- `A01` was labeled `DEMO_A01`, `negative_control`, `demo_batch_01`
+- `A02` was labeled `DEMO_A02`, `negative_control`, `demo_batch_01`
 
 ## Recorded Reply
 
 ```text
-Done — I ran the stable annotation skill on the demo config and wrote the result here:
+Done — I used the stable annotation step **`cyto-annotate-profiles`** with the demo project config and wrote the annotated result under:
 
-- Entrypoint: `cyto-annotate-profiles`
-- Config: `configs/project_config.demo.json`
-- Output directory: `demo/workspace/outputs/agent_demo_cyto_annotate`
-- Primary output: `demo/workspace/outputs/agent_demo_cyto_annotate/pycytominer/annotated.parquet`
+- `demo/workspace/outputs/agent_demo_cyto_annotate_rerun_v2`
 
-What metadata was attached
+### Output
+Annotated profile table:
+- `/root/pipeline/CellPainting-Claw/demo/workspace/outputs/agent_demo_cyto_annotate_rerun_v2/pycytominer/annotated.parquet`
+
+### What metadata were attached
+The annotation added these metadata columns to each well:
+
+- `Metadata_Plate`
+- `Metadata_Well`
+- `Metadata_Object_Count`
 - `Metadata_Treatment`
 - `Metadata_ControlType`
 - `Metadata_Batch`
-
-From the demo output:
-- `A01` -> `DEMO_A01`, `negative_control`, `demo_batch_01`
-- `A02` -> `DEMO_A02`, `negative_control`, `demo_batch_01`
-
-Why this matters biologically
-- treatment metadata links each profile back to the perturbation or condition
-- control metadata defines the reference wells used later for comparison
-- batch metadata preserves experimental grouping so technical variation is not mistaken for biology
 ```
 
 ## Next Skills
